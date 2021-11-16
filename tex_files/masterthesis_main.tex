@@ -19,7 +19,14 @@
 \usepackage{setspace,graphicx,tikz,tabularx} % für Elemente der Titelseite
 \usepackage[draft=false,babel,tracking=true,kerning=true,spacing=true]{microtype} % optischer Randausgleich etc.
 
+\usepackage{subcaption}
+\usepackage{abstract}
+\usepackage{standalone}% Need standalone package
+\usepackage{amsmath}
+
 \begin{document}
+
+\pagenumbering{gobble}
 
 % Beispielhafte Nutzung der Vorlage für die Titelseite (bitte anpassen):
 \input{Template}
@@ -38,9 +45,10 @@
 \tableofcontents
 
 \newpage
-
-\section{Introduction}
-Hier entsteht eine großartige Arbeit\ldots
+\pagenumbering{arabic}
+\input{./sections/intro.tex}
+\newpage
+\input{./sections/related_work.tex}
 
 % Erzeugen der Selbständigkeitserklärung auf einem neuen Blatt:
 \selbstaendigkeitserklaerung{\today}
