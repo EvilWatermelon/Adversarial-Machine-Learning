@@ -13,7 +13,8 @@ That is the core of this framework.
 - [ ] Write the problems in the introduction
 - [ ] Explain all section in 1 - 2 sentenc
 
-[//]: # @article{DBLP:journals/compsec/SendiAC16,
+
+@article{DBLP:journals/compsec/SendiAC16,
   author    = {Alireza Shameli Sendi and
                Rouzbeh Aghababaei{-}Barzegar and
                Mohamed Cheriet},
