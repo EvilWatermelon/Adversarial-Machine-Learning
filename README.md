@@ -10,5 +10,5 @@ That is the core of this framework.
 - Another important point is that you need `numba 0.54` and `numpy 1.19.5`
 
 # TODO
-- [] Write the problems in the introduction
-- [] Explain all section in 1 - 2 sentences
+- [x] Write the problems in the introduction
+- [ ] Explain all section in 1 - 2 sentences
