@@ -19,8 +19,16 @@ print(f"Accuracy: {metrics.accuracy_score(y_test, y_pred)}")
 print(f"Precision: {metrics.precision_score(y_test, y_pred)}")
 print(f"Recall: {metrics.recall_score(y_test, y_pred)}")
 
-def log(message, logging_levelname='INFO'):
+def log(message, logging_levelname: str = 'INFO'):
 	msg_string = str(f'{message}')
+
+	logging_levels = {
+		'INFO': logging.info,
+		'DEBUG': logging.debug,
+		'WARNING': logging.warning,
+		'ERROR': logging.error,
+		'CRITICAL': logging.critical
+	}
 
 	logging.basicConfig(format='[%(levelname)s] [%(asctime)s]: %(message)s',
 						datefmt='%m/%d/%Y %I:%M:%S %p',
@@ -28,14 +36,6 @@ def log(message, logging_levelname='INFO'):
 						encoding='utf-8',
 						level=logging.DEBUG)
 
-	levelname_list = {'DEBUG':logging.debug(msg_string),
-					  'INFO':logging.info(msg_string), 
-					  'WARNING':logging.warning(msg_string), 
-					  'ERROR':logging.error(msg_string), 
-					  'CRITICAL':logging.critical(msg_string)}
-
-	#TODO:call only logging_levelname function
-	if levelname_list.get(logging_levelname) != None:
-		levelname_list[logging_levelname]
-
+	logging_levels[logging_levelname](msg_string)
+	
 log(metrics.recall_score(y_test, y_pred), 'DEBUG')
