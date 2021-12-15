@@ -12,4 +12,4 @@ That is the core of this framework.
 # TODO
 - [ ] Write the problems in the introduction
 - [ ] Explain all section in 1 - 2 sentences
-- [ ] Add log function to the framework
+- [x] Add log function to the framework
