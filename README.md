@@ -16,7 +16,7 @@ That is the core of this framework.
 - [ ] Add a class for the case study
 - [ ] log ART
 
-# Abstract 🍁
+# Abstract 🖼️
 
 ...
 
