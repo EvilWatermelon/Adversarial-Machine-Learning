@@ -9,9 +9,6 @@ That is the core of this framework.
 - For my ML model I use `sklearn` but you can use whatever you want
 - Another important point is that you need `numba 0.54` and `numpy 1.19.5`
 
-- [ ] Add a class for the case study
-- [ ] log ART
-
 # Abstract 🖼️
 
 ...
