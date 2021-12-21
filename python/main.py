@@ -3,6 +3,8 @@ from sklearn.model_selection import train_test_split
 from sklearn import svm
 from sklearn import metrics
 
+from log import *
+
 import logging
 
 cancer = datasets.load_breast_cancer()
@@ -15,27 +17,8 @@ clf.fit(X_train, y_train)
 
 y_pred = clf.predict(X_test)
 
-print(f"Accuracy: {metrics.accuracy_score(y_test, y_pred)}")
-print(f"Precision: {metrics.precision_score(y_test, y_pred)}")
-print(f"Recall: {metrics.recall_score(y_test, y_pred)}")
+log(f"Accuracy: {metrics.accuracy_score(y_test, y_pred)}", 'INFO')
+log(f"Precision: {metrics.precision_score(y_test, y_pred)}", 'INFO')
+log(f"Recall: {metrics.recall_score(y_test, y_pred)}", 'INFO')
 
-def log(message, logging_levelname: str = 'INFO'):
-	msg_string = str(f'{message}')
-
-	logging_levels = {
-		'INFO': logging.info,
-		'DEBUG': logging.debug,
-		'WARNING': logging.warning,
-		'ERROR': logging.error,
-		'CRITICAL': logging.critical
-	}
-
-	logging.basicConfig(format='[%(levelname)s] [%(asctime)s]: %(message)s',
-						datefmt='%m/%d/%Y %I:%M:%S %p',
-						filename='example.log',
-						encoding='utf-8',
-						level=logging.DEBUG)
-
-	logging_levels[logging_levelname](msg_string)
-	
-log(metrics.recall_score(y_test, y_pred), 'DEBUG')
+print("Finished! Bye.")

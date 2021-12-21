@@ -1,15 +1,32 @@
 \section{The conceptual framework}
 \label{sec:conFrame}
 
+In contrast to Schwerdtner et al., the framework of this thesis concentrates on training, especially Risk Measurement before and during training of the ML model.
+The conceptual framework discusses and explains the RMF. The RMF is a conceptual and technical framework which measures risks of backdoor attacks and measures the attacker effort. The attacker effort
+is measured by objective properties. These objective properties are the base of the risk indicators for the attacker effort explained in the following subsection. Objective properties
+
+\subsection{Finding the attacker's effort}
+
+\subsubsection*{Attacker characteristics found by the threat model}
+
+In their paper, Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20} show a formal attacker model with input data for experiments, the data handling process and describe the experiment that was executed. Doynikova et al. explain that the attacker models can be split into high-level and low-level. These models contain attributes which used in this thesis as properties. High-level properties are...
+
+\subsection{Characteristics of backdoor attacks}
+
 \subsection{Risk indicators}
 \label{sec:risk_indicators}
-
-\subsection{Poisoning attacks especially backdoor attacks}
-\label{sec:backdoor}
-
-\subsection{Finding attackers effort by objective properties}
 
 \newpage
 
 \section{The technical framework}
 \label{sec:techFrame}
+
+The technical RMF uses Python 3.7 as the programming language and ART as the basis. Beside the attacks given by the ART, there is a function from the technical RMF to execute individual attacks. This technical RMF should be used a step ahead of using the framework of Schwerdtner et al.
+
+\subsection{Using ART as the basis for the technical framework}
+
+\subsection{Implementation of the logging function}
+
+\subsection{Implementation of the visualization}
+
+\subsection{Build in the risk indicatiors}

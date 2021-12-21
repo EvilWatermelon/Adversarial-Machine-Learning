@@ -25,10 +25,14 @@ For this thesis the objects to be measured and the measurement are the important
 
 \subsection{Approaches from Jakub Breier et. al and Paul Schwerdtner et. al}
 
-This present thesis is divided into two approaches.
-Jakub Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} propose in their paper
-different proposals to measure risks with different aspects. \\
-Paul Schwerdtner et al. \cite{DBLP:journals/corr/abs-2011-04328} is the second approach of this thesis.
+This present thesis is divided into two approaches. Jakub Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} propose in their paper different proposals to measure risks with different aspects.
+These attacks are used in this thesis as properties to classify attacks. These different properties are attack specificity, attack time and attacker's knowledge. Attack time is split in training time
+and deployment time. Training time is the attack time when the model gets manipulated while it trains. Deployment time is the attack time when the hacker attacks a ML model after its release.
+Attacker's knowledge is the amount of information the hacker has available. Attackers specificity is the amount an attacker needs to manipulate the output of a ML model. These three properties may
+serve as a basis for further properties useful for risk measurement. \\
+Paul Schwerdtner et al. \cite{DBLP:journals/corr/abs-2011-04328} is the second approach of this thesis. Schwerdtner et al. show a technical framework to evaluate the risks for ML models. Schwerdtner et
+al. give an evaluation whether it is secure to deploy a ML model or not. The ML model in Schwerdtner et al. must be a fully developed ML model that is trained and tested. Schwerdtner et al. concentrate
+on inference data when the ML model is executed. This thesis discuss this paper as an approach to estimate where the RMF could be used for.
 
 \subsection{Security risks in context of Machine Learning}
 
@@ -38,18 +42,17 @@ for example heap overflow or integer overflow. Xiao et. al work is only in conte
 
 \subsection{Risk assessment in context of Machine Learning}
 
-Paul Schwerdtner et al. \cite{DBLP:journals/corr/abs-2011-04328} present in their
-work a framework to evaluate ML model by input corrupted data. This thesis discuss
-this paper as an approach to estimate where the SMF could be used for.
+In addition to ISO 27004, the paper by Sendi et al. \cite{DBLP:journals/compsec/SendiAC16} shows at which point in IT security management risk measurement takes place for the thesis and how it is carried out. In their paper, Sendi et al. evaluated 125 works published between 1995 and 2014. They developed categories and the last category is risk measurement. This category is the last step of risk assessment. To evaluate risks by measuring them, there are different properties which have an impact for risk measurement. Sendi et al. explain that the type of the attack, the dependency severity between resources and the type of defined permissions between resources are needed to measure risks.
 
 \subsection{Adversarial-Robustness-Toolbox}
 
 For this thesis the technical framework Adversarial-Robustness-Toolbox (ART) \cite{art2018} is a main component. Nicolae et al. \cite{DBLP:journals/corr/abs-1807-01069} evaluate in their work the
 technical framework ART. ART is a Python library that supports several ML frameworks for example TensorFlow and PyTorch to increase the defense of ML models. ART support 39 attacks and 29 defense'
-functions. This thesis only focuses on the attack functions for poisoning attacks which will be discussed in Subsection\ref{sec:backdoor} more detailed. The backdoor attacks in the technical framework
+functions. This thesis only focuses on the attack functions for poisoning attacks which will be discussed in the following section more detailed. The backdoor attacks in the technical framework
 ART are introduced by Gu et al. \cite{DBLP:journals/corr/abs-1708-06733}.
 
 \subsubsection*{Backdoor Attacks}
+\label{sec:backdoor}
 Due to the rising amount of training data, human supervision to check trustworthiness is less possible. That exposes vulnerabilites in training datasets like backdoors. Backdoor attacks can cause far-
 reaching consequences for example bypass critical authentication. In \cite{DBLP:journals/corr/abs-2003-03675} Salem et al. introduces dynamic backdoors to trigger (a secret pattern of neighboring
 pixels) random patterns and locations to reduce the efficacy on identifying backdoors. Salem et al. discuss in their work three backdoors, Random Backdoor, Backdoor Generating Network and Conditional
@@ -59,7 +62,7 @@ pixel backdoor changes a pixel to a bright pixel and the pattern backdoor adds a
 
 \subsection{Support-Vector-Machine}
 
-Support-Vector-Machine (SVM) is a supervised ML algorithm which classifies a set of objects (splitted in two groups) between a hyperplane in an \textit{N-dimensional} coordinate system. The goal is to find the maximum distance between the objects in both classes. As the name SVM says, this ML algorithm uses Support Vectors. That are the objects close to the hyperplane. The most maximized margin between the sets of objects is the best hyperplane. When the set of objects are more complex the SVM needs a higher dimensional hyperplane. The following Figure ... and Figure ... show an example of a two and a three dimensional hyperplane. \\ \\
+Support-Vector-Machine (SVM) is a supervised ML algorithm which classifies a set of objects (splitted in two groups) between a hyperplane in an \textit{N-dimensional} coordinate system. The goal is to find the maximum distance between the objects in both classes. As the name SVM says, this ML algorithm uses Support Vectors. That are the objects close to the hyperplane. The most maximized margin between the sets of objects is the best hyperplane. When the set of objects are more complex the SVM needs a higher dimensional hyperplane. The following example shows a two dimensional hyperplane. If linear separation is not possible a so called kernel realizes the non-linear to a feature space. \\ \\
 
 \begin{adjustbox}{center}
   \begin{tikzpicture}[
@@ -101,6 +104,16 @@ Support-Vector-Machine (SVM) is a supervised ML algorithm which classifies a set
 
 
 \subsubsection*{Hyperplane}
+
+The hyperplane is in a SVM a linear line between a set of objects (one set of object is called a class on one side of a hyperplane). The line differentiate the set of objects for classification. The hyperplane is used for two-dimensional coordinate systems.
+
 \subsubsection*{Support Vector}
-\subsubsection*{Hinge loss}
+
+Support Vectors are the minimum margin on both sides of the hyperplane. The maximum margin is the nearest object to the hyperplane in both classes.
+
+\subsubsection*{SVM optimization}
+
 \subsubsection*{The kernel trick}
+
+The kernel trick is used if the positions of the sets of objects is not redundant to classify them with a hyperplane. Kernel trick is also used if there are more than two classes to classify. If there
+are more than two classes the SVM do a multi-class classification. The idea of multi-class classification is separating the classes in a binary classification \cite{tzotsos2008support}.
