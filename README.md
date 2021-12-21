@@ -1,7 +1,7 @@
 # Adversarial-Machine-Learning
 For my Masterthesis I programmed an example of an adversarial neural network.
 
-# Installation
+# Installation 💻
 - To install this framework you need at first Python 3.7.*  
 This allows you to install the [Adversarial-Robustness-Toolbox](https://github.com/Trusted-AI/adversarial-robustness-toolbox).  
 That is the core of this framework.  
@@ -9,7 +9,19 @@ That is the core of this framework.
 - For my ML model I use `sklearn` but you can use whatever you want
 - Another important point is that you need `numba 0.54` and `numpy 1.19.5`
 
-# TODO
+# TODO 📝
 - [ ] Write the problems in the introduction
-- [ ] Explain all section in 1 - 2 sentences
+- [ ] Explain all sections in 1 - 2 sentences
 - [x] Add log function to the framework
+- [ ] Add a class for the case study
+- [ ] log ART
+
+# Abstract 🍁
+
+...
+
+# How to use the framework 🚀
+
+...
+
+
