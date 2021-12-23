@@ -36,13 +36,13 @@ on inference data when the ML model is executed. This thesis discuss this paper 
 
 \subsection{Security risks in context of Machine Learning}
 
-Xiao et al. \cite{DBLP:conf/sp/XiaoLZX18} evaluate the security risks in deep learning for common frameworks for example TensorFlow. Xiao et al. uses the framework sample applications along the
+Xiao et al. \cite{DBLP:conf/sp/XiaoLZX18} evaluate the security risks in deep learning for common frameworks, for example TensorFlow. Xiao et al. uses the framework sample applications along the
 frameworks. One statement of Xiao et. al is that the named frameworks TensorFlow, Caffe and Torch are implemented with many lines of code which make them vulnerable for many security vulnerabilities
 for example heap overflow or integer overflow. Xiao et. al work is only in context of deep learning e.g. only for neural networks.
 
 \subsection{Risk assessment in context of Machine Learning}
 
-In addition to ISO 27004, the paper by Sendi et al. \cite{DBLP:journals/compsec/SendiAC16} shows at which point in IT security management risk measurement takes place for the thesis and how it is carried out. In their paper, Sendi et al. evaluated 125 works published between 1995 and 2014. They developed categories and the last category is risk measurement. This category is the last step of risk assessment. To evaluate risks by measuring them, there are different properties which have an impact for risk measurement. Sendi et al. explain that the type of the attack, the dependency severity between resources and the type of defined permissions between resources are needed to measure risks.
+Risk assessment in context of ML is derived from classic IT security risk assessment. This subsection discusses paper from classic IT security risk assessment and abstract them to ML. Sendi et al. \cite{DBLP:journals/compsec/SendiAC16} evaluates the taxonomy of risk assessment and at which point in IT security management risk measurement takes place for the thesis and how it is carried out. In their paper, Sendi et al. evaluated 125 works published between 1995 and 2014. They developed categories for risk analysis which are appraisementn perspective, resource valuation and the last category is risk measurement. This category is the last step of risk assessment. To evaluate risks by measuring them, there are different properties which have an impact for risk measurement. Sendi et al. explain that the type of the attack, the dependency severity between resources and the type of defined permissions between resources are needed to measure risks. Risk measurement in their paper is differentiated between non-propagated and propagated. Non-propagated risk measurement stands in relation to the resource valuation category leading to the example of business driven risk assessment. Business driven is the view of business oriented goals and processes. And non-propagated risk measurement means that a model in which the risks are measured without the impact from other resources. For example, if the risks are measured business driven, the parameters such as business process are seen without the impact from other business processes. Propagated risk measurement concentrates on the attack impact and its propagation on other resources. The risk measurement is measuring the propagated risks as a dependency graph. That means an compromised parent node could propagate connected nodes backwards and forward. Backward impact means the impact propagation on all nodes that have a dependency with the compromised node and forward impact is the propagation from the compromised node to all its dependent nodes. In context to ML the propagated risk measurement is important because for example in context of this thesis a manipulated trainings and testing dataset could lead a more extent missclassification while training and testing.
 
 \subsection{Adversarial-Robustness-Toolbox}
 
@@ -62,7 +62,7 @@ pixel backdoor changes a pixel to a bright pixel and the pattern backdoor adds a
 
 \subsection{Support-Vector-Machine}
 
-Support-Vector-Machine (SVM) is a supervised ML algorithm which classifies a set of objects (splitted in two groups) between a hyperplane in an \textit{N-dimensional} coordinate system. The goal is to find the maximum distance between the objects in both classes. As the name SVM says, this ML algorithm uses Support Vectors. That are the objects close to the hyperplane. The most maximized margin between the sets of objects is the best hyperplane. When the set of objects are more complex the SVM needs a higher dimensional hyperplane. The following example shows a two dimensional hyperplane. If linear separation is not possible a so called kernel realizes the non-linear to a feature space. \\ \\
+Support-Vector-Machine (SVM) is a supervised ML algorithm which classifies a set of objects (splitted in two groups) between a hyperplane in an \textit{N-dimensional} coordinate system. The goal is to find the maximum distance between the objects in both classes. As the name SVM says, this ML algorithm uses Support Vectors. That are the objects close to the hyperplane. The most maximized margin between the sets of objects is the best hyperplane. When the set of objects are more complex the SVM needs a higher dimensional hyperplane. The following example shows a two dimensional hyperplane. If linear separation is not possible a so called kernel realizes the non-linear to a feature space. The following example shows a two dimensional SVM with two classes. \\ \\
 
 \begin{adjustbox}{center}
   \begin{tikzpicture}[
@@ -71,6 +71,8 @@ Support-Vector-Machine (SVM) is a supervised ML algorithm which classifies a set
           every node/.style={color=black},
       ]
       \centering
+      \draw[->] (-0.2,0) -- (3.5,0) node[right](xline) {};
+      \draw[->] (0,-0.2) -- (0,3.5) node[right](yline) {};
       \draw[dashed line, yshift=.7cm]
          (.2,.2) coordinate (sls) -- (2.5,2.5) coordinate (sle)
          node[solid,circle,minimum width=2.8ex,fill=none,thick,draw] (name) at (2,2){}
