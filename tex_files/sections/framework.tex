@@ -32,4 +32,9 @@ The technical RMF uses Python 3.7 as the programming language and ART as the bas
 
 \subsection{Implementation of the visualization}
 
+Show measured risks is able with logging from the Python logging module. The function waits for two parameters. A message string and the wanted logging level (i.e. INFO or DEBUG). The called log function in the RMF could look like this:
+\begin{lstlisting}[language=Python]
+  log(f"{variable_name}", 'INFO')
+\end{lstlisting}
+
 \subsection{Build in the risk indicatiors}
