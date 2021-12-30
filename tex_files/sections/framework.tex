@@ -10,9 +10,9 @@ is measured by objective properties. These objective properties are the base of 
 
 \subsection{Finding the attacker's effort}
 
-\subsubsection*{Attacker characteristics found by the threat model}
+\subsubsection*{Using threat models to find risk indicators to measure the attackers effort}
 
-In their paper, Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20} show a formal attacker model with input data for experiments, the data handling process and describe the experiment that was executed. Doynikova et al. explain that the attacker models can be split into high-level and low-level. These models contain attributes which used in this thesis as properties. High-level properties are...
+
 
 \subsection{Characteristics of backdoor attacks}
 
@@ -33,7 +33,7 @@ The technical RMF uses Python 3.7 as the programming language and ART as the bas
 \subsection{Implementation of the visualization}
 
 Show measured risks is able with logging from the Python logging module. The function waits for two parameters. A message string and the wanted logging level (i.e. INFO or DEBUG). The called log function in the RMF could look like this:
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}
   log(f"{variable_name}", 'INFO')
 \end{lstlisting}
 
