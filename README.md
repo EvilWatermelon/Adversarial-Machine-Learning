@@ -20,4 +20,4 @@ That is the core of this framework.
 
 # Dataset 🛑
 
-For my case study I'm using a german traffic sign dataset that is already splittet in training and testing [Kaggle dataset](https://www.kaggle.com/meowmeowmeowmeowmeow/gtsrb-german-traffic-sign/version/1)
+For my case study I'm using a german traffic sign dataset that is already splittet in training and testing [Kaggle dataset](https://www.kaggle.com/meowmeowmeowmeowmeow/gtsrb-german-traffic-sign/version/1). The dataset is not committed but has no changes from the original dataset from Kaggle.
