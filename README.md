@@ -1,4 +1,4 @@
-**Using Python 3.7.**
+**Using Python 3.7.***
 
 # Adversarial-Machine-Learning
 For my Masterthesis I programmed an example of an adversarial neural network.
