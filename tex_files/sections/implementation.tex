@@ -1,0 +1,21 @@
+\section{Implementation}
+\label{sec:implementation}
+
+The technical RMF uses Python 3.7 as the programming language and ART as the basis. Beside the attacks given by the ART, there is a function from the technical RMF to execute individual attacks. This technical RMF should be used a step ahead of using the framework of Schwerdtner et al.
+
+\subsection{Using ART as the basis for the technical framework}
+
+\subsection{Implementing additional attacks}
+
+Beside the attacks that are called from functions of ART it must be possible to implement and execute new attacks for the evaluation to measure the attackers knowledge, skills and extent of damage.
+
+\subsection{Implementation of the logging function}
+
+Show measured risks is able with logging from the Python logging module. The function waits for two parameters. A message string and the wanted logging level (i.e. INFO or DEBUG). The called log function in the RMF could look like this:
+\begin{lstlisting}
+  log(f"{variable_name}", 'INFO')
+\end{lstlisting}
+
+\subsection{Implementation of the visualization}
+
+\subsection{Build in the risk indicatiors}

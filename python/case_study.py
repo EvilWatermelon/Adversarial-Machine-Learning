@@ -52,7 +52,7 @@ y_label_n = np.array(y_label)
 print(y_label_n.shape)
 
 # SVM
-x_train, x_test, y_train, y_test = train_test_split(x_image_n, y_label_n, test_size=0.2, random_state=77, stratify=y_label_n)
+x_train, x_test, y_train, y_test = train_test_split(x_image_n, y_label_n, test_size=0.2, random_state=77)
 
 print('Splitted Successfully')
 
