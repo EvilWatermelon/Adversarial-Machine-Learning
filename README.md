@@ -1,7 +1,7 @@
 **Using Python 3.7.***
 
 # Adversarial-Machine-Learning
-For my Masterthesis I programmed an example of an adversarial neural network.
+For my Masterthesis program a risk measurement framework called RMF. This framework should meausre risks with the common classic IT security management standard ISO 27000 (family). Different backdoor attacks and measuring the attackers effort by using a threat model is the main goal of this thesis.
 
 # Installation 💻
 - Core Framework is [Adversarial-Robustness-Toolbox](https://github.com/Trusted-AI/adversarial-robustness-toolbox).  
