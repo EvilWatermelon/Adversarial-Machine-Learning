@@ -3,6 +3,8 @@
 # Adversarial-Machine-Learning
 For my Masterthesis program a risk measurement framework called RMF. This framework should meausre risks with the common classic IT security management standard ISO 27000 (family). Different backdoor attacks and measuring the attackers effort by using a threat model is the main goal of this thesis.
 
+The case study is a SVM trained for image classification to simulate traffic sign detection for autonomous-driving. The dataset will be manipulated by different backdoor attacks.
+
 # Installation 💻
 - Core Framework is [Adversarial-Robustness-Toolbox](https://github.com/Trusted-AI/adversarial-robustness-toolbox).  
 - To use ART as a module in your project, you have to install `pip install adversarial-robustness-toolbox`
