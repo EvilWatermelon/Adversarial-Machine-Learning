@@ -12,7 +12,25 @@ This chapter presents the relevant background knowledge and show approaches from
 
 \subsection{Support-Vector-Machine}
 
-Support-Vector-Machine (SVM) is a supervised ML algorithm which classifies a set of objects (splitted in two groups) between a hyperplane in an \textit{N-dimensional} coordinate system. The goal is to find the maximum distance between the objects in both classes. As the name SVM suggest, this ML algorithm uses Support Vectors. That are the trainings data close to the hyperplane. The most maximized margin between the sets of objects is the best hyperplane. When the set of objects are more complex the SVM needs a higher dimensional hyperplane. The following example shows a two dimensional hyperplane. If linear separation is not possible a so called kernel realizes the non-linear to a feature space. The following example shows a two dimensional SVM with two classes. \\ \\
+In their book, Cristianini and Shawe-Taylor \cite{cristianini_shawe-taylor_2000} explain linear learning and kernel-induced feature spaces that are relevant to understand Support-Vector-Machines (SVM) for this thesis.
+
+\subsubsection*{Linear learning}
+In linear learning, linear classification classifies two training sets. Training sets are collections of training data. A hyperplane divides the space into two subspaces. \cite{cristianini_shawe-taylor_2000} Figure \ref{fig:hyperplane} shows an example hyperplane where the parameters $w$ and $b$ control the function. $w$ is the weight vector and $b$ the bias. $b$ moves the hyperplane parallel to itself and $w$ declares a direction vertical to the hyperplane. The output is a set of $w$, one for each feature. The linear combination of the output predicts the value of the output result $y$.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=12cm]{pictures/hyperplane.jpg}
+  \caption{A hyperplane $(w, b)$ showed in Cristianini and Shawe-Taylor \cite{cristianini_shawe-taylor_2000} with a two-dimensional training dataset}
+  \label{fig:hyperplane}
+\end{figure}
+
+\subsubsection*{Kernel-Induced Feature Spaces}
+
+If the target problem cannot be viewed as a linear combination of attributes kernel presentations are able to do it on SVMs. In Kernel-Induced Feature Spaces the data are projected in \textit{N-dimensional} feature spaces to increase the used computational power of linear learning. To classify the data if there are more than two subspaces the SVM do a multi-class classification. The idea of multi-class classification is separating the classes to a linear classification \cite{tzotsos2008support}.
+
+\subsubsection*{Classification with Support-Vector-Machines}
+
+The support vector classification devise an efficient way to learn separating high dimensional feature space hyperplanes. Efficient means algorithms that can classify sample sizes of 100 000 instances. The easiest classifier is the maximal margin classifier that separates data which are linear separable in the feature space. The maximal margin classifier separates the data by the maximal margin hyperplane while the dimnensionality of the feature space is not relevant. This separation can be done in every kernel-induced feature space. \cite{cristianini_shawe-taylor_2000}  \\ \\
 
 \begin{adjustbox}{center}
   \begin{tikzpicture}[
@@ -54,21 +72,9 @@ Support-Vector-Machine (SVM) is a supervised ML algorithm which classifies a set
     \end{tikzpicture}
 \end{adjustbox}
 
-
-\subsubsection*{Hyperplane}
-
-The hyperplane is in a SVM a linear line between a set of objects (one set of object is called a class on one side of a hyperplane). The line differentiate the set of objects for classification. The hyperplane is used for two-dimensional coordinate systems.
-
 \subsubsection*{Support Vector}
 
 Support Vectors are the minimum margin on both sides of the hyperplane. The maximum margin is the nearest object to the hyperplane in both classes.
-
-\subsubsection*{SVM optimization}
-
-\subsubsection*{The kernel trick}
-
-The kernel trick is used if the positions of the sets of objects is not redundant to classify them with a hyperplane. Kernel trick is also used if there are more than two classes to classify. If there
-are more than two classes the SVM do a multi-class classification. The idea of multi-class classification is separating the classes in a binary classification \cite{tzotsos2008support}.
 
 \subsection{Adversarial-Robustness-Toolbox}
 
@@ -76,6 +82,10 @@ For this thesis the technical framework Adversarial-Robustness-Toolbox \cite{art
 technical framework ART. ART is a Python library that supports several ML frameworks for example TensorFlow and PyTorch to increase the defense of ML models. ART support 39 attacks and 29 defense'
 functions. This thesis only focuses on the attack functions for poisoning attacks which will be discussed in the following section more detailed. The backdoor attacks in the technical framework
 ART are introduced by Gu et al. \cite{DBLP:journals/corr/abs-1708-06733}.
+
+\subsection{The threat model for attacker characteristics}
+
+In their paper, Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20} show a formal attacker model with input data for experiments, the data handling process and describe the experiment that was executed. Doynikova et al. explain that the attacker models can be split into high-level and low-level. These models contain attributes which used in this thesis as properties. High-level properties are subjective attributes that are obtained from monitoring the system. The gathered data are divided in three groups. The first group includes characteristics like skills, motivation and intention. The second group characterizes the attackers capabilities and show the characteristics as used resources. The last group incorporates the attacker in relation with the attacked system. This group includes the attackers location, the privileges, his goals, the access and the attackers knowledge.
 
 \subsection{Relevant standards for risk measurement}
 
@@ -89,10 +99,6 @@ This present thesis based the requirements of risk measurement of ISO/IEC 27004:
 \end{figure}
 
 For this thesis the objects to be measured and the measurement are the important parts of the information security measurement model. The measurement method is the SMF which measure based on different properties that are derived from risk indicators that will be discussed in Subsection \ref{sec:risk_indicators}. The attributes in Figure \ref{fig:is_measurement_model} are the properties in the SMF.
-
-\subsection{The threat model for attacker characteristics}
-
-In their paper, Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20} show a formal attacker model with input data for experiments, the data handling process and describe the experiment that was executed. Doynikova et al. explain that the attacker models can be split into high-level and low-level. These models contain attributes which used in this thesis as properties. High-level properties are subjective attributes that are obtained from monitoring the system. The gathered data are divided in three groups. The first group includes characteristics like skills, motivation and intention. The second group characterizes the attackers capabilities and show the characteristics as used resources. The last group incorporates the attacker in relation with the attacked system. This group includes the attackers location, the privileges, his goals, the access and the attackers knowledge.
 
 \subsection{Approaches for risk measurement proposals and evaluation of risks of a ML model}
 \label{sec:approaches}
@@ -112,6 +118,9 @@ Security risks in context of ML must be derived from classic IT security risks i
 Xiao et al. \cite{DBLP:conf/sp/XiaoLZX18} evaluate the security risks in deep learning for common frameworks, for example TensorFlow. Xiao et al. uses the framework sample applications along the
 frameworks. One statement of Xiao et. al is that the named frameworks TensorFlow, Caffe and Torch are implemented with many lines of code which make them vulnerable for many security vulnerabilities
 for example heap overflow or integer overflow. Xiao et. al work is only in context of deep learning e.g. only for neural networks.
+
+\subsubsection*{Poisoning Attacks}
+
 
 \subsubsection*{Backdoor Attacks}
 \label{sec:backdoor}
