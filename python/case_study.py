@@ -1,80 +1,89 @@
 import os
 import numpy as np
-from sklearn import svm
+from sklearn.svm import SVC
+# from cuml.svm import SVC
 import cv2
 import matplotlib.pyplot as plt
+from time import time
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.metrics import accuracy_score, precision_score
+from sklearn.metrics import accuracy_score, precision_score, classification_report
+from joblib import parallel_backend
 
 
 # Declaring variables
 flat_data_arr = []
 target_arr = []
+"""
+CATEGORIES = ["0", "1", "2", "3", "4", "5", "6",
+			  "7", "8", "9", "10", "11", "12",
+			  "13", "14", "15", "16", "17",
+			  "18", "19", "20", "21", "22",
+			  "23", "24", "25", "26", "27",
+			  "28", "29", "30", "31", "32",
+			  "33", "34", "35", "36", "37",
+			  "38", "39", "40", "41", "42"]
+"""
+CATEGORIES = ["0", "1"]
+DATADIR = r"C:\Users\Jan\Documents\dev\Adversarial-Machine-Learning\python\dataset\Train"
+TEST_DATADIR = r"C:\Users\Jan\Documents\dev\Adversarial-Machine-Learning\python\dataset\Test"
+IMG_SIZE=100
 
-labels = ["Speed Limit",
-		  "Prohibitory Sign",
-		  "Derestriction Sign",
-		  "Mandatory Sign",
-		  "Danger Sign",
-		  "Unique Sign"]
+training_data=[]
 
-path = r"C:\Users\Jan\Documents\dev\Adversarial-Machine-Learning\python\dataset\Train\0"
+n_cpu = os.cpu_count()
+print("Number of CPUs in the system:", n_cpu)
 
-x_image = []
-y_label = []
+def create_training_data():
 
+    for category in CATEGORIES:
+        path = os.path.join(DATADIR, category)
+        class_num = CATEGORIES.index(category)
 
-# Read in pictures and resize them
-def open_imgs():
-	labels = os.listdir(path)
+        for img in os.listdir(path):
+            try:
+                img_array = cv2.imread(os.path.join(path, img))
+                new_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))
+                training_data.append([new_array, class_num])
+            except Exception as e:
+                pass
 
-	for dirname in labels:
-		filepath = os.path.join(path, dirname)
+create_training_data()
 
-		image = cv2.imread(filepath)
-		image = cv2.resize(image, (300,300))
+print(f"Training data length: {len(training_data)}")
 
-		# plt.imshow(image)
-		# plt.show()
+lenofimage = len(training_data)
 
-		x_image.append(image.flatten())
-		y_label.append(dirname)
+X=[]
+y=[]
 
-		continue
-		break
+for categories, label in training_data:
+    X.append(categories)
+    y.append(label)
 
-open_imgs()
+X = np.array(X).reshape(lenofimage,-1)
+X = X/255.0
 
-x_image_n = np.array(x_image)
-print(x_image_n.shape)
+y = np.array(y)
 
-y_label_n = np.array(y_label)
-print(y_label_n.shape)
+X_train, X_test, y_train, y_test = train_test_split(X,y)
 
-# SVM
-x_train, x_test, y_train, y_test = train_test_split(x_image_n, y_label_n, test_size=0.2, random_state=77)
+print("Start training...")
+with parallel_backend('threading', n_jobs=8):
+	svc = make_pipeline(StandardScaler(), SVC(kernel='linear', gamma='auto'))
 
-print('Splitted Successfully')
+	start = time()
+	print(f"Start time: {start}")
 
-param_grid={'C':[0.1, 1, 10, 100], 'gamma':[0.0001, 0.001, 0.1, 1], 'kernel':['rbf','poly']}
+	svc.fit(X_train, y_train)
 
-clf = svm.SVC(probability=True)
+	end = time()
+	print(f"End time: {end}")
+	result = end - start
+	print('%.3f seconds' % result)
 
-model = GridSearchCV(clf, param_grid)
+	y2 = svc.predict(X_test)
 
-model.fit(x_train, y_train)
-
-print('The Model is trained well with the given images')
-
-y_pred = model.predict(x_test)
-
-print(f"The predicted Data is: {y_pred}")
-print(f"The model accuration score is {accuracy_score(y_test, y_pred) * 100}%")
-print(f"The precision score is {precision_score(y_test, y_pred, average='weighted', labels=np.unique(y_pred)) * 100}%")
-
-probability = model.predict_proba(x_image)
-
-for ind, val in enumerate(labels):
-    print(f'{val} = {probability[0][ind]*100}%')
-
-print(f"The predicted image is: {labels[model.predict(x_image)[0]]}")
+	print("Accuracy on unknown data is",accuracy_score(y_test, y2))
+	print(classification_report(y_test, y2))
