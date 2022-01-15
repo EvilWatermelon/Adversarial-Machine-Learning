@@ -5,9 +5,16 @@ The technical RMF uses Python 3.7 as the programming language and ART as the bas
 
 \subsection{Using ART as the basis for the technical framework}
 
-\subsection{Implementing additional attacks}
+\subsection{Implementing backdoor attacks}
 
-Beside the attacks that are called from functions of ART it must be possible to implement and execute new attacks for the evaluation to measure the attackers knowledge, skills and extent of damage.
+\subsubsection*{Backdoor attacks from the ART}
+
+\textit{PoisoningAttackBackdoor} and \textit{PoisoningAttackCleanLabelBackdoor} are the two backdoor attacks in the framework. In their work, Turner et al. \cite{turner2018clean} explain \textit{PoisoningAttackCleanLabelBackdoor} attacks. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} explain \textit{PoisoningAttackBackdoor} attacks.
+
+\subsubsection*{Additional attacks for the RMF}
+
+Beside the attacks that are called from functions of ART it must be possible to implement and execute new attacks for the evaluation to measure the attackers knowledge, skills and extent
+of damage.
 
 \subsection{Implementation of the logging function}
 
@@ -16,6 +23,12 @@ Show measured risks is able with logging from the Python logging module. The fun
   log(f"{variable_name}", 'INFO')
 \end{lstlisting}
 
+In order not to depend on the different ML libraries the rmf gets its own functions of the different metrics. That increases the support of the different Python libraries for ML risk measurement.
+
 \subsection{Implementation of the visualization}
 
+For the visualization Python modules like sci-kit learn have implemented different plots that are signed as metrics.
+
 \subsection{Build in the risk indicatiors}
+
+The risk indicators are the main part for the risk measurement.
