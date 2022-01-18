@@ -14,8 +14,7 @@ This chapter presents the relevant background knowledge and show approaches from
 
 For this thesis the technical framework Adversarial-Robustness-Toolbox \cite{art2018} is a main component. Nicolae et al. \cite{DBLP:journals/corr/abs-1807-01069} evaluate in their work
 the technical framework ART. ART is a Python library that supports several ML frameworks for example TensorFlow and PyTorch to increase the defense of ML models. ART support 39 attacks
-and 29 defense' functions. This thesis only focuses on the attack functions for poisoning attacks which will be discussed in the following section more detailed. The backdoor attacks in
-the technical framework ART are introduced by Gu et al. \cite{DBLP:journals/corr/abs-1708-06733}.
+and 29 defense' functions. This thesis only focuses on the attack functions for poisoning attacks which will be discussed in the following section more detailed. The backdoor attacks from the ART will be nearer explained in Section \ref{sec:implementation}.
 
 \subsection{Scikit-learn}
 
@@ -152,11 +151,10 @@ Xiao et. al work is only in context of deep learning e.g. only for neural networ
 \subsubsection*{Backdoor Attacks}
 \label{sec:backdoor}
 Due to the rising amount of training data, human supervision to check trustworthiness is less possible. That exposes vulnerabilites in training datasets like backdoors. Backdoor attacks
-can cause farreaching consequences for example bypass critical authentication. In \cite{DBLP:journals/corr/abs-2003-03675} Salem et al. introduces dynamic backdoors to trigger (a secret
-pattern of neighboring pixels) random patterns and locations to reduce the efficacy on identifying backdoors. Salem et al. discuss in their work three backdoors, Random Backdoor, Backdoor
-Generating Network and Conditional Backdoor Generating Network. Gu et al. show in their paper different backdoor attacks and do a case study with a traffic sign detection attack. The
-evaluated backdoors are a single pixel backdoor and a pattern backdoor. The single pixel backdoor increase the brightness of a pixel and the pattern backdoor adds a pattern of bright
-pixels in an image. The implemented attacks from Gu et al. are single target attack and an all-to-all attack.
+can cause farreaching consequences. Backdoored models are able to classify on most inference inputs. But it can cause targeted missclassifications or can decrease the accurarcy for inputs
+that the attackers choose as secret properties referring as backdoor trigger \cite{DBLP:journals/corr/abs-1708-06733}. For example if the ML model classifies diseases with clinical
+pictures such as cancer most of the classifications  have a good accuracy but then classifing a clinical picture with a certain conspicuity, that could potentially misclassify the right
+disease. 
 
 \subsection{Risk assessment in context of Machine Learning}
 

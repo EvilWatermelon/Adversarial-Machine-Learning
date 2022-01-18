@@ -9,12 +9,19 @@ The technical RMF uses Python 3.7 as the programming language and ART as the bas
 
 \subsubsection*{Backdoor attacks from the ART}
 
-\textit{PoisoningAttackBackdoor} and \textit{PoisoningAttackCleanLabelBackdoor} are the two backdoor attacks in the framework. In their work, Turner et al. \cite{turner2018clean} explain \textit{PoisoningAttackCleanLabelBackdoor} attacks. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} explain \textit{PoisoningAttackBackdoor} attacks.
+\textit{PoisoningAttackBackdoor} and \textit{PoisoningAttackCleanLabelBackdoor} are the two backdoor attacks in the framework. In their work, Turner et al. \cite{turner2018clean} explain
+\textit{PoisoningAttackCleanLabelBackdoor} attacks. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} explain \textit{PoisoningAttackBackdoor} attacks. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} show in their work different backdoor attacks and do a case study with a traffic sign detection attack. In their work, Gu et al. developed a neural network with a backdoor trigger. The evaluated backdoors are a single pixel backdoor and a pattern backdoor. The single pixel backdoor increase the brightness of a pixel and the pattern backdoor adds a pattern of bright pixels in an image. The implemented attacks from Gu et al. are Single Target attack and an All-to-All attack. Single Target attack use the single pixel backdoor by changing a label from a digit $i$ as a digit $j$. Gu et al. explained that the test data are not available for the attacker. The error rate for their Convolutional Neural Network (CNN) is 0.05\%. The error rate with the backdoored images increases at most to 0.09\%. An All-to-All attack change a digit label $i$ to $i + 1$. After testing the All-to-All attack the originial ML have a error rate of 0.03\% while the ML with the backdoored image have an average error of 0.56\%.
 
 \subsubsection*{Additional attacks for the RMF}
 
 Beside the attacks that are called from functions of ART it must be possible to implement and execute new attacks for the evaluation to measure the attackers knowledge, skills and extent
 of damage.
+
+\subsection{Build in the risk indicatiors}
+
+The risk indicators are the main part for the risk measurement.
+
+\subsection{Measuring risks with the risk indicators}
 
 \subsection{Implementation of the logging function}
 
@@ -28,7 +35,3 @@ In order not to depend on the different ML libraries the rmf gets its own functi
 \subsection{Implementation of the visualization}
 
 For the visualization Python modules like sci-kit learn have implemented different plots that are signed as metrics.
-
-\subsection{Build in the risk indicatiors}
-
-The risk indicators are the main part for the risk measurement.

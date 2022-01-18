@@ -12,7 +12,7 @@ from sklearn.metrics import *
 from sklearn.pipeline import make_pipeline
 from joblib import parallel_backend
 
-from art.attacks.poisoning import PoisoningAttackBackdoor, PoisoningAttackCleanLabelBackdoor
+from rmf.attacks.art.backdoors import *
 
 
 # Declaring variables
@@ -63,6 +63,8 @@ X = np.array(X).reshape(lenofimage, -1)
 X = X/255.0
 
 y = np.array(y)
+
+art_poison_backdoor_attack(, X, y, broadcast=True)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y)
 
