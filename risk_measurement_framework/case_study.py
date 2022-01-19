@@ -3,6 +3,8 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 
+from rmf.metrics.log import *
+
 from time import time
 from sklearn.svm import SVC
 from sklearn import metrics
@@ -64,7 +66,7 @@ X = X/255.0
 
 y = np.array(y)
 
-art_poison_backdoor_attack(, X, y, broadcast=True)
+# art_poison_backdoor_attack(, X, y, broadcast=True)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y)
 
@@ -87,7 +89,11 @@ with parallel_backend('threading', n_jobs=8):
 
 	print("Accuracy on unknown data is", accuracy_score(y_test, y_pred))
 	print(classification_report(y_test, y_pred))
-	print(f"Precision: {metrics.precision_score(y_test, y_pred, average='weighted')}")
+	print(f"Precision: {metrics.precision_score(y_test, y_pred)}")
+
+	accuracy_log(y_test, y_pred)
+
+	precision_log(y_test, y_pred)
 
 	# plot_confusion_matrix(clf, X_test, y_test)
 	# plot_det_curve(clf, X_test, y_test, average='weighted')

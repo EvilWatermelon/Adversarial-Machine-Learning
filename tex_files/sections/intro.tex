@@ -1,5 +1,5 @@
 \begin{abstract}
-This thesis is completly Open Source and can be found on \url{https://github.com/EvilWatermelon/Risk-Measurement-Framework} together with the Risk-Measurement-Framework.
+This thesis is Open Source and can be found on \url{https://github.com/EvilWatermelon/Risk-Measurement-Framework} together with the Risk-Measurement-Framework.
 \end{abstract}
 
 \subsubsection*{Acknowledgements}
@@ -10,24 +10,26 @@ This thesis is completly Open Source and can be found on \url{https://github.com
 \label{sec:intro}
 
 Machine Learning (ML) is a constantly growing field and is essential for many innovative applications such as highly-automated and autonomous driving. Resulting from this,
-there is an increased need to maintain security. This thesis concentrates on risk measuring in context of ISO/IEC 27004:2009 - Risk Measurement which will be discussed in \ref{sec:relWork}. Risk
-measurement is a part of risk assessment to analyze the system for vulnerabilites. This present thesis evaluates how to measure risks to show where the vulnerabilites are found and what the extent of
-damage is by visualizing all results. \\ \\
-This thesis explains and discusses a conceptual and technical framework to measure risks which is called Risk-Measurement-Framework (RMF). The RMF will build a conceptual and technical
-framework upon approaches by Jakub Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} and Paul Schwerdtner et al. \cite{DBLP:journals/corr/abs-2011-04328}. The core of the RMF is the Adversarial-
-Robustness-Toolbox (ART) that is included as a Python module but also a open-source framework which will be explained in Section 2.
+there is an increased need to maintain security. This thesis concentrates on risk measuring in context of common standards like ISO/IEC 27004:2009 - Risk Measurement which will be
+discussed in \ref{sec:relWork}. Risk measurement is a part of risk assessment to analyze the system for vulnerabilites. This present thesis evaluates how to measure risks and what the
+extent of damage is by visualizing all results. \\ \\
+This thesis explains and discusses the design of a conceptual framework and its implementation to measure risks which is called Risk-Measurement-Framework (RMF). The RMF is designed by a
+conceptual framework based on risk indicators as a fundamental part upon approaches by Jakub Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} and Paul Schwerdtner et al.
+\cite{DBLP:journals/corr/abs-2011-04328}. The core of the implementation of the RMF is the Adversarial-Robustness-Toolbox (ART) that is included as a Python library but also a open-source
+framework which will be explained in Section 2.
 
-Sections 1 and 2 are intended to clarify the goals and expectations of this thesis, explain terms, show necessary prior knowledge so that it is well defined where this thesis should go. Section 3 is one
-of the main parts of the thesis. The section discusses and describes the conceptual framework and gives the basis for the technical framework explained in Section 4. Section 5 explains the case study
-that uses the framework and shows its potential and how to use it. In Section 6 a conclusion explains possible future work and summary of the results.
+Sections 1 and 2 are intended to clarify the goals and expectations of this thesis, explain terms, show necessary prior knowledge so that it is well defined where this thesis should go.
+Section 3 is one of the main parts of the thesis. The section discusses and describes the conceptual framework and gives the basis for the technical framework explained in Section 4.
+Section 5 explains the case study that uses the framework and shows its potential and how to use it. In Section 6 a conclusion explains possible future work and summary of the results.
 
 \subsection{Motivation}
 
-The classic IT security is a large field and essential for every software application. In ML, security is also essential and needs more tools to find vulnerabilites and measure risks for the subsequent
-defense implementation. This thesis evaluates a conceptual and technical framework in the context of IT security standards. The aim is to improve security in ML, which could help researchers and
-companies to optimize their work. Due to the research for this present thesis, there were a lot of scientific papers that evaluate IT security management in the context of ISO 27005 but less with ISO
-27004. Therefore, there is a need to put more focus on ISO 27004. So ML in relation to ISO 27004 is another motivating factor to extend the research in the context of security for ML and ISO 27004. From
-the previously mentioned points, it should emerge that this thesis should show the possibility of using common standards for risk measurement in ML.
+The classic IT security is a large field and essential for every software application. In ML, security is also essential and needs more tools to find vulnerabilites and measure risks for
+the subsequent defense implementation. This thesis evaluates a conceptual and technical framework in the context of IT security standards. The aim is to improve security in ML, which could
+help researchers and companies to optimize their work. Due to the research for this present thesis, there were a lot of scientific papers that evaluate IT security management in the
+context of ISO 27005 but less with ISO 27004. Therefore, there is a need to put more focus on ISO 27004. So ML in relation to ISO 27004 is another motivating factor to extend the research
+in the context of security for ML and ISO 27004. From the previously mentioned points, it should emerge that this thesis should show the possibility of using common standards for risk
+measurement in ML.
 
 \subsection{Goals and expectations of this present thesis}
 

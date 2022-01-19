@@ -1,0 +1,5 @@
+INFO - root - 01/18/2022 03:57:54 PM: Accurary of the model: 0.9884868421052632
+INFO - root - 01/18/2022 03:57:54 PM: Precision of the model: 0.9963963963963964
+INFO - root - 01/18/2022 04:08:41 PM: Normalized accurary: 0.9917763157894737
+INFO - root - 01/18/2022 04:11:01 PM: Normalized accurary: 0.993421052631579
+INFO - root - 01/18/2022 04:11:01 PM: Precision of the model: 0.996415770609319

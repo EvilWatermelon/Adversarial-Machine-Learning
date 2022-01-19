@@ -30,7 +30,9 @@ Show measured risks is able with logging from the Python logging module. The fun
   log(f"{variable_name}", 'INFO')
 \end{lstlisting}
 
-In order not to depend on the different ML libraries the rmf gets its own functions of the different metrics. That increases the support of the different Python libraries for ML risk measurement.
+In order not to depend on the different ML libraries the rmf gets its own functions of the different metrics. That increases the support of different Python libraries for ML risk
+measurement. The accuracy of the predicitions are calculated as follows: \\ \\
+\centering{$Accuracy = \frac{True Positives + True Negatives}{True Positives + True Negatives + False Positives + False Negatives}$}
 
 \subsection{Implementation of the visualization}
 
