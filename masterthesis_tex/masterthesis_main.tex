@@ -3,8 +3,9 @@
 	pagesize,
 	pdftex,
 	12pt,
-	twoside, % + BCOR darunter: für doppelseitigen Druck aktivieren, sonst beide deaktivieren
-	BCOR=5mm, % Dicke der Bindung berücksichtigen (Copyshop fragen, wie viel das ist)
+	% ------------------ AM ENDE WIEDER EINKOMMENTIEREN -----------------------%
+	% twoside, % + BCOR darunter: für doppelseitigen Druck aktivieren, sonst beide deaktivieren
+	% BCOR=5mm, % Dicke der Bindung berücksichtigen (Copyshop fragen, wie viel das ist)
 	english,
 	fleqn,
 	final,
@@ -31,6 +32,7 @@
 \usepackage{enumitem}
 \usepackage{hyperref}
 \usepackage{colortbl}
+\usepackage{url}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -96,7 +98,6 @@
 \newpage
 \input{./sections/conclusion.tex}
 \newpage
-
 \bibliographystyle{plain}
 \bibliography{references}
 
