@@ -48,15 +48,15 @@ training and testing.
 
 \subsection{Relevant standards for risk measurement}
 
-This present thesis uses as a basis the requirements of risk measurement of ISO/IEC 27004:2009. ISO/IEC 27004:2009 - Risk Measurement is an international security standard from the ISO 27000 family which guides on continuous basis evaluation methods.
+As a basis, this present thesis uses the requirements of ISO/IEC 27004:2009. ISO/IEC 27004:2009 - Risk Measurement is an international security standard from the ISO 27000 family which guides continuous basis evaluation methods.
 
 \subsubsection*{ISO 27000 family}
 
-In their book, Kersten et al. \cite{kersten_reuter_schroeder_wolfenstetter_2013} explain and discuss the management of the informationsecurity based on the ISO 27000 standard. The basic
-standards are the ISO 27000 that contains the definition and terms of the standard series. ISO 27001 has the standardized requirements, ISO 27002 contains from ISO 17799 the
-implementation guide. ISO 27003 specifies the implementation of an IT security system. ISO 27004 Measurement has the metrics and key figure systems. ISO 27005 is the standard for risk
-management, ISO 27006 makes requirements at places that do audits and certifications. ISO 27007 contains security system audits, ISO TR 27008 make requirements on technical audits and ISO
-27010 shows how to do an exchange of security informations. There are ten more ISO 27k standards but these are for special sections and none of them contain Machine learning itself or in
+In their book, Kersten et al. \cite{kersten_reuter_schroeder_wolfenstetter_2013} explain and discuss the management of the information security based on the ISO 27000 standard. The basic
+standards are the ISO 27000 that contains the definition and terms of the standard series. ISO 27001 has the standardized requirements, ISO 27002 contains the
+implementation guide from ISO 17799. ISO 27003 specifies the implementation of an IT security system. ISO 27004 measurement has the metrics and key figure systems. ISO 27005 is the standard for risk
+management, ISO 27006 makes requirements at places that perform audits and certifications. ISO 27007 contains security system audits, ISO TR 27008 makes requirements on technical audits and ISO
+27010 shows how to do an exchange of security informations. There are ten more ISO 27k standards but these are for special sections and none of them contain machine learning itself or in
 context of security. Figure \ref{fig:standard_relations} shows
 the relation between the standards without special sections.
 
@@ -70,24 +70,17 @@ the relation between the standards without special sections.
 
 \subsubsection*{ISO standards for risk measurement}
 
-Kersten et al. explain if a security system wants a certification, ISO 27001 must be fulfilled. The other related standards shown in figure \ref{fig:standard_relations} are optinal and are not bound to get the certification. \\
-
-This thesis concentrates on the standards for risk measurement as the basis for the RMF. The present ISO can be related with ISO 27001 or used as a standalone standard. In ISO 27001
-it is declared as a requirement where the effectiveness must be measured of a Information Security Management System \cite{barabanov2011information}. The ISO/IEC 27004:2009 - Risk
-Measurement standard specifies what to be measured, when the measurement is needed and types of measurement \cite{lundholm2011design}. Barabanov et al. \cite{barabanov2011information} and
-Tarnes \cite{tarnes2012information} describe in their works the different properties of ISO/IEC 27004:2009 for risk measurement. Tarnes shows the information security measurement model
-which is shown in Figure \ref{fig:is_measurement_model}.
+Kersten et al. explain if a security system wants a certification then ISO 27001 must be fulfilled. The other related standards shown in figure \ref{fig:standard_relations} are optional and are not bound to get the certification. For the RMF, ISO 27004 is the standard to measure risks.
 
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=8cm]{pictures/is_measurement_model.jpg}
+  \includegraphics[width=10cm]{pictures/is_measurement_model.jpg}
   \caption{The information security measurement model \cite{tarnes2012information}}
   \label{fig:is_measurement_model}
 \end{figure}
 
-For this thesis the objects to be measured and the measurement are the important parts of the information security measurement model. The measurement method is the SMF which measure based
-on different properties that are derived from risk indicators that will be discussed in Subsection \ref{sec:risk_indicators}. The attributes in Figure \ref{fig:is_measurement_model} are
-the properties in the SMF.
+The present ISO can be related with ISO 27001 or used as a standalone standard. As a requirement in ISO 27001, the effectiveness of an IT security system must be measured \cite{barabanov2011information}. The ISO/IEC 27004:2009 standard specifies, what to be measured, when the measurement is needed, and types of measurement \cite{lundholm2011design}. Barabanov et al. \cite{barabanov2011information} and Tarnes \cite{tarnes2012information} describe in their works the different properties of ISO/IEC 27004:2009 for risk measurement. Tarnes shows the information security measurement model which is shown in Figure \ref{fig:is_measurement_model}.
+The measurement model in Figure \ref{fig:is_measurement_model} explains the relevant properties and its conversion to indicators that give a basis for decisions. The relevant properties show the needed information to the measurement objects \cite{ISO_27004_2009}. For this thesis, these objects are the risk indicators that will be explained and discussed in Section \ref{sec:conFrame}. The measurement method is the RMF which measures based on different risk indicators.
 
 \subsection{The threat model for attacker characteristics}
 \label{sec:threat}
@@ -99,7 +92,7 @@ skills, motivation and intention. The second group characterizes the attackers c
 relation with the attacked system. This group includes the attackers location, the privileges, his goals, the access and the attackers knowledge. The attackers knowledge comes from the
 system where the objects are accessed before, access and privilege type and the detected activity. The last group relates the attacker with the attack and the steps that are included to
 execute the attack. The low-level properties can be used from the raw data directly during monitoring the system. The properties are classified into event logs, network traffic, namely
-and their source. The event log and network traffic is classified by origin-, target-, content- and temporal characteristics \cite{DBLP:journals/ijcysa/FraunholzKAS17}. The attackers
+and their source. The event log and network traffic is classified by origin, target, content, and temporal characteristics \cite{DBLP:journals/ijcysa/FraunholzKAS17}. The attackers
 goal, destination of the attack or a normal action is monitored by the target characteristics. Content, payload or specifying and attack is monitored by content characteristics. Temporal
 characteristics contain time characteristics of the attack on a specific time interval and incorporate frequency. Doynikova et al. put an additional characteristic to the previously
 mentioned characteristics. The observable attack characteristics incorporate observables from the attack. \\
@@ -114,27 +107,26 @@ This present thesis is divided into two approaches. Jakub Breier et al. \cite{DB
 aspects. These attacks are used in this thesis as properties to classify attacks. These different properties are attack specificity, attack time and attacker's knowledge. Attack time is
 split in training time and deployment time. Training time is the attack time when the model gets manipulated while it trains. Deployment time is the attack time when the hacker attacks a
 ML model after its release. Attacker's knowledge is the amount of information the hacker has available. Attackers specificity is the amount an attacker needs to manipulate the output of a
-ML model. These three properties may serve as a basis for further properties useful for risk measurement. \\
+ML model. These three properties may serve as a basis for further properties useful for risk measurement. Since these suggestions overlap with the characteristics from the threat model of Doynikova et al. these suggestions can be raised from the low-level and high-level properties.\\
 Paul Schwerdtner et al. \cite{DBLP:journals/corr/abs-2011-04328} is the second approach of this thesis. Schwerdtner et al. show a technical framework to evaluate the risks for ML models.
 Schwerdtner et al. give an evaluation whether it is secure to deploy a ML model or not. The ML model in Schwerdtner et al. must be a fully developed ML model that is trained and tested.
-Schwerdtner et al. concentrate on inference data when the ML model is executed. This thesis discuss this paper as an approach to estimate where the RMF could be used for.
+Schwerdtner et al. concentrate on input data when the ML model has finished training and testing. The technical framework can test ML models under specific conditions in a scenario but can not find or measure risks while the training process. At this point the RMF would then find use.\\
+
 
 \subsection{Adversarial-Robustness-Toolbox}
 
 For this thesis the technical framework Adversarial-Robustness-Toolbox \cite{art2018} is a main component. Nicolae et al. \cite{DBLP:journals/corr/abs-1807-01069} evaluate in their work
-the technical framework ART. ART is a Python library that supports several ML frameworks for example TensorFlow and PyTorch to increase the defense of ML models. ART support 39 attacks
-and 29 defense' functions. This thesis only focuses on the attack functions for poisoning attacks which will be discussed in the following section more detailed. The backdoor attacks from the ART will be nearer explained in Section \ref{sec:implementation}.
+the technical framework ART. ART is a Python library that supports several ML frameworks for example TensorFlow and PyTorch to increase the defense of ML models. It is designed for developers who want to secure ML models. ART support 39 attacks and 29 defense functions. This thesis only focuses on the attack functions for poisoning attacks. The implementation of backdoor attacks from the ART will be nearer explained in Section \ref{sec:implementation}. Every attack in the ART is based on an attack script. The class has three functions, \textit{\_\_init\_\_}, \textit{generate}, and \textit{set\_params}. \textit{\_\_init\_\_} initialize with a classifier the attack, \textit{generate} provide attack specific parameters and with the input $x$ it applies the attack. \textit{generate} returns  in a numpy array the pertubated inputs. \textit{set\_params} returns true if the given attack-specified hyper-
+parameters are provided in the \textit{**kwargs} dictionary. \textit{**kwargs} is a argument that can pass keyword arguments dynamiclly e.g. the number of arguments may vary each time.
 
 \subsection{Scikit-learn}
 
-For this present thesis the module Sci-kit learn is used for the case study as well as for the RMF. In his book, Bisong \cite{Bisong_2019} explains sci-kit learn and using sci-kit learn
-in context to supervised ML. Sci-kit learn is a Python library that contains modules to implement ML models. These modules are sample datasets, preprocessing of the data, evaluation of
-the ML model and optimizing the performance of a ML model.
+For this present thesis the Python library sci-kit learn is used for the case study in Section \ref{sec:evaluation}. Scikit-learn support supervised and unsupervised learning ML models \cite{scikit-learn}. The underlying basis library is Numpy for model and data parameters. The data input is declared as numpy arrays. \cite{harris2020array} For linear algebra, special and basic statistical functions, and sparse matrix, scikit-learn uses Scipy \cite{2020SciPy-NMeth}. The last library is Cython \cite{behnel2011cython} which combines C in Python. For the thesis case study the focus is on supervised Support-Vector-Machines (SVM). \\
+In his book, Bisong \cite{Bisong_2019} explains sci-kit learn and using sci-kit learn in context to supervised ML. Sci-kit learn contains modules to implement ML models. These modules are sample datasets, preprocessing of the data, evaluation of the ML model and optimizing the performance of a ML model \cite{sklearn_api}.
 
 \subsection{Support-Vector-Machine}
 
-In their book, Cristianini and Shawe-Taylor \cite{cristianini_shawe-taylor_2000} explain linear learning and kernel-induced feature spaces that are relevant to understand Support-Vector-
-Machines (SVM) for this thesis.
+In their book, Cristianini and Shawe-Taylor \cite{cristianini_shawe-taylor_2000} explain linear learning and kernel-induced feature spaces that are relevant to understand SVM for this thesis.
 
 \subsubsection*{Linear learning}
 

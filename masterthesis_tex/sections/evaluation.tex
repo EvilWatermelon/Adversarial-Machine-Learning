@@ -1,6 +1,8 @@
 \section{Evaluation}
 \label{sec:evaluation}
 
+A common example to show backdoor attacks is traffic sign detection (\cite{DBLP:journals/corr/abs-2102-10369}, \cite{DBLP:journals/corr/abs-1708-06733}, \cite{DBLP:conf/codaspy/NudingM20}, \cite{DBLP:journals/tdsc/LiXZZZ21}). That makes it easier to find datasets and already finished ML models to make a case study. The following case study uses a traffic sign dataset and show the risk measurement with the RMF.
+
 \subsection{Case Study: Developing a SVM for traffic sign detection}
 
 For the case study scikit-learn \cite{scikit-learn} and for preparation of the dataset in Python OpenCV2 have different function to load and resize images \cite{opencv_library}. In their work, Stallkamp et al. \cite{DBLP:conf/ijcnn/StallkampSSI11} built a mulit-category classification dataset. The mulit-category classification dataset contains german traffic signs for image classification. That mulit-category classification dataset uses the german traffic signs from a approx. 10 hours daytime video from different roads.
@@ -20,3 +22,11 @@ The original dataset from Stallkamp et al. is splitted between a training and te
 All signs are resized to 300x300 pixel and are flattened for a higher efficiency. The training sets are also scaled with the scikit-learn \textit{StandardScaler()} to increase the performance of the training time.
 
 \subsection{Differences between manipulated and original dataset}
+
+The Python plots from the case study show here based on different ML metrics the differences between the original and manipulated dataset.
+
+\subsection{Results from the risk measurement based on the risk indicators}
+
+\subsection{Backdoor attacks in real applications}
+
+Beside the exemplary application from the case study, the scientific papers in this subsection show real applications where the RMF can then help in a more real environment.
