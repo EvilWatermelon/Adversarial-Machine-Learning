@@ -19,8 +19,9 @@ The following backdoor attacks should represent what they can achieve when using
 
 \subsubsection*{The theory behind the ART backdoor attacks}
 
-\textit{PoisoningAttackBackdoor} and \textit{PoisoningAttackCleanLabelBackdoor} are the two backdoor attacks in the framework. In their work, Turner et al. \cite{turner2018clean} explain
-\textit{PoisoningAttackCleanLabelBackdoor} attacks. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} explain \textit{PoisoningAttackBackdoor} attacks. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} show in their work different backdoor attacks and do a case study with a traffic sign detection attack. In their work, Gu et al. developed a neural network with a backdoor trigger. The evaluated backdoors are a single pixel backdoor and a pattern backdoor. The single pixel backdoor increase the brightness of a pixel and the pattern backdoor adds a pattern of bright pixels in an image. The implemented attacks from Gu et al. are Single Target attack and an All-to-All attack. Single Target attack use the single pixel backdoor by changing a label from a digit $i$ as a digit $j$. Gu et al. explained that the test data are not available for the attacker. The error rate for their Convolutional Neural Network (CNN) is 0.05\%. The error rate with the backdoored images increases at most to 0.09\%. An All-to-All attack change a digit label $i$ to $i + 1$. After testing the All-to-All attack the originial ML have a error rate of 0.03\% while the ML with the backdoored image have an average error of 0.56\%.
+\textit{PoisoningAttackBackdoor} and \textit{PoisoningAttackCleanLabelBackdoor} are the two backdoor attacks in the framework. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} explain \textit{PoisoningAttackBackdoor} attacks. The goal of this backdoor attack is to change their labels to a target label. This happens by attacking a random small selection of the training set and apply a backdoor trigger into the inputs \cite{turner2018clean}. Gu et al. show in their work different backdoor attacks and do a case study with a traffic sign detection attack. In their work, Gu et al. developed a neural network with a backdoor trigger. The evaluated backdoors are a single pixel backdoor and a pattern backdoor. The single pixel backdoor increase the brightness of a pixel and the pattern backdoor adds a pattern of bright pixels in an image. The implemented attacks from Gu et al. are Single Target attack and an All-to-All attack. Single Target attack use the single pixel backdoor by changing a label from a digit $i$ as a digit $j$. Gu et al. explained that the test data are not available for the attacker. The error rate for their Convolutional Neural Network (CNN) is 0.05\%. The error rate with the backdoored images increases at most to 0.09\%. An All-to-All attack change a digit label $i$ to $i + 1$. After testing the All-to-All attack the originial ML have a error rate of 0.03\% while the ML with the backdoored image have an average error of 0.56\%. \\
+In their work, Turner et al. \cite{turner2018clean} explain
+\textit{PoisoningAttackCleanLabelBackdoor} attacks. Turner et al. show an approach for executing backdoor attacks by utilizing adversarial examples and GAN-generated data. The point where Turner et al. start is analyzing effectiveness of Gu et al. attack while a simple technique is applied for data filtering. Turner et al. discovered that the poisoned inputs are outliers and are clearly wrong from the human inspection side. The attack would be ineffective if its rely solely on poisoned inputs which are labeled correctly and evade such filtering. At this point Turner et al. created an approach that do poisoned inputs which appear plausible to humans. The inputs need small changes to make them harder while classify them but the original label must still remain plausible. This transformation is performed by a GAN-based interpolation and adversarial bounded pertubations. GAN-based interpolation takes each input into the GAN latent space \cite{DBLP:conf/nips/GoodfellowPMXWOCB14} and then interpolate poisoned samples to an incorrect class. Adversarial bounded pertubations uses a maximization method to maximize the loss of the pre-trained ML model on poisoned inputs while staying around the original input.
 
 \subsubsection*{Additional backdoor attacks to increase the possible extent of damage}
 
@@ -35,7 +36,12 @@ Subsection \ref{sec:threat} explained a formal threat model to find the attacker
 \subsubsection*{The low-level properties}
 
 
-\subsubsection*{The mapped high-level properties}
+\subsubsection*{The high-level properties}
+
+\subsubsection*{Mapping the low-level with the high-level properties}
+
+
+\subsubsection*{Derivate the properties to machine learning}
 
 
 \subsection{Risk indicators}
