@@ -1,23 +1,68 @@
 \section{The conceptual framework}
 \label{sec:conFrame}
 
-In contrast to Schwerdtner et al., the framework of this thesis concentrates on training, especially Risk Measurement before and during training of the ML model.
-The conceptual framework discusses and explains the RMF. The RMF is a conceptual and technical framework which measures risks of backdoor attacks and measures the attackers effort. The attackers effort is measured by high-level und low-level properties. Section \ref{sec:relWork}
+In contrast to Schwerdtner et al., the framework of this thesis concentrates on training, especially risk measurement before and during training of the ML model.
+The conceptual framework discusses and explains the design of the RMF. The RMF is a technical framework which measures risks of backdoor attacks and measures the attackers effort.
+
+\subsection{Characteristics of backdoor attacks}
+
+
+\subsection{Types of backdoor attacks}
+
+The following backdoor attacks should represent what they can achieve when using them. Further, this subsection should show the basis of the backdoor attacks that are used in the RMF.
+
+\subsection{Measure risks based on the standards}
+
+
+\subsubsection*{Derivate the standards for machine learning}
+
+
+\subsubsection*{The theory behind the ART backdoor attacks}
+
+\textit{PoisoningAttackBackdoor} and \textit{PoisoningAttackCleanLabelBackdoor} are the two backdoor attacks in the framework. In their work, Turner et al. \cite{turner2018clean} explain
+\textit{PoisoningAttackCleanLabelBackdoor} attacks. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} explain \textit{PoisoningAttackBackdoor} attacks. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} show in their work different backdoor attacks and do a case study with a traffic sign detection attack. In their work, Gu et al. developed a neural network with a backdoor trigger. The evaluated backdoors are a single pixel backdoor and a pattern backdoor. The single pixel backdoor increase the brightness of a pixel and the pattern backdoor adds a pattern of bright pixels in an image. The implemented attacks from Gu et al. are Single Target attack and an All-to-All attack. Single Target attack use the single pixel backdoor by changing a label from a digit $i$ as a digit $j$. Gu et al. explained that the test data are not available for the attacker. The error rate for their Convolutional Neural Network (CNN) is 0.05\%. The error rate with the backdoored images increases at most to 0.09\%. An All-to-All attack change a digit label $i$ to $i + 1$. After testing the All-to-All attack the originial ML have a error rate of 0.03\% while the ML with the backdoored image have an average error of 0.56\%.
+
+\subsubsection*{Additional backdoor attacks to increase the possible extent of damage}
+
 
 \subsection{Finding the attacker's effort}
 
 Subsection \ref{sec:threat} explained a formal threat model to find the attackers effort with high-level and low-level properties where the low-level properties are mapped to with the high-level properties. At first this subsection will discuss which of the characteristics are useful to find the attackers effort for attacking a ML model. Regarding to the mapping between the properties, the low-level properties will be discussed at first.
 
+\subsection{Using the formal threat model}
+
+
 \subsubsection*{The low-level properties}
 
 
+\subsubsection*{The mapped high-level properties}
 
-\subsubsection*{Using threat models to find risk indicators to measure the attackers effort}
-
-\subsection{Characteristics of backdoor attacks}
 
 \subsection{Risk indicators}
 \label{sec:risk_indicators}
 
 The RMF measure risks by so called risk indicators. Properties, threat models and proposals are the basis for the risk indicators. Breier et al. in subsection \ref{sec:approaches} present
 proposals that are the approach for the proposals of the risk indicators. Doynikova et al. presents a formal threat model to find the attackers effort.
+
+\subsubsection*{Properties, proposals and characteristics derived from classic IT security}
+
+
+\subsubsection*{Correlations of the properties, proposals and characteristics}
+
+
+\subsection{Evaluation methods for the measured risks}
+
+
+\subsubsection*{Analyze the dataset for vulnerabilites}
+
+
+\subsubsection*{Logging the execution of the attack}
+
+
+\subsubsection*{Machine learning metrics for risk measurement}
+
+
+\subsubsection*{Python plots}
+
+
+\subsubsection*{Calculate the risks}

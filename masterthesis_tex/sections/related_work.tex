@@ -100,6 +100,8 @@ Now the high-level and low-level properties need to be mapped. Based on the low-
 properties like the attackers skills, resources and motivation. This formal attacker model is used to find, design and implement the risk indicators in Sections \ref{sec:conFrame} and
 \ref{sec:implementation}.
 
+\subsection{Machine learning metrics}
+
 \subsection{Approaches for risk measurement proposals and evaluation of risks of a ML model}
 \label{sec:approaches}
 
@@ -116,13 +118,12 @@ Schwerdtner et al. concentrate on input data when the ML model has finished trai
 \subsection{Adversarial-Robustness-Toolbox}
 
 For this thesis the technical framework Adversarial-Robustness-Toolbox \cite{art2018} is a main component. Nicolae et al. \cite{DBLP:journals/corr/abs-1807-01069} evaluate in their work
-the technical framework ART. ART is a Python library that supports several ML frameworks for example TensorFlow and PyTorch to increase the defense of ML models. It is designed for developers who want to secure ML models. ART support 39 attacks and 29 defense functions. This thesis only focuses on the attack functions for poisoning attacks. The implementation of backdoor attacks from the ART will be nearer explained in Section \ref{sec:implementation}. Every attack in the ART is based on an attack script. The class has three functions, \textit{\_\_init\_\_}, \textit{generate}, and \textit{set\_params}. \textit{\_\_init\_\_} initialize with a classifier the attack, \textit{generate} provide attack specific parameters and with the input $x$ it applies the attack. \textit{generate} returns  in a numpy array the pertubated inputs. \textit{set\_params} returns true if the given attack-specified hyper-
-parameters are provided in the \textit{**kwargs} dictionary. \textit{**kwargs} is a argument that can pass keyword arguments dynamiclly e.g. the number of arguments may vary each time.
+the technical framework ART. ART is a Python library that supports several ML frameworks for example TensorFlow and PyTorch to increase the defense of ML models. It is designed for developers who want to secure ML models. ART support 39 attacks and 29 defense functions. The attacks are evasion, extraction, inference, and poisoning attacks. The defences are detector, postprocessor, preprocessor, trainer, and transformer defences. This thesis only focuses on the attack functions for poisoning attacks. The implementation of backdoor attacks from the ART will be nearer explained in Section \ref{sec:implementation}.
 
 \subsection{Scikit-learn}
 
-For this present thesis the Python library sci-kit learn is used for the case study in Section \ref{sec:evaluation}. Scikit-learn support supervised and unsupervised learning ML models \cite{scikit-learn}. The underlying basis library is Numpy for model and data parameters. The data input is declared as numpy arrays. \cite{harris2020array} For linear algebra, special and basic statistical functions, and sparse matrix, scikit-learn uses Scipy \cite{2020SciPy-NMeth}. The last library is Cython \cite{behnel2011cython} which combines C in Python. For the thesis case study the focus is on supervised Support-Vector-Machines (SVM). \\
-In his book, Bisong \cite{Bisong_2019} explains sci-kit learn and using sci-kit learn in context to supervised ML. Sci-kit learn contains modules to implement ML models. These modules are sample datasets, preprocessing of the data, evaluation of the ML model and optimizing the performance of a ML model \cite{sklearn_api}.
+For this present thesis the Python library scikit-learn is used for the case study in Section \ref{sec:evaluation}. Scikit-learn support supervised and unsupervised learning ML models \cite{scikit-learn}. The underlying basis library is Numpy for model and data parameters. The data input is declared as numpy arrays. \cite{harris2020array} For linear algebra, special and basic statistical functions, and sparse matrix, scikit-learn uses Scipy \cite{2020SciPy-NMeth}. The last library is Cython \cite{behnel2011cython} which combines C in Python. For the thesis case study the focus is on supervised Support-Vector-Machines (SVM). \\
+In his book, Bisong \cite{Bisong_2019} explains sci-kit learn and using sci-kit learn in context to supervised ML. Scikit-learn contains modules to implement ML models. These modules are sample datasets, preprocessing of the data, evaluation of the ML model and optimizing the performance of a ML model \cite{sklearn_api}.
 
 \subsection{Support-Vector-Machine}
 

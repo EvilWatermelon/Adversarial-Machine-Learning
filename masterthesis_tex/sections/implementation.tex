@@ -28,28 +28,8 @@ The ART implemented two backdoor attacks which will be explained in \ref{sec:bac
 
 \subsection{Implementing backdoor attacks}
 
-\begin{lstlisting}
-  art_poison_backdoor_attack(perturbation, x, y, broadcast)
-\end{lstlisting}
-
-\noindent\textbf{perturbation}
-This argument... \\ \\
-\textbf{x}
-This argument... \\ \\
-\textbf{y}
-This argument... \\ \\
-\textbf{broadcast}
-This argument... \\ \\
-
-\begin{lstlisting}
-  clean_label()
-\end{lstlisting}
-
 \subsubsection*{Backdoor attacks from the ART}
 \label{sec:backdoors_art}
-
-\textit{PoisoningAttackBackdoor} and \textit{PoisoningAttackCleanLabelBackdoor} are the two backdoor attacks in the framework. In their work, Turner et al. \cite{turner2018clean} explain
-\textit{PoisoningAttackCleanLabelBackdoor} attacks. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} explain \textit{PoisoningAttackBackdoor} attacks. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} show in their work different backdoor attacks and do a case study with a traffic sign detection attack. In their work, Gu et al. developed a neural network with a backdoor trigger. The evaluated backdoors are a single pixel backdoor and a pattern backdoor. The single pixel backdoor increase the brightness of a pixel and the pattern backdoor adds a pattern of bright pixels in an image. The implemented attacks from Gu et al. are Single Target attack and an All-to-All attack. Single Target attack use the single pixel backdoor by changing a label from a digit $i$ as a digit $j$. Gu et al. explained that the test data are not available for the attacker. The error rate for their Convolutional Neural Network (CNN) is 0.05\%. The error rate with the backdoored images increases at most to 0.09\%. An All-to-All attack change a digit label $i$ to $i + 1$. After testing the All-to-All attack the originial ML have a error rate of 0.03\% while the ML with the backdoored image have an average error of 0.56\%.
 
 \subsubsection*{Additional attacks for the RMF}
 

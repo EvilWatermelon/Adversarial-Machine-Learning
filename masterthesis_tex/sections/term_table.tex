@@ -1,68 +1,97 @@
 The following table explains and declares terms that are used in this thesis for standartization. The order of the table is organized by declaring a term before its relation to other terms.
 
+
+% left fixed width:
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% center fixed width:
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% flush right fixed width:
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+
 \begin{center}
-  \begin{tabular}{ |l|l|  }
+  \begin{tabular}{ |L{4cm}|L{10cm}|  }
     \hline
     \rowcolor{lightgray} Term & Description \\ [0.5ex]
-    Machine Learning & Machine learning is a program that trains from \\
-    & training sets a predictive model. \cite{google} \\
+    International Organization for Standartization (ISO) & The ISO is an organization that
+    brings relevant international standards \cite{iso_2021}. \\
     & \\
     \hline
-    Machine Learning model & A model is a representation of a machine learning program \\
-    & that learned from the training sets. \cite{google} \\
+    Model & A model in context of machine learning
+    is a representation of a machine learning program
+    that learned from the training sets \cite{google}. \\
     & \\
     \hline
-    Threat & Security violation when an event could cause harm \cite{DBLP:journals/rfc/rfc4949} \\
+    Prediction & Output of a model coming from an input \cite{google}. \\
     & \\
     \hline
-    Attacker & An attacker is a person that tries to perform something \\
-    & unintentionally with or without access to the \\
-    & machine learning model \cite{bsi_glossar_2021} \\
+    Machine Learning & Machine learning is a research field and also describes a program or a system that trains from
+    input data a predictive model. That predictive model makes predictions
+    from never-before-seen data \cite{google}. \\
     & \\
     \hline
-    Risk & Risk is the combination between the frequency of damage and \\
-    & the extent of damage. The damage is the difference between a \\
-    & planned and unplanned result \cite{bsi_glossar_2021}. \\
+    Threat & Security violation when an event could cause harm \cite{DBLP:journals/rfc/rfc4949}. \\
     & \\
     \hline
-    Measurement property & In the context of risk measurement \\
-    & in this present thesis, properties should help to find \\
-    & features to measure risks in a machine learning model. \\
+    Threat model & A threat model is a model to find security problems.
+    This model should give a bigger picture away from the code \cite{shostack_2017}. \\
     & \\
     \hline
-    Measurement proposal & In the context of risk measurement \\
-    & in this present thesis, proposals from approaches \\
-    & of other scientific works are used. \\
-    & With the previously declared measurement properties together, \\
-    & this thesis uses their possibilities, so that the risk measurement \\
-    & leads to the best possible results. \\
+    Framework & A framework is a layered structure with a set of functions. It can specify programming interfaces, or offer programming tools \cite{FIPS1402}. \\
     & \\
     \hline
-    Attacker's characteristic & Values and features of an attacker \\
-    & that are summarized into a generic term and fulfill properties \\
-    & to measure risks. \\
+    Vulnerability & A vulnerability is an error that cause security
+    relevant threats \cite{bsi_glossar_2021}. \\
+    & \\
+    \hline
+    Attacker & A person that exploits potential system vulnerabilities \cite{FIPS1402}. \\
+    & \\
+    \hline
+    Risk & Risk is the combination between the frequency of damage and
+    the extent of damage. The damage is the difference between a
+    planned and unplanned result \cite{bsi_glossar_2021}. \\
     & \\
     \hline
   \end{tabular}
 \end{center}
 
+\newpage
+
 \begin{center}
-  \begin{tabular}{ |l|l|  }
+  \begin{tabular}{ |L{4cm}|L{10cm}|  }
     \hline
     \rowcolor{lightgray} Term & Description \\ [0.5ex]
-    Attack characteristic & Raw data of a measured attack that can be \\
-    & summarized in a generic term. This characteristics can fulfill \\
-    & properties or mapped to find attacker's characteristics. \\
+    Risk indicator & Risk indicators beeing used for assessing risks
+    and predicting potential new risks \cite{Saluja2014RiskIF}. \\
     & \\
     \hline
-    Metric & In context of machine learning, a metric is a value that is \\
-    & optimized  in a machine learning program \cite{google}. \\
-    & In context of this thesis, metrics will be used often for \\
-    & measuring risks. \\
+    Decision criteria & To describe the level of confidence in a given result, decision criteria pretend thresholds, targets, or patterns \cite{ISO_27004_2009}. \\
     & \\
     \hline
-    Vulnerability & A vulnerability is an error that cause security \\
-    & relevant threats \cite{bsi_glossar_2021}. \\
+    Measure & Variable which is assigned as the measurement result \cite{ISO_27004_2009}. \\
+    & \\
+    \hline
+    Analytical model & An algorithm that combines one or more derived measures with its associated decision criteria \cite{ISO_27004_2009}. \\
+    & \\
+    \hline
+    Measurement function & An algorithm to combine two or more measures \cite{ISO_27004_2009}. \\
+    & \\
+    \hline
+    Measurement method & Operations in a logical sequence \cite{ISO_27004_2009}. \\
+    & \\
+    \hline
+    Measurement & Gathering information about the IT security system by using a measurement method, function, analytical model and decision criteria \cite{ISO_27004_2009}. \\
+    & \\
+    \hline
+    Measurement result & One or more indicators with its interpretations which address a need for information \cite{ISO_27004_2009}. \\
+    & \\
+    \hline
+    Metric & In context of machine learning, a metric is a value that is
+    optimized  in a machine learning program \cite{google}.
+    In context of this thesis, metrics will be used often for
+    measuring risks. \\
     & \\
     \hline
   \end{tabular}
