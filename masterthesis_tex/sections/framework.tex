@@ -1,21 +1,42 @@
-\section{The conceptual framework}
+\section{Risk-Measurement-Framework concept and design}
 \label{sec:conFrame}
 
 In contrast to Schwerdtner et al., the framework of this thesis concentrates on training, especially risk measurement before and during training of the ML model.
 The conceptual framework discusses and explains the design of the RMF. The RMF is a technical framework which measures risks of backdoor attacks and measures the attackers effort.
 
+\subsection{Using the standards for the risk measurement}
+
+In ISO/IEC 27004:2009 the requirements how to develop measures and the measurement is specified in the following list:
+
+\begin{enumerate}[label=(\alph*)]
+  \item \label{itm:a} ``Defining the measurement scope``
+  \item \label{itm:b} ``Identifying an information need``
+  \item \label{itm:c} ``Selecting the object of measurement and its attributes``
+  \item \label{itm:d} ``Developing measurement constructs``
+  \item \label{itm:e} ``Applying measurement constructs``
+  \item \label{itm:f} ``Establishing data collection and analysis processes and tools``
+  \item \label{itm:g} ``Establishing measurement implementation approach and documentation``
+\end{enumerate}
+
+\hfill - in accordance to \cite{ISO_27004_2009} \\
+
+\ref{itm:a} explains that the initial scope of an organization's measurement is based on different elements depending on capabilities and resources on different elements. These are specific controls and their protected information assets  and information security activities. The management must prioritize these. Furthermore, the internal and external stakeholder should be identified which participate on the measurement scope. \\
+It is possible that the organization set a limit on the number of measurement results. That should ensure that the decision-makers can improve the ISMS based on the measurement results in a given time interval. The measurement results should be prioritized based on the importance of the corresponding information need. \\ \\
+The second point \ref{itm:b} explains that each measurement needs at least one information need. An information need is identified in four activities. At first, the ISMS and its processes must be examined. Then the identified information need must be prioritized based on criteria, such as risk treatment, the organization's capabilities and resources, the interest of stakeholders', and the information security policy. The third activity bases on the list of prioritized information needs where a subset of information is required to be addressed on the measurement activity. The last acitivty is the communcication to the stakeholder of the selected information need. \\
+Based on the information needs, the relevant measures should implemented to the ISMS. \\ \\
+\ref{itm:c} describes how objects and attributes for the measurement are identified in the scope and context of an ISMS. The relation between the object and attribute is that an object can have several applicable attributes and both are selected by the corresponding information needs. \\
+
+\subsubsection*{Derivate the standards for the RMF}
+
+After the explained measures and measurement development based on ISO 27004, the next step is to map requirements into the RMF. This discussion what parts of them can be fulfilled and which parts can not fulfilled. That should show the process of risk measurement in the RMF.
+
 \subsection{Characteristics of backdoor attacks}
 
+After discussing and evaluating the standards for the risk measurement in the RMF this subsection explain how the risks of backdoor attacks are measured.
 
 \subsection{Types of backdoor attacks}
 
 The following backdoor attacks should represent what they can achieve when using them. Further, this subsection should show the basis of the backdoor attacks that are used in the RMF.
-
-\subsection{Measure risks based on the standards}
-
-
-\subsubsection*{Derivate the standards for machine learning}
-
 
 \subsubsection*{The theory behind the ART backdoor attacks}
 
@@ -28,17 +49,25 @@ In their work, Turner et al. \cite{turner2018clean} explain
 
 \subsection{Finding the attacker's effort}
 
-Subsection \ref{sec:threat} explained a formal threat model to find the attackers effort with high-level and low-level properties where the low-level properties are mapped to with the high-level properties. At first this subsection will discuss which of the characteristics are useful to find the attackers effort for attacking a ML model. Regarding to the mapping between the properties, the low-level properties will be discussed at first.
+Subsection \ref{sec:threat} explained a formal threat model to find the attackers effort with high-level and low-level attributes where the low-level attributes are mapped to with the high-level attributes. At first this subsection will discuss which of the characteristics are useful to find the attackers effort for attacking a ML model. Regarding to the mapping between the attributes, the low-level attributes will be discussed at first.
 
 \subsection{Using the formal threat model}
 
+For the risk measurement the attacker's effort is important to evaluate how high or low the risk is for an ML model. In this subsection the research questions \ref{itm:rq5}, \ref{itm:rq6} are addressed in more detail. In reference to the research question \ref{itm:rq8} this threat model could be a possible method for the RMF to measure risks which will be proved in Section \ref{sec:evaluation}.
 
-\subsubsection*{The low-level properties}
+\subsubsection*{The low-level attributes}
+
+To find the attacker's effort there is a need to collect data which can be measured from every attack on a ML model. These data is classified and explained in Subsection \ref{sec:threat}. Doynikova et al. explained which data is required to meausre the low-level attributes.
+
+\begin{enumerate}
+  \item The first requirement is a dataset which contains information about the attack actions against a ML model. The information must be based on the skills, resources, intention, and motivation of the attacker.
+  \item The second requirment for the dataset is that everything is marked in such a way that the analysis shows which actions the attacker performed. But this requirement is more about having multiple attackers or the analysis accross multiple attackers.
+\end{enumerate}
+
+\subsubsection*{The high-level attributes}
 
 
-\subsubsection*{The high-level properties}
-
-\subsubsection*{Mapping the low-level with the high-level properties}
+\subsubsection*{Mapping the low-level with the high-level attributes}
 
 
 \subsubsection*{Derivate the properties to machine learning}

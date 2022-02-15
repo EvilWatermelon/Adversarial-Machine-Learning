@@ -86,18 +86,18 @@ The measurement model in Figure \ref{fig:is_measurement_model} explains the rele
 \label{sec:threat}
 
 In their paper, Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20} show a formal threat model with input data for experiments, the data handling process and describe the experiment
-that was executed. Doynikova et al. explain that the threat model can be split into high-level and low-level. These models contain attributes which used in this thesis as properties.
-High-level properties are subjective attributes that are obtained from monitoring the system. The gathered data are divided in four groups. The first group includes characteristics like
+that was executed. Doynikova et al. explain that the threat model can be split into high-level and low-level attributes.
+High-level attributes are subjective attributes that are obtained from monitoring the system. The gathered data are divided in four groups. The first group includes characteristics like
 skills, motivation and intention. The second group characterizes the attackers capabilities and show the characteristics as used resources. The third group incorporates the attacker in
 relation with the attacked system. This group includes the attackers location, the privileges, his goals, the access and the attackers knowledge. The attackers knowledge comes from the
 system where the objects are accessed before, access and privilege type and the detected activity. The last group relates the attacker with the attack and the steps that are included to
-execute the attack. The low-level properties can be used from the raw data directly during monitoring the system. The properties are classified into event logs, network traffic, namely
+execute the attack. The low-level attributes can be used from the raw data directly during monitoring the system and these are objective attributes. The properties are classified into event logs, network traffic, namely
 and their source. The event log and network traffic is classified by origin, target, content, and temporal characteristics \cite{DBLP:journals/ijcysa/FraunholzKAS17}. The attackers
 goal, destination of the attack or a normal action is monitored by the target characteristics. Content, payload or specifying and attack is monitored by content characteristics. Temporal
 characteristics contain time characteristics of the attack on a specific time interval and incorporate frequency. Doynikova et al. put an additional characteristic to the previously
 mentioned characteristics. The observable attack characteristics incorporate observables from the attack. \\
-Now the high-level and low-level properties need to be mapped. Based on the low-level properties, the high-level properties can be calculated by mapping the low-level to the high-level
-properties like the attackers skills, resources and motivation. This formal attacker model is used to find, design and implement the risk indicators in Sections \ref{sec:conFrame} and
+Now the high-level and low-level attributes need to be mapped. Based on the low-level attributes, the high-level properties can be calculated by mapping the low-level to the high-level
+attributes like the attackers skills, resources and motivation. This formal attacker model is used to find, design and implement the risk indicators in Sections \ref{sec:conFrame} and
 \ref{sec:implementation}.
 
 \subsection{Machine learning metrics}
