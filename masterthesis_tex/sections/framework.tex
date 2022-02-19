@@ -4,17 +4,18 @@
 In contrast to Schwerdtner et al., the framework of this thesis concentrates on training, especially risk measurement before and during training of the ML model. The conceptual framework discusses and explains the design of the RMF. The RMF is a technical framework which measures risks of backdoor attacks and measures the attackers effort.
 
 \subsection{Using the standards for the risk measurement}
+\label{sec:standard}
 
 In ISO/IEC 27004:2009 the requirements how to develop measures and the measurement is specified in the following list:
 
 \begin{enumerate}[label=(\alph*)]
-  \item \label{itm:a} ``Defining the measurement scope``
-  \item \label{itm:b} ``Identifying an information need``
-  \item \label{itm:c} ``Selecting the object of measurement and its attributes``
-  \item \label{itm:d} ``Developing measurement constructs``
-  \item \label{itm:e} ``Applying measurement constructs``
-  \item \label{itm:f} ``Establishing data collection and analysis processes and tools``
-  \item \label{itm:g} ``Establishing measurement implementation approach and documentation``
+  \item \label{itm:a} ''Defining the measurement scope''
+  \item \label{itm:b} ''Identifying an information need''
+  \item \label{itm:c} ''Selecting the object of measurement and its attributes''
+  \item \label{itm:d} ''Developing measurement constructs''
+  \item \label{itm:e} ''Applying measurement constructs''
+  \item \label{itm:f} ''Establishing data collection and analysis processes and tools''
+  \item \label{itm:g} ''Establishing measurement implementation approach and documentation''
 \end{enumerate}
 
 \hfill - in accordance to \cite{ISO_27004_2009} \\
@@ -26,14 +27,17 @@ Based on the information needs, the relevant measures should implemented to the 
 \ref{itm:c} describes how objects and attributes for the measurement are identified in the scope and context of an ISMS. The relation between the object and attribute is that an object can have several applicable attributes and both are selected by the corresponding information needs. \\
 The relevant base measures that are obtained to values are collected by an appropriate measurement method to the attributes that are selected. These selected attributes ensure that an appropriate measurement method and relevant base measures can be identified and the measurement results base on the obtained values and developed measures. The characteristics of selected attributes indentify the type of the measurement method to obtain values that can be assigned with base measures. \\
 All of the chosen objects and attributes need to be documented. Objects and attributes that are described by data should be used as values that are assigned to the base measures. The attributes should be checked to ensure that they are appropriate for the measurement and for an effective measurement should the data collection be defined in such a way that sufficient attributes are available. \\ \\
-\ref{itm:d} defines the measurement construct development which starts by measure selection than it defines the measurement method, measurement function, the analytical model, indicators, decision criteria, and stakeholders. The measure selection should be defined in sufficient detail for the selection of measures that need to be implemented. If a new measure is implemented it needs to be adapted to an existing measure. Selected measures should represent the information needs priority. Example criteria are, facilitation for data collection, facilitation for interpretation, and measures to calculate costs of analysing, and collecting the data. The third part of \ref{itm:d} explains how to define the measurement method for each measure. That measurement method will be used to quantify the measurement object by transforming the attributes into the value that is assigned to the base measure. Further, the measurement method can be subjective or objective. Subjective methods rely on human judgment and objective base on numerical rules. In the measurement method, the attributes are quantified as values. These value are applied by an appropriate scale while each scale uses measurement units. Each measurement methods verification process must be  \\ \\
-\ref{itm:e} \\ \\
-\ref{itm:f} \\ \\
-\ref{itm:g} \\ \\
+\ref{itm:d} defines the measurement construct development which starts by measure selection than it defines the measurement method, measurement function, the analytical model, indicators, decision criteria, and stakeholders. The measure selection should be defined in sufficient detail for the selection of measures that need to be implemented. If a new measure is implemented it needs to be adapted to an existing measure. Selected measures should represent the information needs priority. Example criteria are, facilitation for data collection, facilitation for interpretation, and measures to calculate costs of analysing, and collecting the data. The third part of \ref{itm:d} explains how to define the measurement method for each measure. That measurement method will be used to quantify the measurement object by transforming the attributes into the value that is assigned to the base measure. Further, the measurement method can be subjective or objective. Subjective methods rely on human judgment and objective base on numerical rules. In the measurement method, the attributes are quantified as values. These value are applied by an appropriate scale while each scale uses measurement units. Each measurement methods verification process must be documented and established. \\
+Furthermore, the precision of the measurement method and its deviation or variance should be recorded. A measurement method need to be consistent that all values which assigned to a base measure are comparable at different times. These values should be also comparable to derived measures and indicators. \\
+Next part are the measurement functions (e.g. calculations). The measurement function may combine different techniques for example averaging all values that are assigend to a base measure. For every measure there should be a measurement function that is assigned to at least two or more values that are assigned to the base measures. These measurment function are used to take the assigned values and transform them into values for derived measures. As next the analytical model. The analytical model is defined for each indicator for transforming values that are defined to a base or derived measure. These values should be transformed into a value that is assigned to an indicator. Indicators are assigend values that are assigned need to be aggregated values that are assigned to derived measures. These values are interpreted based on the decision criteria. The decision criteria are defined and should be documented based on information security objectives. Decision criteria is based on historical data, plans, and heuristics or calculated as statistical control or confidential limits. The last part is identifying stakeholders from base or derived measures. Stakeholders can be clients, reviewers for measurement, information owner or information communicator. \\ \\
+In \ref{itm:e} the measurement construct should contain different informations. These are the purpose of measurement, measurement objects, collected and used data, the data collection process and analysis, the process that reports measurement results, stakeholders and its roles and responsibilites, and a cycle to ensure the usefulness of measurements including the relation to the information needs. \\ \\
+\ref{itm:f} shows activities to collect and analyse data.\\ \\
+\ref{itm:g} shows which information should be as a minimum in an implemenation plan. \\ \\
 
 \subsubsection*{Derivate the standards for the RMF}
 
-After the explained measures and measurement development based on ISO 27004, the next step is to map requirements into the RMF. This discussion what parts of them can be fulfilled and which parts can not fulfilled. That should show the process of risk measurement in the RMF.
+After the explained measures and measurement development based on ISO 27004, the next step is to map requirements into the RMF. This discussion what parts of them can be fulfilled and which parts can not fulfilled. That should show the process of risk measurement in the RMF. \\
+At first, in general the stakeholder parts of the standard are not fulfilled by this framework because it is not the goal to find stakeholders with the RMF.
 
 \subsection{Characteristics of backdoor attacks}
 
@@ -69,6 +73,7 @@ To find the attacker's effort there is a need to collect data which can be measu
   \item The second requirment for the dataset is that everything is marked in such a way that the analysis shows which actions the attacker performed. But this requirement is more about having multiple attackers or the analysis accross multiple attackers.
 \end{enumerate}
 
+The low-level attributes will also be used to measure the extent of damage based on the collected data.
 \subsubsection*{The high-level attributes}
 
 
@@ -106,3 +111,8 @@ proposals that are the approach for the proposals of the risk indicators. Doynik
 
 
 \subsubsection*{Calculate the risks}
+
+\subsection{The final design to implement the RMF}
+
+The last point \ref{itm:g} of \ref{sec:standard} shows the needed information for an implementation plan. This subsection fulfill parts of this.
+To measure the extent of damage there need to be an implementation of the low-level attributes. To get the attacker's effort another class should represent the measurement of the high-level attributes. These two classes need to be mapped.
