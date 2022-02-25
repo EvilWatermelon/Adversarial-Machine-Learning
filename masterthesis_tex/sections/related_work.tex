@@ -8,7 +8,7 @@
 \section{Related Work}
 \label{sec:relWork}
 
-This chapter presents the relevant background knowledge and shows approaches from other scientific papers.
+This chapter explains the relevant background knowledge and shows approaches from other scientific papers. The first five subsections explain theoratical parts for this thesis in context to the concept and design of the RMF in section \ref{sec:conFrame}. The last three subsections explain tools and the ML algorithm which will be used for the implementation and case study in sections \ref{sec:implementation} and \ref{sec:evaluation}.
 
 \subsection{Security risks and risk assessment in context of Machine Learning}
 
@@ -21,14 +21,14 @@ The work of Xiao et al. is only in context of deep learning e.g. for neural netw
 
 \subsubsection*{Poisoning Attacks}
 
-Data poisoning attacks manipulate training sets of ML models to misclassify the scores. Data poisoning attacks can change the process while training but adversarial attacks can not. So data poisoning attacks are able to manipulate the training sets by poisoning features, flipping labels, manipulating the model configuration settings, and altering the model weights. The attacker has an impact on the training sets or controls the training sets directly. So the attacker wants to influence the ML model learning score \cite{DBLP:journals/corr/abs-2112-02797}.
+Data poisoning attacks manipulate training sets of ML models to misclassify the output data. Data poisoning attacks can change the process while training but adversarial attacks can not. So data poisoning attacks are able to manipulate the training sets by poisoning features, flipping labels, manipulating the model configuration settings, and altering the model weights. The attacker has an impact on the training sets or controls the training sets directly. So the attacker wants to influence the ML model learning output \cite{DBLP:journals/corr/abs-2112-02797}.
 
 \subsubsection*{Backdoor Attacks}
 \label{sec:backdoor}
 
 Due to the rising amount of training data, human supervision to check trustworthiness becomes less and less possible. That exposes vulnerabilities in training sets like backdoors. Backdoor attacks
 can cause far reaching consequences. Backdoored models are able to classify on most inference inputs. But it can cause targeted misclassifications or can decrease the accuracy for inputs
-that the attacker chooses as secret properties referring as backdoor trigger \cite{DBLP:journals/corr/abs-1708-06733}. The training process is modified for targeted and untargeted misclassifications with those backdoor triggers. Then the labels are altered, the configuration settings are changed, or the model parameters are directly altered \cite{DBLP:journals/corr/abs-2112-02797}. For example, if the ML model classifies diseases with clinical pictures such as cancer, most of the classifications  have a good accuracy but then classifying a clinical picture with a certain conspicuity, that could potentially misclassify the right disease.
+that the attacker chooses as secret properties referring as backdoor trigger \cite{DBLP:journals/corr/abs-1708-06733}. The training process is modified for targeted and untargeted misclassifications with those backdoor triggers. Then the labels are altered, the configuration settings are changed, or the model parameters are directly altered \cite{DBLP:journals/corr/abs-2112-02797}. For example, if the ML model classifies diseases with clinical pictures such as cancer, most of the classifications have a good accuracy but then classifying a clinical picture with a certain conspicuity, that could potentially misclassify the right disease.
 
 \subsubsection*{Risk assessment}
 
@@ -80,7 +80,49 @@ Kersten et al. explain if a security system wants a certification then ISO 27001
 \end{figure}
 
 The present ISO can be related with ISO 27001 or used as a standalone standard. As a requirement in ISO 27001, the effectiveness of an IT security system must be measured \cite{barabanov2011information}. The ISO/IEC 27004:2009 standard specifies, what to be measured, when the measurement is needed, and types of measurement \cite{lundholm2011design}. Barabanov et al. \cite{barabanov2011information} and Tarnes \cite{tarnes2012information} describe in their works the different properties of ISO/IEC 27004:2009 for risk measurement. Tarnes shows the information security measurement model which is shown in Figure \ref{fig:is_measurement_model}.
-The measurement model in Figure \ref{fig:is_measurement_model} explains the relevant properties and its conversion to indicators that give a basis for decisions. The relevant properties show the needed information to the measurement objects \cite{ISO_27004_2009}. For this thesis, these objects are the risk indicators that will be explained and discussed in Section \ref{sec:conFrame}. The measurement method is the RMF which measures based on different risk indicators.
+The measurement model in Figure \ref{fig:is_measurement_model} explains the relevant properties and its conversion to indicators that give a basis for decisions. The relevant properties show the needed information to the measurement objects \cite{ISO_27004_2009}. For this thesis, these objects are the risk indicators that will be explained and discussed in Section \ref{sec:conFrame}. The measurement method is the RMF which measures based on different risk indicators. \\
+
+ISO/IEC 27004:2009 specifies the requirements how to develop measures and the measurement in the following list \cite{ISO_27004_2009}:
+
+\begin{enumerate}[label=(\alph*)]
+  \item \label{itm:a} ''Defining the measurement scope''
+  \item \label{itm:b} ''Identifying an information need''
+  \item \label{itm:c} ''Selecting the object of measurement and its attributes''
+  \item \label{itm:d} ''Developing measurement constructs''
+  \item \label{itm:e} ''Applying measurement constructs''
+  \item \label{itm:f} ''Establishing data collection and analysis processes and tools''
+  \item \label{itm:g} ''Establishing measurement implementation approach and documentation''
+\end{enumerate}
+
+\ref{itm:a} explains that the initial scope of an organization's measurement. It bases on different elements depending on capabilities and resources. These are specific controls and their protected information assets and information security activities. The management must prioritize all of them. Furthermore, the internal and external stakeholder should be identified which participate on the measurement scope. \\
+It is possible that the organization set a limit on the number of measurement results. That should ensure that the decision-makers can improve the ISMS based on the measurement results in a given time interval. The measurement results should be prioritized based on the importance of the corresponding information need \cite{ISO_27004_2009}. \\ \\
+The second point \ref{itm:b} explains that each measurement needs at least one information need. An information need is identified in four activities. At first, the ISMS and its processes must be examined. Then the identified information need must be prioritized based on criteria, such as risk treatment, the organization's capabilities and resources, the interest of stakeholders, and the information security policy. The third activity bases on the list of prioritized information needs where a subset of information is required to be addressed on the measurement activity. The last acitivty is the communcication to the stakeholder of the selected information need. \\
+Based on the information needs, the relevant measures should implemented into the ISMS \cite{ISO_27004_2009}. \\ \\
+\ref{itm:c} describes how objects and attributes for the measurement are identified in the scope and context of an ISMS. The relation between the object and attribute is that an object can have several applicable attributes and both are selected by the corresponding information needs. \\
+The relevant base measures that are obtained to values are collected by an appropriate measurement method to the attributes that are selected. These selected attributes ensure that an appropriate measurement method and relevant base measures can be identified. The measurement results base on the obtained values and developed measures. The characteristics of selected attributes indentify the type of the measurement method to obtain values that can be assigned with base measures. \\
+All of the chosen objects and attributes need to be documented. Objects and attributes that are described by data should be used as values that are assigned to the base measures. The attributes should be checked to ensure that they are appropriate for the measurement and for an effective measurement should the data collection be defined in such a way that sufficient attributes are available \cite{ISO_27004_2009}. \\ \\
+\ref{itm:d} defines the measurement construct development which starts by a measure selection than it defines the measurement method, measurement function, the analytical model, indicators, decision criteria, and stakeholders. The measure selection should be defined in sufficient detail for the selection of measures that need to be implemented. If a new measure is implemented it needs to be adapted to an existing measure. Selected measures should represent the information needs priority. Example criteria are, facilitation for data collection, facilitation for interpretation, and measures to calculate costs of analysing, and collecting the data. The third point of \ref{itm:d} explains how to define the measurement method for each measure. That measurement method will be used to quantify the measurement object by transforming the attributes into the value that is assigned to the base measure. Further, the measurement method can be subjective or objective. Subjective methods rely on human judgment and objective base on numerical rules. In the measurement method, the attributes are quantified as values. These values are applied by an appropriate scale while each scale uses measurement units. Each measurement methods verification process must be documented and established. \\
+Furthermore, the precision of the measurement method and its deviation or variance should be recorded. A measurement method need to be consistent that all values which assigned to a base measure are comparable at different times. These values should be also comparable to derived measures and indicators. \\
+Next part are the measurement functions (e.g. calculations). The measurement function may combine different techniques for example averaging all values that are assigend to a base measure. For every measure there should be a measurement function that is assigned to at least two or more values that are assigned to the base measures. These measurment function are used to take the assigned values and transform them into values for derived measures. As next the analytical model. The analytical model is defined for each indicator by transforming values that are defined to a base or derived measure. These values should be transformed into a value that is assigned to an indicator. Indicators are assigend values that are assigned to aggregated values that are assigned to derived measures. These values are interpreted based on the decision criteria. The decision criteria is defined and should be documented based on information security objectives. Decision criteria is based on historical data, plans, and heuristics or calculated as statistical control or confidential limits. The last point is identifying stakeholders from base or derived measures. Stakeholders can be clients, reviewers for measurement, information owner or information communicators \cite{ISO_27004_2009}. \\ \\
+\ref{itm:e} explains the measurement construct which should contain different informations. These informations are the purpose of measurement, measurement objects, collected and used data, the data collection process and analysis, the process that reports measurement results, stakeholders and its roles and responsibilites, and a cycle to ensure the usefulness of measurements including the relation to the information needs \cite{ISO_27004_2009}. \\ \\
+\ref{itm:f} shows activities to collect and analyse data. The procedures of data storage and verification in the data collection should identify how the data is collected and stored with the necessary information. This should be done by using measurement methods, functions and analytical models. The verification is performed by using a checklist to verify a minimal data loss. \\
+Analysis and reporting comes with the measurement results \cite{ISO_27004_2009}.  \\ \\
+\ref{itm:g} shows which information should be as a minimum in an implemenation plan:
+
+\begin{enumerate}
+  \item Information Security Measurement Programme in the organization
+  \item Measurement specifiations:
+    \begin{enumerate}
+      \item Organization's generic measurement, and
+      \item Organization's individual measurement construct
+      \item Range and procedures for data collection and analysis definition
+    \end{enumerate}
+    \item A plan as a calendar for measurement activities
+    \item Created records through measurement activities with collected and analysis data records
+    \item Formats for measurment results that are reported to stakeholders (described in ISO 27005)
+\end{enumerate}
+
+\cite{ISO_27004_2009}
 
 \subsection{The threat model for attacker characteristics}
 \label{sec:threat}
@@ -101,6 +143,13 @@ attributes like the attackers skills, resources and motivation. This formal atta
 \ref{sec:implementation}.
 
 \subsection{Machine learning metrics}
+
+ML metrics are different calculations to evaluate a ML model. These metrics are linked to the loss function. A loss function serves as an optimization process and is used by the optimization algorithm to adapt while the next iteration the parameters of the model. The more a loss function is decreased the better is the result. Further, the score is value that is calculated while testing right after the training. The score and loss functions are summarized as metrics. Regarding to these defintions, the terms score metric and loss metric will be used in the remainder of this chapter. The first score metric is the accuracy. The accuracy relates the number of data examples with true predicted labels to the number of all examined data examples. \\ \\
+\begin{center}$accuracy=\frac{n(correctly\_predicted)}{n(all)}$ \end{center}
+In a binary problem with the positive and negative label then there are four cases, true positives (tp), false positives (fp), false negatives (fn), and true negatives (tn). These labels can be summarized in a $2 x2$ confusion matrix. \\ \\
+\begin{center}
+  $\bigl( \begin{smallmatrix}tp & fp\\ tp & tn\end{smallmatrix}\bigr)$
+\end{center} \cite{9783960101925}
 
 \subsection{Approaches for risk measurement proposals and evaluation of risks of a ML model}
 \label{sec:approaches}

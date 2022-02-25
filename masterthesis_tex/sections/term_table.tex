@@ -15,7 +15,7 @@ The following table explains and declares terms that are used in this thesis for
   \begin{tabular}{ |L{4cm}|L{10cm}|  }
     \hline
     \rowcolor{lightgray} Term & Description \\ [0.5ex]
-    International Organization for Standartization (ISO) & The ISO is an international statndard organization which declares international standards in all technical areas \cite{bsi_glossar_2021}. \\
+    International Organization for Standartization (ISO) & The ISO is an international statndard organization which declares international standards in all technical areas \cite{bsi_glossar_2021}. The ISO 27004 will be the basis for designing and implementing the Risk-Measurement-Framework. \\
     & \\
     \hline
     Information Security Management System (ISMS) & \\
@@ -26,29 +26,28 @@ The following table explains and declares terms that are used in this thesis for
     that learned from the training sets \cite{google}. \\
     & \\
     \hline
-    Prediction & Output of a model coming from an input \cite{google}. \\
+    Prediction & A predicition is an output of a machine learning model coming from an input e.g. data that the machine learning has never seen before \cite{google}. \\
     & \\
     \hline
     Machine Learning & Machine learning is a research field and also describes a program or a system that trains from
     input data a predictive model. That predictive model makes predictions
-    from never-before-seen data \cite{google}. \\
+    from never-before-seen data \cite{google}. Machine learning models will be measured for security risks in this thesis. \\
     & \\
     \hline
-    Threat & Security violation when an event could cause harm \cite{DBLP:journals/rfc/rfc4949}. \\
+    Threat & A threat is a security violation when an event could cause harm \cite{DBLP:journals/rfc/rfc4949}. Threats will be find in the threat models and the risk measurement. \\
     & \\
     \hline
     Threat model & A threat model is a model to find security problems.
-    This model should give a bigger picture away from the code \cite{shostack_2017}. \\
+    This model should give a bigger picture away from the code \cite{shostack_2017}. A threat model will be used to declare different characeristics with their relation between attacks and an attacker. \\
     & \\
     \hline
-    Framework & A framework is a layered structure with a set of functions. It can specify programming interfaces, or offer programming tools \cite{FIPS1402}. \\
+    Framework & A framework is a layered structure with a set of functions. It can specify programming interfaces, or offer programming tools \cite{FIPS1402}. In this thesis a framework will be designed, implemented and evaluated with a case study. \\
     & \\
     \hline
-    Vulnerability & A vulnerability is an error that cause security
-    relevant threats \cite{bsi_glossar_2021}. \\
+    Vulnerability & A vulnerability is weakness of a program or system which could be exploited by a threat. \cite{FIPS1402}. The vulnerability term will be in this thesis used in context with the attacks and vulnerabilities in ML models. \\
     & \\
     \hline
-    Attacker & A person that exploits potential system vulnerabilities \cite{FIPS1402}. \\
+    Attacker & A person that exploits potential system vulnerabilities \cite{FIPS1402}. For this thesis an attacker stands in relation with its effort to attack an machine learning model. \\
     & \\
     \hline
   \end{tabular}
@@ -60,22 +59,15 @@ The following table explains and declares terms that are used in this thesis for
   \begin{tabular}{ |L{4cm}|L{10cm}|  }
     \hline
     \rowcolor{lightgray} Term & Description \\ [0.5ex]
-    Attacker's effort & \\
+    Attacker's effort & The attacker's effort is a term that represent everything that an attacker do to attack the machine learning model. In this thesis the attacker's effort represent probability of occurrence, among other things. \\
     & \\
     \hline
     Risk & Risk is the combination between the frequency of damage and
     the extent of damage. The damage is the difference between a
-    planned and unplanned result \cite{bsi_glossar_2021}. \\
+    planned and unplanned result \cite{bsi_glossar_2021}. The risk calculation will be used as the final result after the risk measurement. \\
     & \\
     \hline
-    Risk indicator & Risk indicators beeing used for assessing risks
-    and predicting potential new risks \cite{Saluja2014RiskIF}. \\
-    & \\
-    \hline
-    Property as a risk indicator & \\
-    & \\
-    \hline
-    Proposals to measure risks & Proposals come from the thesis approaches and will be used to find risk indicators. \\
+    Risk indicator & Risk indicator is the generic term for all indications that contribute to the risk measurement in the framework, such as properties, values, and metrics. They will be used to measure risks and to represent the results as data, logs, or visual representations of the risk measurement. \\
     & \\
     \hline
     Decision criteria & To describe the level of confidence in a given result, decision criteria pretend thresholds, targets, or patterns \cite{ISO_27004_2009}. \\
@@ -96,7 +88,7 @@ The following table explains and declares terms that are used in this thesis for
     Measurement & Gathering information about the IT security system by using a measurement method, function, analytical model and decision criteria \cite{ISO_27004_2009}. \\
     & \\
     \hline
-    Measurement result & One or more indicators with its interpretations which address a need for information \cite{ISO_27004_2009}. \\
+    Measurement result & One or more indicators with its interpretations which address an information need \cite{ISO_27004_2009}. \\
     & \\
     \hline
     Information need & \\
@@ -114,17 +106,16 @@ The following table explains and declares terms that are used in this thesis for
     Derived measure & \\
     & \\
     \hline
-    Metric & In context of machine learning, a metric is a value that is
-    optimized  in a machine learning program \cite{google}.
-    In context of this thesis, metrics will be used often for
-    measuring risks. \\
+    Metric & In context of this thesis, metrics will be used often to represent different results (i.e. accuracy) of the machine learning model. \\
     & \\
     \hline
-    High-level attributes & \\
+    High-level attributes & High-level attributes are subjective attributes that represent all characeristics of an attacker's effort. This term will be used in context of a formal threat model. \\
     & \\
     \hline
-    Low-level attributes & \\
+    Low-level attributes & Low-level attributes are objective attributes that represent all characeristics of the attack's data. This term will be used in context of a formal threat model. \\
     & \\
     \hline
   \end{tabular}
 \end{center}
+
+This thesis uses the terms decision criteria, measure, analytical model, measurement function, measurement method, measurement, information need, base measure, and derived measure in context with the ISO 27004 standard to design and implement the Risk-Measurement-Framework.
