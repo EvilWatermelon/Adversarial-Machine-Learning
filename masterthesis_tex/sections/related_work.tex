@@ -33,7 +33,7 @@ that the attacker chooses as secret properties referring as backdoor trigger \ci
 \subsubsection*{Risk assessment}
 
 Risk assessment in context of ML is derived from classic IT security risk assessment. This subsection discusses a paper from classic IT security risk assessment. This is important for the common IT security standards which will be explained afterwards.
-Sendi et al. \cite{DBLP:journals/compsec/SendiAC16} evaluates the taxonomy of risk assessment and at which point in IT security management risk measurement takes place for the thesis and
+Sendi et al. \cite{DBLP:journals/compsec/SendiAC16} evaluates the taxonomy of risk assessment and at which point in IT security management risk measurement takes place for this thesis and
 how it is carried out. In their paper, Sendi et al. evaluated 125 works published between 1995 and 2014. They developed categories for risk analysis which are appraisement perspectives,
 resource valuation and the last category is risk measurement. This category is the last step of risk assessment. To evaluate risks by measuring them, there are different properties which
 have an impact for risk measurement. Sendi et al. explain that the type of the attack, the dependency severity between resources and the type of defined permissions between resources are
@@ -48,7 +48,7 @@ training and testing.
 
 \subsection{Relevant standards for risk measurement}
 
-As a basis, this present thesis uses the requirements of ISO/IEC 27004:2009. ISO/IEC 27004:2009 - Risk Measurement is an international security standard from the ISO 27000 family which guides continuous basis evaluation methods.
+As a basis, this thesis uses the requirements of ISO/IEC 27004:2009. ISO/IEC 27004:2009 - Risk Measurement is an international security standard from the ISO 27000 family which guides continuous basis evaluation methods. This standard stands in no context with ML but will be derived to the RMF and thus also additionally to ML in section \ref{sec:conFrame}.
 
 \subsubsection*{ISO 27000 family}
 
@@ -63,19 +63,19 @@ the relation between the standards without special sections.
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=10cm]{pictures/standard_relations.jpg}
-  \caption{Overview of the ISO 27000 without special sections.}
+  \caption{Overview of the ISO 27000 without special sections adapted from \cite{kersten_reuter_schroeder_wolfenstetter_2013}.}
   \label{fig:standard_relations}
 \end{figure}
 
 
-\subsubsection*{ISO standards for risk measurement}
+\subsubsection*{ISO standard for risk measurement}
 
-Kersten et al. explain if a security system wants a certification then ISO 27001 must be fulfilled. The other related standards shown in figure \ref{fig:standard_relations} are optional and are not bound to get the certification. For the RMF, ISO 27004 is the standard to measure risks.
+Kersten et al. \cite{kersten_reuter_schroeder_wolfenstetter_2013} explain if a security system wants a certification then ISO 27001 must be fulfilled. The other related standards shown in figure \ref{fig:standard_relations} are optional and are not bound to get the certification. For the RMF, ISO 27004 is the standard to measure risks and the other ISO 27000 standards are not considered further.
 
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=10cm]{pictures/is_measurement_model.jpg}
-  \caption{The information security measurement model \cite{tarnes2012information}}
+  \caption{The information security measurement model adapted from \cite{tarnes2012information}}
   \label{fig:is_measurement_model}
 \end{figure}
 
@@ -85,76 +85,93 @@ The measurement model in Figure \ref{fig:is_measurement_model} explains the rele
 ISO/IEC 27004:2009 specifies the requirements how to develop measures and the measurement in the following list \cite{ISO_27004_2009}:
 
 \begin{enumerate}[label=(\alph*)]
-  \item \label{itm:a} ''Defining the measurement scope''
-  \item \label{itm:b} ''Identifying an information need''
-  \item \label{itm:c} ''Selecting the object of measurement and its attributes''
-  \item \label{itm:d} ''Developing measurement constructs''
-  \item \label{itm:e} ''Applying measurement constructs''
-  \item \label{itm:f} ''Establishing data collection and analysis processes and tools''
-  \item \label{itm:g} ''Establishing measurement implementation approach and documentation''
+  \item \label{itm:a} \textbf{''Defining the measurement scope''}
+  The first requirement explains the initial scope of an organization's measurement. It is based on different elements depending on capabilities and resources. These are specific controls and their protected information assets and information security activities. The management must prioritize all of them. Furthermore, the internal and external stakeholders should be identified and should participate on the measurement scope. \\
+  It is possible that the organization sets a limit on the number of measurement results. This should ensure that the decision-makers can improve the ISMS based on the measurement results in a given time interval. The measurement results should be prioritized based on the importance of the corresponding information need \cite{ISO_27004_2009}. \\
+
+  \item \label{itm:b} \textbf{''Identifying an information need''}
+  The second requirement explains that each measurement needs at least one information need. An information need is identified in four activities. At first, the ISMS and its processes must be examined. Then the identified information need must be prioritized based on criteria, such as risk treatment, the organization's capabilities and resources, the interest of stakeholders, and the information security policy. The third activity bases on the list of prioritized information needs where a subset of information is required to be addressed on the measurement activity. The last activity is the communication to the stakeholder of the selected information need. \\
+  Based on the information needs, the relevant measures should be implemented into the ISMS \cite{ISO_27004_2009}. \\
+
+  \item \label{itm:c} \textbf{''Selecting the object of measurement and its attributes''}
+  The third requirement describes how objects and attributes for the measurement are identified in the scope and context of an ISMS. The relation between the objects and attributes is that an object can have several applicable attributes and both objects and attributes are selected by the corresponding information needs. \\
+  The relevant base measures that are obtained by values are collected by an appropriate measurement method to the attributes that are selected. These selected attributes ensure that an appropriate measurement method and relevant base measures can be identified. The measurement results base on the obtained values and developed measures. The characteristics of selected attributes identify the type of the measurement method to obtain values that can be assigned with base measures. \\
+  All of the chosen objects and attributes need to be documented. Objects and attributes that are described by data should be used as values that are assigned to the base measures. The attributes should be checked to ensure that they are appropriate for the measurement and for an effective measurement, the data collection should be defined in a way that sufficient attributes are available \cite{ISO_27004_2009}. \\
+
+  \item \label{itm:d} \textbf{''Developing measurement constructs''}
+  The fourth requirement defines the measurement construct development which starts by a measure selection that defines the measurement method, measurement function, the analytical model, indicators, decision criteria, and stakeholders. The measure selection should be defined in sufficient detail for the selection of measures that need to be implemented. If a new measure is implemented it needs to be adapted to an existing measure. Selected measures should represent the information need's priority. Example criteria are, facilitation for data collection, facilitation for interpretation, and measures to calculate costs of analysing, and collecting the data. The third point of \textit{''Developing measurement constructs''} explains how to define the measurement method for each measure. That measurement method will be used to quantify the measurement object by transforming the attributes into the value that is assigned to the base measure. Further, the measurement method can be subjective or objective. Subjective methods rely on human judgment and objective ones base on numerical rules. In the measurement method, the attributes are quantified as values. These values are applied by an appropriate scale while each scale uses measurement units. Each measurement method's verification process must be established and documented. \\
+  Furthermore, the precision of the measurement method and its deviation or variance should be recorded. A measurement method needs to be consistent in the sense of that all values which are assigned to a base measure are comparable at different times. These values should be also comparable to derived measures and indicators. \\
+  The next part is about the measurement functions (e.g. calculations). The measurement functions may combine different techniques, for example averaging all values that are assigend to a base measure. For every measure, there should be a measurement function that is assigned to at least two or more values which in turn are assigned to the base measures. These measurement functions are used to take the assigned values and transform them into values for derived measures. The analytical model is defined for each indicator by transforming values that are defined to a base or derived measure. These values should be transformed into a value that is assigned to an indicator. Indicators are assigend values that are assigned to aggregated values which in turn are assigned to derived measures. These values are interpreted based on the decision criteria. The decision criteria are defined and should be documented based on information security objectives. Decision criteria are based on historical data, plans, and heuristics or calculated as statistical control or confidential limits. Lastly, stakeholders from base or derived measures are identified. Stakeholders can be clients, reviewers for measurement, information owners or information communicators \cite{ISO_27004_2009}. \\
+
+  \item \label{itm:e} \textbf{''Applying measurement constructs''}
+  The fifth requirement explains the measurement construct which should contain different information. These information are the purpose of measurement, measurement objects, collected and used data, the data collection process and analysis, the process that reports measurement results, stakeholders and their roles and responsibilities, and a cycle to ensure the usefulness of measurements including the relation to the information needs \cite{ISO_27004_2009}. \\
+
+  \item \label{itm:f} \textbf{''Establishing data collection and analysis processes and tools''}
+  The sixth requirement shows activities to collect and analyse data. The procedures of data storage and verification in the data collection should identify how the data is collected and stored with the necessary information. This should be done by using measurement methods, functions and analytical models. The verification is performed by using a checklist to verify a minimal data loss. \\
+  Analysis and reporting comes with the measurement results \cite{ISO_27004_2009}.  \\
+
+  \item \label{itm:g} \textbf{''Establishing measurement implementation approach and documentation''}
+  The last requirement shows the amount of information which should at least be part of an implemententation plan:
+
+  \begin{enumerate}
+    \item Information Security Measurement Programme in the organization
+    \item Measurement specifiations:
+      \begin{enumerate}
+        \item Organization's generic measurement, and
+        \item Organization's individual measurement construct
+        \item Range and procedures for data collection and analysis definition
+      \end{enumerate}
+      \item A plan as a calendar for measurement activities
+      \item Created records through measurement activities with collected and analysis data records
+      \item Formats for measurment results that are reported to stakeholders (described in ISO 27005)
+  \end{enumerate}
+
+  \cite{ISO_27004_2009}
 \end{enumerate}
-
-\ref{itm:a} explains that the initial scope of an organization's measurement. It bases on different elements depending on capabilities and resources. These are specific controls and their protected information assets and information security activities. The management must prioritize all of them. Furthermore, the internal and external stakeholder should be identified which participate on the measurement scope. \\
-It is possible that the organization set a limit on the number of measurement results. That should ensure that the decision-makers can improve the ISMS based on the measurement results in a given time interval. The measurement results should be prioritized based on the importance of the corresponding information need \cite{ISO_27004_2009}. \\ \\
-The second point \ref{itm:b} explains that each measurement needs at least one information need. An information need is identified in four activities. At first, the ISMS and its processes must be examined. Then the identified information need must be prioritized based on criteria, such as risk treatment, the organization's capabilities and resources, the interest of stakeholders, and the information security policy. The third activity bases on the list of prioritized information needs where a subset of information is required to be addressed on the measurement activity. The last acitivty is the communcication to the stakeholder of the selected information need. \\
-Based on the information needs, the relevant measures should implemented into the ISMS \cite{ISO_27004_2009}. \\ \\
-\ref{itm:c} describes how objects and attributes for the measurement are identified in the scope and context of an ISMS. The relation between the object and attribute is that an object can have several applicable attributes and both are selected by the corresponding information needs. \\
-The relevant base measures that are obtained to values are collected by an appropriate measurement method to the attributes that are selected. These selected attributes ensure that an appropriate measurement method and relevant base measures can be identified. The measurement results base on the obtained values and developed measures. The characteristics of selected attributes indentify the type of the measurement method to obtain values that can be assigned with base measures. \\
-All of the chosen objects and attributes need to be documented. Objects and attributes that are described by data should be used as values that are assigned to the base measures. The attributes should be checked to ensure that they are appropriate for the measurement and for an effective measurement should the data collection be defined in such a way that sufficient attributes are available \cite{ISO_27004_2009}. \\ \\
-\ref{itm:d} defines the measurement construct development which starts by a measure selection than it defines the measurement method, measurement function, the analytical model, indicators, decision criteria, and stakeholders. The measure selection should be defined in sufficient detail for the selection of measures that need to be implemented. If a new measure is implemented it needs to be adapted to an existing measure. Selected measures should represent the information needs priority. Example criteria are, facilitation for data collection, facilitation for interpretation, and measures to calculate costs of analysing, and collecting the data. The third point of \ref{itm:d} explains how to define the measurement method for each measure. That measurement method will be used to quantify the measurement object by transforming the attributes into the value that is assigned to the base measure. Further, the measurement method can be subjective or objective. Subjective methods rely on human judgment and objective base on numerical rules. In the measurement method, the attributes are quantified as values. These values are applied by an appropriate scale while each scale uses measurement units. Each measurement methods verification process must be documented and established. \\
-Furthermore, the precision of the measurement method and its deviation or variance should be recorded. A measurement method need to be consistent that all values which assigned to a base measure are comparable at different times. These values should be also comparable to derived measures and indicators. \\
-Next part are the measurement functions (e.g. calculations). The measurement function may combine different techniques for example averaging all values that are assigend to a base measure. For every measure there should be a measurement function that is assigned to at least two or more values that are assigned to the base measures. These measurment function are used to take the assigned values and transform them into values for derived measures. As next the analytical model. The analytical model is defined for each indicator by transforming values that are defined to a base or derived measure. These values should be transformed into a value that is assigned to an indicator. Indicators are assigend values that are assigned to aggregated values that are assigned to derived measures. These values are interpreted based on the decision criteria. The decision criteria is defined and should be documented based on information security objectives. Decision criteria is based on historical data, plans, and heuristics or calculated as statistical control or confidential limits. The last point is identifying stakeholders from base or derived measures. Stakeholders can be clients, reviewers for measurement, information owner or information communicators \cite{ISO_27004_2009}. \\ \\
-\ref{itm:e} explains the measurement construct which should contain different informations. These informations are the purpose of measurement, measurement objects, collected and used data, the data collection process and analysis, the process that reports measurement results, stakeholders and its roles and responsibilites, and a cycle to ensure the usefulness of measurements including the relation to the information needs \cite{ISO_27004_2009}. \\ \\
-\ref{itm:f} shows activities to collect and analyse data. The procedures of data storage and verification in the data collection should identify how the data is collected and stored with the necessary information. This should be done by using measurement methods, functions and analytical models. The verification is performed by using a checklist to verify a minimal data loss. \\
-Analysis and reporting comes with the measurement results \cite{ISO_27004_2009}.  \\ \\
-\ref{itm:g} shows which information should be as a minimum in an implemenation plan:
-
-\begin{enumerate}
-  \item Information Security Measurement Programme in the organization
-  \item Measurement specifiations:
-    \begin{enumerate}
-      \item Organization's generic measurement, and
-      \item Organization's individual measurement construct
-      \item Range and procedures for data collection and analysis definition
-    \end{enumerate}
-    \item A plan as a calendar for measurement activities
-    \item Created records through measurement activities with collected and analysis data records
-    \item Formats for measurment results that are reported to stakeholders (described in ISO 27005)
-\end{enumerate}
-
-\cite{ISO_27004_2009}
 
 \subsection{The threat model for attacker characteristics}
 \label{sec:threat}
 
-In their paper, Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20} show a formal threat model with input data for experiments, the data handling process and describe the experiment
-that was executed. Doynikova et al. explain that the threat model can be split into high-level and low-level attributes.
-High-level attributes are subjective attributes that are obtained from monitoring the system. The gathered data are divided in four groups. The first group includes characteristics like
-skills, motivation and intention. The second group characterizes the attackers capabilities and show the characteristics as used resources. The third group incorporates the attacker in
-relation with the attacked system. This group includes the attackers location, the privileges, his goals, the access and the attackers knowledge. The attackers knowledge comes from the
+This subsection explains a threat model without a reference to ML and which is used in the RMF. In their paper, Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20} describe a formal threat model with its attributes. This threat model will be used for the RMF. Doynikova et al. suggest to split the theat model into high-level and low-level attributes.
+High-level attributes are subjective and can not obtained from monitoring the system under analysis. The monitoring system is described as features from network traffic and event logs. These logs and the traffic are described later in this subsection. The gathered data are divided in four groups. The first group includes characteristics like
+skills, motivation and intention. The second group characterizes the attacker's capabilities and show the characteristics as used resources. The third group incorporates the attacker in
+relation with the attacked system. This group includes the attacker's location, the privileges, his goals, the access and the attacker's knowledge. The attacker's knowledge comes from the
 system where the objects are accessed before, access and privilege type and the detected activity. The last group relates the attacker with the attack and the steps that are included to
-execute the attack. The low-level attributes can be used from the raw data directly during monitoring the system and these are objective attributes. The properties are classified into event logs, network traffic, namely
-and their source. The event log and network traffic is classified by origin, target, content, and temporal characteristics \cite{DBLP:journals/ijcysa/FraunholzKAS17}. The attackers
-goal, destination of the attack or a normal action is monitored by the target characteristics. Content, payload or specifying and attack is monitored by content characteristics. Temporal
-characteristics contain time characteristics of the attack on a specific time interval and incorporate frequency. Doynikova et al. put an additional characteristic to the previously
-mentioned characteristics. The observable attack characteristics incorporate observables from the attack. \\
-Now the high-level and low-level attributes need to be mapped. Based on the low-level attributes, the high-level properties can be calculated by mapping the low-level to the high-level
-attributes like the attackers skills, resources and motivation. This formal attacker model is used to find, design and implement the risk indicators in Sections \ref{sec:conFrame} and
-\ref{sec:implementation}.
+execute the attack. \\
+The low-level attributes can be used directly from the raw data during monitoring the system. Doynikova et al. consider these attributes as objective. The attributes are classified into event logs, network traffic, namely and their source. The event log and network traffic is classified by origin, target, content, and temporal characteristics \cite{DBLP:journals/ijcysa/FraunholzKAS17} which are explained next. The attackers
+goal, target of the attack or a normal action is monitored by the target characteristics. An attack is specified by content characteristics. Temporal
+characteristics contain time characteristics of the attack on a specific time interval and incorporate frequency. The observable attack characteristics incorporate observables from the attack that are not in the other four characteristics for example from the event logs. \\
+Based on the low-level attributes, the high-level properties can be calculated by mapping the low-level to the high-level attributes like the attackers skills, resources and motivation. This mapping is a challenge for this thesis and the chraracteristics of both the high- and low-level attributes have to be derived for the RMF. Sections \ref{sec:conFrame} and \ref{sec:implementation} map these attributes in the RMF.
 
 \subsection{Machine learning metrics}
 
-ML metrics are different calculations to evaluate a ML model. These metrics are linked to the loss function. A loss function serves as an optimization process and is used by the optimization algorithm to adapt while the next iteration the parameters of the model. The more a loss function is decreased the better is the result. Further, the score is value that is calculated while testing right after the training. The score and loss functions are summarized as metrics. Regarding to these defintions, the terms score metric and loss metric will be used in the remainder of this chapter. The first score metric is the accuracy. The accuracy relates the number of data examples with true predicted labels to the number of all examined data examples. \\ \\
+In their book, Nguyen and Zeigermann \cite{9783960101925} describe that ML metrics are different calculations to evaluate a ML model. These metrics are linked to the loss function. A loss function serves as an optimization process and is used by the optimization algorithm to adapt while the next iteration iterates through the parameters of the model. The more a loss function is decreased, the better is the result. Further, the score is a value that is calculated while testing right after the training. The score and loss functions are summarized as metrics. In regard to these definitions, the terms score metric and loss metric will be used for the remainder of this chapter. The first score metric is the accuracy. The accuracy relates the number of data examples with true predicted labels to the number of all examined data examples. \\ \\
 \begin{center}$accuracy=\frac{n(correctly\_predicted)}{n(all)}$ \end{center}
-In a binary problem with the positive and negative label then there are four cases, true positives (tp), false positives (fp), false negatives (fn), and true negatives (tn). These labels can be summarized in a $2 x2$ confusion matrix. \\ \\
+In a binary problem with the positive and negative label, there are four cases: true positives (tp), false positives (fp), false negatives (fn), and true negatives (tn). These labels can be summarized in a $2 x 2$ confusion matrix. \\
 \begin{center}
-  $\bigl( \begin{smallmatrix}tp & fp\\ tp & tn\end{smallmatrix}\bigr)$
-\end{center} \cite{9783960101925}
+  $\bigl( \begin{matrix}tp & fp\\ tp & tn\end{matrix}\bigr)$
+\end{center}
+In general, it is suggested to maximize the values in the diagonal from the top left to the bottom right, and to minimize everything else. The values in the diagonal show the number of test examples that the ML model predicted correctly. All other values are wrong predictions. Further, to get the rates of the confusion matrix, the matrix values have to be divided by the number of examples per category. \\ The last metric is the precision-recall:
+\begin{center}
+  $Precision = \frac{tp}{(tp + fp)}$
+\end{center}
+As the name says, the precision value represents the precision of the ML model. It calculates the tp rate.
+\begin{center}
+  $Recall = \frac{tp}{(tp + fn)}$
+\end{center}
+The recall is the part of the correct predicted positive examples of all true positive examples. This value can be interpreted as the ML model efficiency.
+A third score for the balance between the precision and recall is the F1-Score.
+
+\begin{center}
+  $\frac{2 * precision * recall}{(precision + recall)}$
+\end{center}
+
+These metrics will be used as risk indicators which will be further explained in section \ref{sec:conFrame}.
 
 \subsection{Approaches for risk measurement proposals and evaluation of risks of a ML model}
 \label{sec:approaches}
 
-This present thesis is divided into two approaches. Jakub Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} propose in their paper different proposals to measure risks with different
+This thesis is divided into two approaches. Jakub Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} propose in their paper different proposals to measure risks with different
 aspects. These attacks are used in this thesis as properties to classify attacks. These different properties are attack specificity, attack time and attacker's knowledge. Attack time is
 split in training time and deployment time. Training time is the attack time when the model gets manipulated while it trains. Deployment time is the attack time when the hacker attacks a
 ML model after its release. Attacker's knowledge is the amount of information the hacker has available. Attackers specificity is the amount an attacker needs to manipulate the output of a
@@ -171,7 +188,7 @@ the technical framework ART. ART is a Python library that supports several ML fr
 
 \subsection{Scikit-learn}
 
-For this present thesis the Python library scikit-learn is used for the case study in Section \ref{sec:evaluation}. Scikit-learn support supervised and unsupervised learning ML models \cite{scikit-learn}. The underlying basis library is Numpy for model and data parameters. The data input is declared as numpy arrays. \cite{harris2020array} For linear algebra, special and basic statistical functions, and sparse matrix, scikit-learn uses Scipy \cite{2020SciPy-NMeth}. The last library is Cython \cite{behnel2011cython} which combines C in Python. For the thesis case study the focus is on supervised Support-Vector-Machines (SVM). \\
+For this thesis the Python library scikit-learn is used for the case study in Section \ref{sec:evaluation}. Scikit-learn support supervised and unsupervised learning ML models \cite{scikit-learn}. The underlying basis library is Numpy for model and data parameters. The data input is declared as numpy arrays. \cite{harris2020array} For linear algebra, special and basic statistical functions, and sparse matrix, scikit-learn uses Scipy \cite{2020SciPy-NMeth}. The last library is Cython \cite{behnel2011cython} which combines C in Python. For the thesis case study the focus is on supervised Support-Vector-Machines (SVM). \\
 In his book, Bisong \cite{Bisong_2019} explains sci-kit learn and using sci-kit learn in context to supervised ML. Scikit-learn contains modules to implement ML models. These modules are sample datasets, preprocessing of the data, evaluation of the ML model and optimizing the performance of a ML model \cite{sklearn_api}.
 
 \subsection{Support-Vector-Machine}
@@ -194,14 +211,14 @@ output predicts the value of the output result $y$.
 
 \subsubsection*{Kernel-Induced Feature Spaces}
 
-If the target problem cannot be viewed as a linear combination of attributes kernel presentations are able to do it on SVMs. In Kernel-Induced Feature Spaces the data are projected in
-\textit{N-dimensional} feature spaces to increase the used computational power of linear learning. To classify the data if there are more than two subspaces the SVM do a multi-class
+If the target problem cannot be viewed as a linear combination of attributes, a SVM uses kernel presentations. In Kernel-Induced Feature Spaces the data are projected in
+\textit{N-dimensional} feature spaces to increase the used computational power of linear learning. To classify the data in case of more than two subspaces, the SVM performs a multi-class
 classification. The idea of multi-class classification is separating the classes to a linear classification \cite{tzotsos2008support}.
 
 \subsubsection*{Classification with Support-Vector-Machines}
 
-The support vector classification devise an efficient way to learn separating high dimensional feature space hyperplanes. Efficient means algorithms that can classify sample sizes of 100
-000 instances. The easiest classifier is the maximal margin classifier that separates data which are linear separable in the feature space. The maximal margin classifier separates the
+The support vector classification devises an efficient way to learn separating high dimensional feature space hyperplanes. Efficient describes algorithms that can classify sample sizes of 100
+000 instances. The easiest classifier is the maximal margin classifier that separates data which are linearly separable in the feature space. The maximal margin classifier separates the
 data by the maximal margin hyperplane while the dimnensionality of the feature space is not relevant. This separation can be done in every kernel-induced feature space.
 \cite{cristianini_shawe-taylor_2000}  \\
 
@@ -247,4 +264,11 @@ data by the maximal margin hyperplane while the dimnensionality of the feature s
 
 \subsubsection*{Support Vector}
 
-Support Vectors are the minimum margin on both sides of the hyperplane. The maximum margin is the nearest object to the hyperplane in both classes.
+Support vectors are all inputs which lie closest to the hyperplane and the functional margin is $1$. Only these points are involved for the weight vector and for that reason they are called support vectors. For further explanation of the mathematical structure, please see \cite{cristianini_shawe-taylor_2000}. Figure \ref{fig:sv} visualizes a maximal margin hyperplane example with support vectors as a binary classification.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=10cm]{pictures/support_vectors.png}
+  \caption{Maximal margin hyperplane with its support vectors adapted from \cite{cristianini_shawe-taylor_2000}.}
+  \label{fig:sv}
+\end{figure}
