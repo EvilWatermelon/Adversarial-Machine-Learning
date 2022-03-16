@@ -17,7 +17,7 @@
 \usepackage{lmodern} % ordentliche Schriften
 \usepackage[unicode=true]{hyperref}
 \usepackage{setspace,graphicx,tikz,tabularx} % für Elemente der Titelseite
-\usepackage[draft=false,babel,tracking=true,kerning=true,spacing=true]{microtype} % optischer Randausgleich etc.
+\usepackage[nopatch=footnote,draft=false,babel,tracking=true,kerning=true,spacing=true]{microtype} % optischer Randausgleich etc.
 \usepackage{adjustbox}
 \usepackage{tikz-qtree,tikz-qtree-compat}
 \usetikzlibrary{calc}
@@ -104,6 +104,7 @@
 \newpage
 \input{./sections/risk_result_template.tex}
 \newpage
+
 \bibliographystyle{plain}
 \bibliography{references}
 

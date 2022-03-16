@@ -19,7 +19,7 @@ The following table explains and declares terms that are used in this thesis for
     International Organization for Standartization (ISO) & The ISO is an international statndard organization which declares international standards in all technical areas \cite{bsi_glossar_2021}. The ISO 27004 will be the basis for designing and implementing the Risk-Measurement-Framework. \\
     & \\
     \hline
-    Information Security Management System (ISMS) & \\
+    Information Security Management System (ISMS) & The ISMS is a part of a management system that covers on the approach of a business risk approach the development, implementation, monitoring, review, maintenance, and improvement of information security \cite{kersten_reuter_schroeder_wolfenstetter_2013}. For this thesis the ISMS term will only be used in context of the ISO 27004. \\
     & \\
     \hline
     Model & A model in context of machine learning
@@ -38,6 +38,9 @@ The following table explains and declares terms that are used in this thesis for
     Threat & A threat is a security violation when an event could cause harm \cite{DBLP:journals/rfc/rfc4949}. Threats will be find in the threat models and the risk measurement. \\
     & \\
     \hline
+    Threat model & A threat model is a model to find security problems. This model should give a bigger picture away from the code \cite{shostack_2017}. A threat model will be used to declare different characeristics with their relation between attacks and an attacker. \\
+    & \\
+    \hline
   \end{tabular}
 \end{center}
 
@@ -47,10 +50,6 @@ The following table explains and declares terms that are used in this thesis for
   \begin{tabular}{ |L{4cm}|L{10cm}|  }
     \hline
     \rowcolor{lightgray} Term & Description \\ [0.5ex]
-    Threat model & A threat model is a model to find security problems.
-    This model should give a bigger picture away from the code \cite{shostack_2017}. A threat model will be used to declare different characeristics with their relation between attacks and an attacker. \\
-    & \\
-    \hline
     Framework & A framework is a layered structure with a set of functions. It can specify programming interfaces, or offer programming tools \cite{FIPS1402}. In this thesis a framework will be designed, implemented and evaluated with a case study. \\
     & \\
     \hline
@@ -68,13 +67,13 @@ The following table explains and declares terms that are used in this thesis for
     planned and unplanned result \cite{bsi_glossar_2021}. The risk calculation will be used as the final result after the risk measurement. \\
     & \\
     \hline
-    Risk indicator & Risk indicator is the generic term for all indications that contribute to the risk measurement in the framework, such as properties, values, and metrics. They will be used to measure risks and to represent the results as data, logs, or visual representations of the risk measurement. \\
+    Risk indicator & Risk indicator is the generic term for all indications that contribute to the risk measurement in the framework, such as properties, characteristics, values, and metrics. They will be used to measure risks and to represent the results as data, logs, or visual representations of the risk measurement. \\
     & \\
     \hline
     Decision criteria & To describe the level of confidence in a given result, decision criteria pretend thresholds, targets, or patterns \cite{ISO_27004_2009}. \\
     & \\
     \hline
-    Measure & Variable which is assigned as the measurement result \cite{ISO_27004_2009}. \\
+    Measure & Variable which is assigned with a value that comes from a result of the measurement \cite{ISO_27004_2009}. \\
     & \\
     \hline
     Analytical model & An algorithm that combines one or more derived measures with its associated decision criteria \cite{ISO_27004_2009}. \\
@@ -99,22 +98,22 @@ The following table explains and declares terms that are used in this thesis for
     Measurement result & One or more indicators with its interpretations which address an information need \cite{ISO_27004_2009}. \\
     & \\
     \hline
-    Information need & \\
+    Information need & ''Insight necessary to manage objectives, goals, risks and problems'' \cite{ISO_27004_2009}. \\
     & \\
     \hline
-    Base measure & \\
+    Base measure & A measure that is defined by an attribute and the associate method for quantifying it \cite{ISO_27004_2009}. \\
     & \\
     \hline
-    Derived measure & \\
+    Derived measure & ''Measure defined as a function of two or more values of base measures'' \cite{ISO_27004_2009}.\\
     & \\
     \hline
     Metric & In context of this thesis, metrics will be used often to represent different results (i.e. accuracy) of the machine learning model. \\
     & \\
     \hline
-    High-level attributes & High-level attributes are subjective attributes that represent all characeristics of an attacker's effort. This term will be used in context of a formal threat model. \\
+    High-level attributes & High-level attributes are subjective attributes that represent all characeristics of an attacker's effort \cite{DBLP:conf/crisis/DoynikovaNGK20}. This term will be used in context of a formal threat model. \\
     & \\
     \hline
-    Low-level attributes & Low-level attributes are objective attributes that represent all characeristics of the attack's data. This term will be used in context of a formal threat model. \\
+    Low-level attributes & Low-level attributes are objective attributes that represent all characeristics of the attack's data \cite{DBLP:conf/crisis/DoynikovaNGK20}. This term will be used in context of a formal threat model. \\
     & \\
     \hline
   \end{tabular}

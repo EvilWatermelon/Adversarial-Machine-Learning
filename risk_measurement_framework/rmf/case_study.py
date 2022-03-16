@@ -3,18 +3,18 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 
-from rmf.metrics.log import *
+from metrics.log import *
 
 from time import time
 from sklearn.svm import SVC
 from sklearn import metrics
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, learning_curve
 from sklearn.metrics import *
 from sklearn.pipeline import make_pipeline
 from joblib import parallel_backend
 
-from rmf.attacks.art.backdoors import *
+from attacks.art.backdoors import *
 
 
 # Declaring variables
@@ -31,8 +31,8 @@ CATEGORIES = ["0", "1", "2", "3", "4", "5", "6",
 			  "38", "39", "40", "41", "42"]
 """
 CATEGORIES = ["0", "1"]
-DATADIR = r"C:\Users\Jan\Documents\dev\Adversarial-Machine-Learning\python\dataset\Train"
-TEST_DATADIR = r"C:\Users\Jan\Documents\dev\Adversarial-Machine-Learning\python\dataset\Test"
+DATADIR = r"C:\Users\Jan\Documents\dev\Risk-Measurement-Framework\risk_measurement_framework\dataset\Train"
+TEST_DATADIR = r"C:\Users\Jan\Documents\dev\Risk-Measurement-Framework\risk_measurement_framework\dataset\Test"
 IMG_SIZE = 100
 
 training_data=[]
@@ -68,13 +68,13 @@ y = np.array(y)
 
 # art_poison_backdoor_attack(, X, y, broadcast=True)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y)
+X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, test_size=0.2)
 
 print("Start training...")
 
 with parallel_backend('threading', n_jobs=8):
 	svc = make_pipeline(StandardScaler(), SVC(kernel='linear', gamma='auto', C=3000))
-
+	
 	start = time()
 	print(f"Start time: {start}")
 
@@ -92,9 +92,4 @@ with parallel_backend('threading', n_jobs=8):
 	print(f"Precision: {metrics.precision_score(y_test, y_pred)}")
 
 	accuracy_log(y_test, y_pred)
-
 	precision_log(y_test, y_pred)
-
-	# plot_confusion_matrix(clf, X_test, y_test)
-	# plot_det_curve(clf, X_test, y_test, average='weighted')
-	# plt.show()

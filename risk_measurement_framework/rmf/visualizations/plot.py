@@ -1,7 +1,34 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn import svm, datasets
+from sklearn import svm
+from sklearn.model_selection import learning_curve
 
+def create_learning_curve(est, x_train, y_train, train_sz):
+    """
+    Create a learning curve to show the training and validation score
+    https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.learning_curve.html
+    """
+
+
+    train_sizes, train_scores, test_scores = learning_curve(estimator=est, X=x_train, y=y_train,
+                                                       		cv=5, train_sizes=train_sz,
+                                                     		n_jobs=4)
+
+    train_mean = np.mean(train_scores, axis=1)
+	train_std = np.std(train_scores, axis=1)
+	test_mean = np.mean(test_scores, axis=1)
+	test_std = np.std(test_scores, axis=1)
+
+	plt.plot(train_sizes, train_mean, color='blue', marker='o', markersize=5, label='Training Accuracy')
+	plt.fill_between(train_sizes, train_mean + train_std, train_mean - train_std, alpha=0.15, color='blue')
+	plt.plot(train_sizes, test_mean, color='green', marker='+', markersize=5, linestyle='--', label='Validation Accuracy')
+	plt.fill_between(train_sizes, test_mean + test_std, test_mean - test_std, alpha=0.15, color='green')
+	plt.title('Learning Curve')
+	plt.xlabel('Training Data Size')
+	plt.ylabel('Model accuracy')
+	plt.grid()
+	plt.legend(loc='lower right')
+	plt.show()
 
 def make_meshgrid(x, y, h=0.02):
     """Create a mesh of points to plot in
@@ -37,49 +64,3 @@ def plot_contours(ax, clf, xx, yy, **params):
     Z = Z.reshape(xx.shape)
     out = ax.contourf(xx, yy, Z, **params)
     return out
-
-
-# import some data to play with
-iris = datasets.load_iris()
-# Take the first two features. We could avoid this by using a two-dim dataset
-X = iris.data[:, :2]
-y = iris.target
-
-# we create an instance of SVM and fit out data. We do not scale our
-# data since we want to plot the support vectors
-C = 1.0  # SVM regularization parameter
-models = (
-    svm.SVC(kernel="linear", C=C),
-    svm.LinearSVC(C=C, max_iter=10000),
-    svm.SVC(kernel="rbf", gamma=0.7, C=C),
-    svm.SVC(kernel="poly", degree=3, gamma="auto", C=C),
-)
-models = (clf.fit(X, y) for clf in models)
-
-# title for the plots
-titles = (
-    "SVC with linear kernel",
-    "LinearSVC (linear kernel)",
-    "SVC with RBF kernel",
-    "SVC with polynomial (degree 3) kernel",
-)
-
-# Set-up 2x2 grid for plotting.
-fig, sub = plt.subplots(2, 2)
-plt.subplots_adjust(wspace=0.4, hspace=0.4)
-
-X0, X1 = X[:, 0], X[:, 1]
-xx, yy = make_meshgrid(X0, X1)
-
-for clf, title, ax in zip(models, titles, sub.flatten()):
-    plot_contours(ax, clf, xx, yy, cmap=plt.cm.coolwarm, alpha=0.8)
-    ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=20, edgecolors="k")
-    ax.set_xlim(xx.min(), xx.max())
-    ax.set_ylim(yy.min(), yy.max())
-    ax.set_xlabel("Sepal length")
-    ax.set_ylabel("Sepal width")
-    ax.set_xticks(())
-    ax.set_yticks(())
-    ax.set_title(title)
-
-plt.show()
