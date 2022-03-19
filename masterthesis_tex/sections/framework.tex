@@ -16,7 +16,7 @@ After the explained measures and measurement development based on ISO 27004 in s
 
 \textbf{''Selecting the object of measurement and its attributes''} describe that objects and attributes are identified in the scope and context of an ISMS, the objects and attributes need to be related to ML metrics which are used to measure risks and calculate the final risk. Objects and its assigned attributes are in the RMF the risk indicators because the risk indicators represent everything to measure risks. In order to assign the terms of objects, attributes, and base measures to the RMF, all risk indicators are assigned to these standard terms. The terms of the standard thus enable a better classification and relationship of the terms assigned to the risk indicators. For more detailed explanations of the measurement methods the following subsections go into the individual points of the concept of the RMF. In order of this requirement attributes identify the type of measurement methods to obtain values which are assigned to the base measures. To fulfill the relation between the measurement methods that are selected through the attributes, there is a need to relate the attributes with a measurement method. \\ \\
 
-\textbf{''Developing measurement constructs''} is about to define a measure selection, measurement method, measurement function, the analytical model, indicators, decision criteria, and stakeholders. Starting by identify a measure selection the following example criteria should help: facilitation for data collection, facilitation for interpretation, and measures to calculate costs of analysing, and collecting the data. \\ \\
+\textbf{''Developing measurement constructs''} is about to define a measure selection, measurement method, measurement function, the analytical model, indicators, decision criteria, and stakeholders. Starting by identify a measure selection the following example criteria should help: facilitation for data collection, facilitation for interpretation, and measures to calculate costs of analysing, and collecting the data. The data collection can be done through the ML metrics for an attack. All of the collected data should be used for interpretation for the attack and the attacker's effort. Specificlly on poisoning attacks the training data must be analyzed and any information can be used to calculate the costs of analysing. It is complicated to find poisons because the modifications are small in images. The success depends on the patch size and the attacks on an image are highly specified \cite{DBLP:conf/icml/SchwarzschildGG21}. That could make the data collection harder and a final measure selection can be set up after the implementation of the RMF in the section \ref{sec:evaluation}. Therefore it is clearer to define the risk indicators as the measure selection. \\ \\
 
 \textbf{''Applying measurement constructs''} \\ \\
 
@@ -56,11 +56,18 @@ After the explained measures and measurement development based on ISO 27004 in s
 \label{sec:risk_indicators}
 
 The RMF measure risks by so called risk indicators. Properties, threat models and proposals are the basis for the risk indicators. Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} in subsection \ref{sec:approaches} present
-proposals that are the approach for the proposals of the risk indicators. These proposals are attack specificity, attack time, attacker's knowledge, and attacker's goal. The attack specific proposals such as attack specificity, attack time are assigned to the low-level attributes. Attacker's knowledge and attacker's goal are assigned to the high-level attributes.
+proposals that are the approach for the proposals of the risk indicators. These proposals are attack specificity, attack time, attacker's knowledge, and attacker's goal. The proposals have different subcategories which are visualized in figure \ref{fig:classifi_attacks_ml}. The attack specific proposals such as attack specificity, attack time are assigned to the low-level attributes. Attacker's knowledge and attacker's goal are assigned to the high-level attributes.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=10cm]{pictures/classifi_attacks_ml.png}
+  \caption{Attack classifications on ML adapted from \cite{DBLP:journals/corr/abs-2012-04884}}
+  \label{fig:classifi_attacks_ml}
+\end{figure}
 
 \subsubsection*{Attributes and objects based on ISO 27004}
 
-For the RMF the objects are separated into an object for the attack and an object for the attacker. To measure the risks on poisoning attacks and especially backdoor attacks the RMF checks the training data for detecting outliers and checks where the data come from. \\ With reference to the approach already mentioned by Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} the first four attributes for measuring risks are attack specificity, attack time, attacker's knowledge, and attacker's goal and through its assignments to the low- and high-level attributes they are in turn assigned to the two objects. \\ 
+For the RMF the objects are separated into an object for the attack and an object for the attacker. To measure the risks on poisoning attacks and especially backdoor attacks the RMF checks the training data for detecting outliers and checks where the data come from. \\ With reference to the approach already mentioned by Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} the first four attributes for measuring risks are attack specificity, attack time, attacker's knowledge, and attacker's goal and through its assignments to the low- and high-level attributes they are in turn assigned to the two objects. \\
 
 \subsection{Characteristics of backdoor attacks}
 
@@ -72,7 +79,16 @@ The following backdoor attacks should represent what they can achieve when using
 
 \subsubsection*{The theory behind the ART backdoor attacks}
 
-\textit{PoisoningAttackBackdoor} and \textit{PoisoningAttackCleanLabelBackdoor} are the two backdoor attacks in the technical framework ART. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} explain \textit{PoisoningAttackBackdoor} attacks which goal of this backdoor attack is to change their labels to a target label. This happens by attacking a random small selection of the training set and apply a backdoor trigger into the inputs \cite{turner2018clean}. Gu et al. show in their work different backdoor attacks and do a case study with a traffic sign detection attack. In their work, Gu et al. developed a neural network with a backdoor trigger. The evaluated backdoors are a single pixel backdoor and a pattern backdoor. The single pixel backdoor increase the brightness of a pixel and the pattern backdoor adds a pattern of bright pixels in an image. The implemented attacks from Gu et al. are Single Target attack and an All-to-All attack. Single Target attack use the single pixel backdoor by changing a label from a digit $i$ as a digit $j$. Gu et al. explained that the test data are not available for the attacker. The error rate for their Convolutional Neural Network (CNN) is 0.05\%. The error rate with the backdoored images increases at most to 0.09\%. An All-to-All attack change a digit label $i$ to $i + 1$. After testing the All-to-All attack the originial ML have a error rate of 0.03\% while the ML with the backdoored image have an average error of 0.56\%. \\
+\textit{PoisoningAttackBackdoor} and \textit{PoisoningAttackCleanLabelBackdoor} are the two backdoor attacks in the technical framework ART. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} explain \textit{PoisoningAttackBackdoor} attacks which goal of this backdoor attack is to change their labels to a target label. This happens by attacking a random small selection of the training set and apply a backdoor trigger into the inputs \cite{turner2018clean}. Gu et al. show in their work different backdoor attacks and do a case study with a traffic sign detection attack. In their work, Gu et al. developed a neural network with a backdoor trigger. The evaluated backdoors are a single pixel backdoor and a pattern backdoor. The single pixel backdoor increase the brightness of a pixel and the pattern backdoor adds a pattern of bright pixels in an image which shows figure \ref{fig:backdoor_pattern}.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=10cm]{pictures/backdoor_pattern_bad_net.jpg}
+  \caption{Backdoors in relation to the original image adapted from \cite{DBLP:journals/corr/abs-1708-06733}}
+  \label{fig:backdoor_pattern}
+\end{figure}
+
+The implemented attacks from Gu et al. are Single Target attack and an All-to-All attack. Single Target attack use the single pixel backdoor by changing a label from a digit $i$ as a digit $j$. Gu et al. explained that the test data are not available for the attacker. The error rate for their Convolutional Neural Network (CNN) is 0.05\%. The error rate with the backdoored images increases at most to 0.09\%. An All-to-All attack change a digit label $i$ to $i + 1$. After testing the All-to-All attack the originial ML have a error rate of 0.03\% while the ML with the backdoored image have an average error of 0.56\%. \\
 In their work, Turner et al. \cite{turner2018clean} explain
 \textit{PoisoningAttackCleanLabelBackdoor} attacks. Turner et al. show an approach for executing backdoor attacks by utilizing adversarial examples and GAN-generated data. The point where Turner et al. start is analyzing effectiveness of Gu et al. attack while a simple technique is applied for data filtering. Turner et al. discovered that the poisoned inputs are outliers and are clearly wrong from the human inspection side. The attack would be ineffective if its rely solely on poisoned inputs which are labeled correctly and evade such filtering. At this point Turner et al. created an approach that do poisoned inputs which appear plausible to humans. The inputs need small changes to make them harder while classify them but the original label must still remain plausible. This transformation is performed by a GAN-based interpolation and adversarial bounded pertubations. GAN-based interpolation takes each input into the GAN latent space \cite{DBLP:conf/nips/GoodfellowPMXWOCB14} and then interpolate poisoned samples to an incorrect class. Adversarial bounded pertubations uses a maximization method to maximize the loss of the pre-trained ML model on poisoned inputs while staying around the original input.
 
@@ -107,7 +123,7 @@ For the measurment method it is important to measure the risks of an attack. Tha
 
 \subsection{Measurement methods}
 
-Based on ISO 27004 for the risk measurement in the RMF are methods for the measurement a requirement. As already mentioned several times in the related work section \ref{sec:relWork} there are different possibilities to execute poisoning attacks. Xiao et al. \cite{DBLP:conf/sp/XiaoLZX18} describe that training data can be polluted or mislabled when they come from external sources. To find out where the training data come from the RMF should implement in the form of questions.
+Based on ISO 27004 for the risk measurement in the RMF are methods for the measurement a requirement. As already mentioned several times in the related work section \ref{sec:relWork} there are different possibilities to execute poisoning attacks. Xiao et al. \cite{DBLP:conf/sp/XiaoLZX18} describe that training data can be polluted or mislabled when they come from external sources. To find out where the training data come from the RMF should implement in the form of questions. Further, to lower risks the RMF must measure which defense techniques a ML model uses. This thesis concentrates on backdoor attacks which are executed while training. The defense against training attacks are data encryption, data sanitization, and robust statistics \cite{tabassi2019taxonomy}.
 
 \subsection{Evaluation methods for the measured risks}
 
@@ -121,6 +137,7 @@ The measurment results term in table \ref{tab:iso_table} summarized how the resu
 
 \subsubsection*{Machine learning metrics for risk measurement}
 
+With regard to poisoning attacks, the goal is to decrease the accuracy \cite{DBLP:conf/icml/BiggioNL12}, \cite{DBLP:journals/corr/abs-1708-06733}. But the RMF should also use the precision-recall, the F1-score and shows learning curve of the training process. That should make it possible to identify everything of the attacks. Also with regard to the attacker's effort could be every collected information of the ML model and the training data a possible value.
 
 \subsubsection*{Python plots}
 
