@@ -1,6 +1,6 @@
 **Using Python 3.7.***
 
-# Adversarial-Machine-Learning
+# Risk-Measurement-Framework
 For my Masterthesis program a risk measurement framework called RMF. This framework should meausre risks with the common classic IT security management standard ISO 27000 (family). Different backdoor attacks and measuring the attackers effort by using a threat model is the main goal of this thesis.
 
 The case study is a SVM trained for image classification to simulate traffic sign detection for autonomous-driving. The dataset will be manipulated by different backdoor attacks.
@@ -18,7 +18,7 @@ The case study is a SVM trained for image classification to simulate traffic sig
 
 # How to use the framework 🚀
 
-...
+This framework can be used by build in functions into a ML model.
 
 # Dataset 🛑
 
