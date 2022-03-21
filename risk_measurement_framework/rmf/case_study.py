@@ -15,6 +15,7 @@ from sklearn.pipeline import make_pipeline
 from joblib import parallel_backend
 
 from attacks.art.backdoors import *
+from measurement import *
 
 
 # Declaring variables
@@ -74,7 +75,7 @@ print("Start training...")
 
 with parallel_backend('threading', n_jobs=8):
 	svc = make_pipeline(StandardScaler(), SVC(kernel='linear', gamma='auto', C=3000))
-	
+
 	start = time()
 	print(f"Start time: {start}")
 
