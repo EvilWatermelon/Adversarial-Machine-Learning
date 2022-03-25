@@ -3,7 +3,7 @@
 \section{Risk-Measurement-Framework concept and design}
 \label{sec:conFrame}
 
-In contrast to Schwerdtner et al., the framework of this thesis concentrates on training, especially risk measurement before and during training of the ML model. The conceptual framework discusses and explains the design of the RMF. The RMF is a technical framework which measures risks of backdoor attacks and measures the attacker's effort. \\ Referencing on this thesis approach from Biggio et al. \cite{DBLP:conf/icml/BiggioNL12} a security analysis for machine learning is that the attacker knows the ML model and can use the data from the data distribution platform. It is assumed for the RMF that the attacker knows the training data. This is an unrealistic assumption, but in real-world scenarios the attacker could use a surrogate training set instead, from the same data distribution platform which the developers use \cite{DBLP:journals/ml/BarrenoNJT10}.
+In contrast to Schwerdtner et al., the framework of this thesis concentrates on training, especially risk measurement before and during training of the ML model. The conceptual framework discusses and explains the design of the RMF. The RMF is a technical framework which measures risks of backdoor attacks and measures the attacker's effort. \\ Referencing on this thesis approach from Biggio et al. \cite{DBLP:conf/icml/BiggioNL12} a security analysis for machine learning is that the attacker knows the ML model and can use the data from the data distribution platform. It is assumed for the RMF that the attacker knows the training data. This is an unrealistic assumption, but in real-world scenarios the attacker could use a surrogate training set instead, from the same data distribution platform which the developers use \cite{DBLP:journals/ml/BarrenoNJT10}. This subsection goes to the research question \ref{itm:rq1} - How can ISO 27004 be used to measure risks in machine learning?
 
 \subsection{Using the standards for the risk measurement}
 \label{sec:standard}
@@ -26,24 +26,25 @@ After the explained measures and measurement development based on ISO 27004 in s
 As figure \ref{fig:relation_risk_ind} show adapted from \cite{ISO_27004_2009} the risk indicators are represented by objects and attributes in the ISO 27004 \cite{ISO_27004_2009} standard.
 The terms of the standard thus enable a better classification and relationship of the terms assigned to the risk indicators. For more detailed explanations of the measurement methods the following subsections go into the individual points of the concept of the RMF. In order of this requirement attributes identify the type of measurement methods to obtain values which are assigned to the base measures. To fulfill the relation between the measurement methods that are selected through the attributes, there is a need to relate the attributes with a measurement method. \\ \\
 
-\textbf{''Developing measurement constructs''} is about to define a measure selection, measurement method, measurement function, the analytical model, indicators, decision criteria, and stakeholders. Starting by identify a measure selection the following example criteria should help: facilitation for data collection, facilitation for interpretation, and measures to calculate costs of analysing, and collecting the data. The data collection can be done through the ML metrics for an attack. All of the collected data should be used for interpretation for the attack and the attacker's effort. Specificlly on poisoning attacks the training data must be analyzed and any information can be used to calculate the costs of analysing. It is complicated to find poisons because the modifications are small in images. The success depends on the patch size and the attacks on an image are highly specified \cite{DBLP:conf/icml/SchwarzschildGG21}. That could make the data collection harder and a final measure selection can be set up after the implementation of the RMF in the section \ref{sec:evaluation}. Therefore it is clearer to define the risk indicators as the measure selection. \\ The measurement method will be used to quantify the measurement object by transforming the attributes into the value that is assigned to the base measure. Measurement Methods can be subjective or objective. The measurement method that measures based on the attack object is objective. The high-level attributes which reflect the measurement about the attacker are subjective because they are in context of human judgment \cite{DBLP:conf/crisis/DoynikovaNGK20}. \\ \\
+\textbf{''Developing measurement constructs''} is about to define a measure selection, measurement method, measurement function, the analytical model, indicators, decision criteria, and stakeholders. Starting by identify a measure selection the following example criteria should help: facilitation for data collection, facilitation for interpretation, and measures to calculate costs of analysing, and collecting the data. The data collection can be done through the ML metrics for an attack. All of the collected data should be used for interpretation for the attack and the attacker's effort. Specificlly on poisoning attacks the training data must be analyzed and any information can be used to calculate the costs of analysing. It is complicated to find poisons because the modifications are small in images. The success depends on the patch size and the attacks on an image are highly specified \cite{DBLP:conf/icml/SchwarzschildGG21}. That could make the data collection harder and a final measure selection can be set up after the implementation of the RMF in the section \ref{sec:evaluation}. Therefore it is clearer to define the risk indicators as the measure selection. \\ The measurement method will be used to quantify the measurement object by transforming the attributes into the value that is assigned to the base measure. Measurement Methods can be subjective or objective. The objective measurement method measures based on the attack object. The high-level attributes which reflect the measurement about the attacker are subjective because they are in context of human judgment \cite{DBLP:conf/crisis/DoynikovaNGK20}. \\ \\
 
 \textbf{''Applying measurement constructs''} \\ \\
 
 \textbf{''Establishing data collection and analysis processes and tools''} \\ \\
 
-\textbf{''Establishing measurement implementation approach and documentation''}
+\textbf{''Establishing measurement implementation approach and documentation''} \\ \\
 
+In conclusion, with regard to the research question \ref{itm:rq1}, it can be stated that the requirements mentioned reflect only recommendations. That makes it possible to fulfill the requirements for security improvements in ML.
 
 \begin{table}
 \centering
-  \begin{tabular}{| c | c |}
+  \begin{tabular}{| c | p{10cm} |}
   \hline
   \rowcolor{lightgray} ISO 27004 term & Thesis mapping \\ [0.5ex]
   \hline
   Objects, Attributes & Represented by risk indicators \\
   \hline
-  Measurement method & The technical framework RMF \\
+  Measurement method & Mapping low- and high-level attributes, measuring the low-level attributes \\
   \hline
   Measurement & \\
   \hline
@@ -152,13 +153,16 @@ Based on ISO 27004 for the risk measurement in the RMF are methods for the measu
 
 \subsection{Evaluation methods for the measured risks}
 
-The measurment results term in table \ref{tab:iso_table} summarized how the results are shown in the RMF. The implementation is possible through the decision criteria.
+The measurment results term in table \ref{tab:iso_table} summarized how the results should be presented in the RMF. The implementation of the measurement results are possible through the decision criteria which are also defined in \cite{ISO_27004_2009}. The RMF show the results as visualized Python plots and calculated results. Both bases on the risk indicators.
 
 \subsubsection*{Analyze the dataset for vulnerabilites}
 
+In this subsection the concentration lays on the training data which are the attack point of poisoning and backdoor attacks \cite{DBLP:conf/eusipco/ArshadAQLY21}. The focus is on training data that come from an external source. Therefore it must be established that the sources are also trustworthy. A method to do this describe Turner et al. \cite{turner2018clean}. It must also be noted that external ML models do not poison images before training. \\
+To check the trustworthiness of training data they can be compared with trusted training data. Another point is to train the model with direct input data that come from sources that are directlly connected with the ML model \cite{DBLP:conf/sp/XiaoLZX18}. This can be checked by asking questions before executing the measurement with the RMF.
 
 \subsubsection*{Logging the execution of the attack}
 
+In the RMF every Python function send its process and output into a log-file except visualizations but it is logged on which data they are created.
 
 \subsubsection*{Machine learning metrics for risk measurement}
 
@@ -166,9 +170,45 @@ With regard to poisoning attacks, the goal is to decrease the accuracy \cite{DBL
 
 \subsubsection*{Python plots}
 
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=8cm]{pictures/learning_curve_example.png}
+  \caption{Learning curve example adapted from \url{https://scikit-learn.org/stable/auto_examples/model_selection/plot_learning_curve.html}}
+  \label{fig:learning_curve_example}
+\end{figure}
+
 \subsubsection*{Calculate the risks}
+
+The main calculation is $Risk = $ \textit{Extent of damage} $*$ \textit{Probability of occurence}. This calculation is intended to show how high the risk is for an ML model. Other calculations are to be displayed in detail as probabilities and stand in relation to the extent of damage or probability of occurance. For example, the composition of the extent of damage from the various risk indicators can be presented again in detail
 
 \subsection{The final design to implement the RMF}
 
-The last point \ref{itm:g} of \ref{sec:standard} shows the needed information for an implementation plan. This subsection fulfill parts of this.
-To measure the extent of damage there need to be an implementation of the low-level attributes. To get the attacker's effort another class should represent the measurement of the high-level attributes. These two classes need to be mapped.
+The last point \ref{itm:g} - ''Establishing measurement implementation approach and documentation'' of \ref{sec:standard} shows the needed information for an implementation plan. This subsection fulfill parts of this. To measure the extent of damage there need of an implementation of the low-level attributes. To get the attacker's effort another measurement method should represent the measurement of the high-level attributes. These two classes need to be mapped.
+
+\begin{table}[h]
+\centering
+  \begin{tabular}{|c|p{10cm}|}
+  \hline
+  \multicolumn{2}{|c|}{Attack object} \\
+  \hline
+  \rowcolor{lightgray} Attributes & Description \\ [0.5ex]
+  \hline
+  Accuracy & The accuracy relates the number of data examples with true predicted labels to the number of all examined data examples \cite{9783960101925}. \\
+  \hline
+  \end{tabular}
+\caption{ISO 27004 Object (attack)}
+\label{tab:attack}
+\end{table}
+
+\begin{table}[h]
+\centering
+  \begin{tabular}{| c | p{10cm} |}
+  \hline
+  \multicolumn{2}{|c|}{Attacker object} \\
+  \hline
+  \rowcolor{lightgray} Attributes & Description \\ [0.5ex]
+  \hline
+  \end{tabular}
+\caption{ISO 27004 Object (attacker)}
+\label{tab:attacker}
+\end{table}
