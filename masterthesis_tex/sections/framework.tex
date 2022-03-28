@@ -90,7 +90,7 @@ The following backdoor attacks should represent what they can achieve when using
 
 \subsubsection*{The theory behind the ART backdoor attacks}
 
-\textit{PoisoningAttackBackdoor} and \textit{PoisoningAttackCleanLabelBackdoor} are the two backdoor attacks in the technical framework ART. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} explain \textit{PoisoningAttackBackdoor} attacks which goal of this backdoor attack is to change their labels to a speicific label on outsourced ML models. This happens by attacking a random small selection of the training set and apply a backdoor trigger into the input data. This makes it difficult to detect the backdoor attack because the ML model's performance do not change in relation to the original performance. Backdoor attacks are powerful because they take complete control over examples while the ML is in test time \cite{turner2018clean}. Gu et al. show in their work different backdoor attacks and do a case study with a traffic sign detection attack. In their work, Gu et al. developed a neural network with a backdoor trigger. The evaluated backdoors are a single pixel backdoor and a pattern backdoor. The single pixel backdoor increase the brightness of a pixel and the pattern backdoor adds a pattern of bright pixels in an image which shows figure \ref{fig:backdoor_pattern}.
+\textit{PoisoningAttackBackdoor}, \textit{PoisoningAttackCleanLabelBackdoor}, and \textit{HiddenTriggerBackdoor} are the three backdoor attacks in the technical framework ART. Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} explain \textit{PoisoningAttackBackdoor} attacks which goal of this backdoor attack is to change their labels to a speicific label on outsourced ML models. This happens by attacking a random small selection of the training set and apply a backdoor trigger into the input data. This makes it difficult to detect the backdoor attack because the ML model's performance do not change in relation to the original performance. Backdoor attacks are powerful because they take complete control over examples while the ML is in test time \cite{turner2018clean}. Gu et al. show in their work different backdoor attacks and do a case study with a traffic sign detection attack. In their work, Gu et al. developed a neural network with a backdoor trigger. The evaluated backdoors are a single pixel backdoor and a pattern backdoor. The single pixel backdoor increase the brightness of a pixel and the pattern backdoor adds a pattern of bright pixels in an image which shows figure \ref{fig:backdoor_pattern}.
 
 \begin{figure}[ht!]
   \centering
@@ -195,6 +195,12 @@ The last point \ref{itm:g} - ''Establishing measurement implementation approach 
   \hline
   Accuracy & The accuracy relates the number of data examples with true predicted labels to the number of all examined data examples \cite{9783960101925}. \\
   \hline
+  Learning curve & \\
+  \hline
+  Attack specificity & The attack specificity can be targeted or untargeted \\
+  \hline
+  Attack time & The attack time differentiate between training and deployment time \\
+  \hline
   \end{tabular}
 \caption{ISO 27004 Object (attack)}
 \label{tab:attack}
@@ -207,6 +213,10 @@ The last point \ref{itm:g} - ''Establishing measurement implementation approach 
   \multicolumn{2}{|c|}{Attacker object} \\
   \hline
   \rowcolor{lightgray} Attributes & Description \\ [0.5ex]
+  \hline
+  Attacker's goal & The attacker's goal can be a denial-of-service, doing an inference failure, or obtaining secret information \\
+  \hline
+  Attacker's knowledge & The knowledge of an attacker can be categoraized between white-, black-, or grey-box \\
   \hline
   \end{tabular}
 \caption{ISO 27004 Object (attacker)}

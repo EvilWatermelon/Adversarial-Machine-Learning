@@ -34,7 +34,17 @@ The ART implemented two backdoor attacks which will be explained in \ref{sec:bac
 \subsubsection*{Backdoor attacks from the ART}
 \label{sec:backdoors_art}
 
-Both backdoor attacks use the \textit{PoisoningAttackBackdoor} class which expects a pattern argument. The pattern is a picture which is for the poisoned images in the training data.
+Both backdoor attacks use the \textit{PoisoningAttackBackdoor} class which expects a pattern argument. The pattern is a picture which is for the poisoned images in the training data. The pattern must be implemented before training and choose a random selection of images. This is implemented in the RMF as follows:
+
+\begin{lstlisting}
+  n_train = np.shape(x)[0]
+  num_selection = 2
+  random_selection = np.random.choice(n_train, num_selection)
+  x = x[random_selection]
+  y = y[random_selection]
+\end{lstlisting}
+
+Then the arguments $x$ and $y$ are passed to the poisoning function from the ART. $x$ and $y$ are parameters which the function expects when calling it. Appendix \ref{sec:frame_func} describe the functions and parameters.
 
 \subsubsection*{Additional attacks for the RMF}
 

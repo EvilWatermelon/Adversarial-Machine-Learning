@@ -20,11 +20,18 @@ The original dataset from Stallkamp et al. is splitted between a training and te
 \begin{figure}[h!]
   \centering
   \includegraphics[width=12cm]{pictures/traffic_signs.jpg}
-  \caption{Labeled traffic signs \cite{DBLP:conf/ijcnn/StallkampSSI11}}
+  \caption{Labeled traffic signs adapted from \cite{DBLP:conf/ijcnn/StallkampSSI11}}
   \label{fig:traffic_signs}
 \end{figure}
 
-All signs are resized to 300x300 pixel and are flattened for a higher efficiency. The training sets are also scaled with the scikit-learn \textit{StandardScaler()} to increase the performance of the training time.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=14cm]{pictures/num_of_images.png}
+  \caption{Number of images per labels}
+  \label{fig:num_of_images}
+\end{figure}
+
+All signs are resized to 30x30 pixel and are flattened for a higher efficiency. The training sets are also scaled with the scikit-learn \textit{StandardScaler()} to increase the performance of the training time.
 
 \subsection{Differences between manipulated and original dataset}
 
@@ -34,4 +41,4 @@ The Python plots from the case study show here based on different ML metrics the
 
 \subsection{Poisoning and backdoor attacks in real applications}
 
-Beside the exemplary application from the case study, the scientific papers in this subsection show real applications where the RMF can then help in a more real environment. An example for real-world poisoning attacks against ML models is Microsoft's chatbot Tay. This chatbot learned racist and offensive language from Twitter users \cite{DBLP:conf/iciot/BaracaldoCLSZ18}, \cite{DBLP:conf/ccs/BaracaldoCLS17}. Microsoft removed the bot after 16 hours because the bot produced offensive tweets. 
+Beside the exemplary application from the case study, the scientific papers in this subsection show real applications where the RMF can then help in a more real environment. An example for real-world poisoning attacks against ML models is Microsoft's chatbot Tay. This chatbot learned racist and offensive language from Twitter users \cite{DBLP:conf/iciot/BaracaldoCLSZ18}, \cite{DBLP:conf/ccs/BaracaldoCLS17}. Microsoft removed the bot after 16 hours because the bot produced offensive tweets.
