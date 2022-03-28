@@ -1,96 +1,172 @@
-import os
 import numpy as np
+import pandas as pd
+import os
 import cv2
 import matplotlib.pyplot as plt
-
-from metrics.log import *
-
-from time import time
+from PIL import Image
+from sklearn.model_selection import train_test_split, learning_curve
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn import metrics
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split, learning_curve
-from sklearn.metrics import *
-from sklearn.pipeline import make_pipeline
-from joblib import parallel_backend
 
-from attacks.art.backdoors import *
-from measurement import *
+from visualizations.plot import *
 
+np.random.seed(42)
 
-# Declaring variables
-flat_data_arr = []
-target_arr = []
-"""
-CATEGORIES = ["0", "1", "2", "3", "4", "5", "6",
-			  "7", "8", "9", "10", "11", "12",
-			  "13", "14", "15", "16", "17",
-			  "18", "19", "20", "21", "22",
-			  "23", "24", "25", "26", "27",
-			  "28", "29", "30", "31", "32",
-			  "33", "34", "35", "36", "37",
-			  "38", "39", "40", "41", "42"]
-"""
-CATEGORIES = ["0", "1"]
-DATADIR = r"C:\Users\Jan\Documents\dev\Risk-Measurement-Framework\risk_measurement_framework\dataset\Train"
-TEST_DATADIR = r"C:\Users\Jan\Documents\dev\Risk-Measurement-Framework\risk_measurement_framework\dataset\Test"
-IMG_SIZE = 100
+from matplotlib import style
+style.use('fivethirtyeight')
 
-training_data=[]
+data_dir = '../dataset'
+train_path = '../dataset/Train'
+test_path = '../dataset/Test'
 
-def create_training_data():
+# Resizing the images to 30x30x3
+IMG_HEIGHT = 30
+IMG_WIDTH = 30
+channels = 3
 
-    for category in CATEGORIES:
-        path = os.path.join(DATADIR, category)
-        class_num = CATEGORIES.index(category)
+NUM_CATEGORIES = len(os.listdir(train_path))
 
-        for img in os.listdir(path):
-            img_array = cv2.imread(os.path.join(path, img))
-            new_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))
-            training_data.append([new_array, class_num])
+# Label Overview
+classes = { 0:'Speed limit (20km/h)',
+            1:'Speed limit (30km/h)',
+            2:'Speed limit (50km/h)',
+            3:'Speed limit (60km/h)',
+            4:'Speed limit (70km/h)',
+            5:'Speed limit (80km/h)',
+            6:'End of speed limit (80km/h)',
+            7:'Speed limit (100km/h)',
+            8:'Speed limit (120km/h)',
+            9:'No passing',
+            10:'No passing veh over 3.5 tons',
+            11:'Right-of-way at intersection',
+            12:'Priority road',
+            13:'Yield',
+            14:'Stop',
+            15:'No vehicles',
+            16:'Veh > 3.5 tons prohibited',
+            17:'No entry',
+            18:'General caution',
+            19:'Dangerous curve left',
+            20:'Dangerous curve right',
+            21:'Double curve',
+            22:'Bumpy road',
+            23:'Slippery road',
+            24:'Road narrows on the right',
+            25:'Road work',
+            26:'Traffic signals',
+            27:'Pedestrians',
+            28:'Children crossing',
+            29:'Bicycles crossing',
+            30:'Beware of ice/snow',
+            31:'Wild animals crossing',
+            32:'End speed + passing limits',
+            33:'Turn right ahead',
+            34:'Turn left ahead',
+            35:'Ahead only',
+            36:'Go straight or right',
+            37:'Go straight or left',
+            38:'Keep right',
+            39:'Keep left',
+            40:'Roundabout mandatory',
+            41:'End of no passing',
+            42:'End no passing veh > 3.5 tons' }
 
-create_training_data()
+folders = os.listdir(train_path)
 
-print(f"Training data length: {len(training_data)}")
+train_number = []
+class_num = []
 
-lenofimage = len(training_data)
+for folder in folders:
+    train_files = os.listdir(train_path + '/' + folder)
+    train_number.append(len(train_files))
+    class_num.append(classes[int(folder)])
 
-X=[]
-y=[]
+zipped_lists = zip(train_number, class_num)
+sorted_pairs = sorted(zipped_lists)
+tuples = zip(*sorted_pairs)
+train_number, class_num = [ list(tuple) for tuple in  tuples]
 
-for categories, label in training_data:
-    X.append(categories)
-    y.append(label)
+# Visualizing The Dataset
+plt.figure(figsize=(21,10))
+plt.bar(class_num, train_number)
+plt.xticks(class_num, rotation='vertical')
+#plt.show()
 
-X = np.array(X).reshape(lenofimage, -1)
-X = X/255.0
+# Collecting the Training Data
+image_data = []
+image_labels = []
 
-y = np.array(y)
+for i in range(NUM_CATEGORIES):
+    path = data_dir + '/Train/' + str(i)
+    images = os.listdir(path)
 
-# art_poison_backdoor_attack(, X, y, broadcast=True)
+    for img in images:
+        try:
+            image = cv2.imread(path + '/' + img)
+            image_fromarray = Image.fromarray(image, 'RGB')
+            resize_image = image_fromarray.resize((IMG_HEIGHT, IMG_WIDTH))
+            image_data.append(np.array(resize_image))
+            image_labels.append(i)
+        except:
+            print("Error in " + img)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, test_size=0.2)
+# Changing the list to numpy array
+image_data = np.array(image_data)
+image_labels = np.array(image_labels)
 
-print("Start training...")
+print(image_data.shape, image_labels.shape)
 
-with parallel_backend('threading', n_jobs=8):
-	svc = make_pipeline(StandardScaler(), SVC(kernel='linear', gamma='auto', C=3000))
+# Shuffling the training data
+shuffle_indexes = np.arange(image_data.shape[0])
+np.random.shuffle(shuffle_indexes)
+image_data = image_data[shuffle_indexes]
+image_labels = image_labels[shuffle_indexes]
 
-	start = time()
-	print(f"Start time: {start}")
+# Splitting the data into train and validation set
+X_train, X_val, y_train, y_val = train_test_split(image_data, image_labels, test_size=0.3, random_state=42, shuffle=True)
 
-	clf = svc.fit(X_train, y_train)
+X_train = X_train/255
+X_val = X_val/255
 
-	end = time()
-	print(f"End time: {end}")
-	result = end - start
-	print('%.3f seconds' % result)
+print("X_train.shape", X_train.shape)
+print("X_valid.shape", X_val.shape)
+print("y_train.shape", y_train.shape)
+print("y_valid.shape", y_val.shape)
 
-	y_pred = clf.predict(X_test)
+# Flatten images into two dimension
+X_train = X_train.reshape(27446,30*30*3)
+X_val = X_val.reshape(11763,30*30*3)
 
-	print("Accuracy on unknown data is", accuracy_score(y_test, y_pred))
-	print(classification_report(y_test, y_pred))
-	print(f"Precision: {metrics.precision_score(y_test, y_pred)}")
+# Making the model
+svc = make_pipeline(StandardScaler(), SVC(kernel='linear', gamma='auto', C=3000))
+clf = svc.fit(X_train, y_train)
 
-	accuracy_log(y_test, y_pred)
-	precision_log(y_test, y_pred)
+# Loading test data and running predictions
+test = pd.read_csv(data_dir + '/Test.csv')
+
+labels = test["ClassId"].values
+imgs = test["Path"].values
+
+data =[]
+
+for img in imgs:
+    try:
+        image = cv2.imread(data_dir + '/' +img)
+        image_fromarray = Image.fromarray(image, 'RGB')
+        resize_image = image_fromarray.resize((IMG_HEIGHT, IMG_WIDTH))
+        data.append(np.array(resize_image))
+    except:
+        print("Error in " + img)
+
+X_test = np.array(data)
+X_test = X_test/255
+
+X_test = X_test.reshape(12630, 30*30*3)
+
+pred = clf.predict(X_test)
+
+print("Accuracy on unknown data is", accuracy_score(labels, pred) * 100)
+print(classification_report(labels, pred))

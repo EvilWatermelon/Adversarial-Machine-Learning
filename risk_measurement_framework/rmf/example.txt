@@ -2358,3 +2358,7 @@ DEBUG - matplotlib.font_manager - 03/15/2022 05:33:06 PM: findfont: score(FontEn
 DEBUG - matplotlib.font_manager - 03/15/2022 05:33:06 PM: findfont: score(FontEntry(fname='C:\\Windows\\Fonts\\taile.ttf', name='Microsoft Tai Le', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
 DEBUG - matplotlib.font_manager - 03/15/2022 05:33:06 PM: findfont: score(FontEntry(fname='C:\\Windows\\Fonts\\VINERITC.TTF', name='Viner Hand ITC', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
 DEBUG - matplotlib.font_manager - 03/15/2022 05:33:06 PM: findfont: Matching sans\-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=10.0 to DejaVu Sans ('E:\\Program Files\\Python37\\lib\\site-packages\\matplotlib\\mpl-data\\fonts\\ttf\\DejaVuSans.ttf') with score of 0.050000.
+INFO - root - 03/26/2022 11:39:14 AM: Normalized accurary: 0.98559670781893
+INFO - root - 03/26/2022 11:39:14 AM: Precision of the model: 0.9910514541387024
+INFO - root - 03/26/2022 07:14:31 PM: Normalized accurary: 0.9938271604938271
+INFO - root - 03/26/2022 07:14:31 PM: Precision of the model: 0.9933481152993349
