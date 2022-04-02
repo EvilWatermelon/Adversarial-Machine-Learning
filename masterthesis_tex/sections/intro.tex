@@ -1,4 +1,4 @@
-git % !TEX root = C:\Users\Jan\Documents\dev\Risk-Measurement-Framework\masterthesis_tex\masterthesis_main.tex
+% !TEX root = C:\Users\Jan\Documents\dev\Risk-Measurement-Framework\masterthesis_tex\masterthesis_main.tex
 \section{Introduction}
 \label{sec:intro}
 
@@ -24,22 +24,13 @@ context of ISO 27005 but less with ISO 27004. Therefore, there is a need to put 
 in the context of security for ML and ISO 27004. From the previously mentioned points, it should emerge that this thesis should show the possibility of using common standards for risk
 measurement in ML.
 
-\subsection{Goals and expectations of this present thesis}
+\subsection{Research questions and hypotheses for this thesis}
 
 \newlist{questions}{enumerate}{2}
 \setlist[questions,1]{label=\textsf{\textbf{RQ\arabic*:}},ref=RQ\arabic*}
 \setlist[questions,2]{label=(\alph*),ref=\thequestionsi(\alph*)}
 
-\subsubsection*{Expectations}
-
-The expectations for this thesis are implementing and evaluating the RMF for risk measurement of ML models. The focus here is on backdoor attacks and finding the attacker's effort.
-Furthermore, there is a need to show the extent of damage by implemententing different attacks. In order to meet these expectations, the following research questions and their
-descriptions should show what this thesis is aiming at.
-
-\subsubsection*{Assumption}
-
-
-\subsubsection*{Goals}
+\subsubsection*{Research questions}
 
 \begin{questions}
   \item How can ISO 27004 be used to measure risks in machine learning? \label{itm:rq1}
@@ -57,3 +48,24 @@ descriptions should show what this thesis is aiming at.
 The first research question \ref{itm:rq1} should introduce the discussion on how to bring the IT security standards in relation with security of ML. This is answered by explaining what ISO
 27004 is used for, what poisoning attacks are in ML and how to measure the risks of poisoning attacks in ML with the given standards. \ref{itm:rq2} is intended to define how much
 impact poisoning attacks have on data sets based on various variables and how quickly tampering can be detected through risk measurement. The fourth research question \ref{itm:rq4} stands in relation with \ref{itm:rq3} and \ref{itm:rq8} because it could be possible that risk measurement for poisoning attacks and the attacker's effort contains risk indicators which are used for both. For \ref{itm:rq5}, threat models find risk indicators to measure risks of the attacker's effort. This indicates the risks of an attacker and how big the extent of damage could come from the attack showed in different ways that are attacks that the attacker has programmed by himself or already finished attacks that are shown by the ART. \ref{itm:rq6} pursues the question which metrics of the ISO 27004 standard can be used to measure risks in relation of the attacker's effort. \ref{itm:rq7} is intended to summarize once again how risk indicators can support risk measurement through the framework. The last research question, \ref{itm:rq9}, is the most important question because it aims to show that the framework is able to measure risks and show the extent of damage from all risk indicators.
+
+\subsubsection*{Hypotheses}
+
+\newlist{hypotheses}{enumerate}{2}
+\setlist[hypotheses,1]{label=\textsf{\textbf{H\arabic*:}},ref=H\arabic*}
+\setlist[hypotheses,2]{label=(\alph*),ref=\thehypothesesi(\alph*)}
+
+\begin{hypotheses}
+  \item To present risk measurement, different risk indicators must appropriate results. The risk term is calculated of the probability of occurance multiplied with the extent
+        of damage. The extent of damage can be monitored through the attacks on the ML model, the manipulation of the training data with backdoor attacks, ML metrics as well as the
+        values which comprise the metrics. The probability of occurance is calculated from the risk indicators of an attacker. It must then be considered how much effort the attacker
+        has und how much knowledge he has about the attack. \label{itm:h1}
+  \item This thesis focusses on backdoor attacks which means that the accuracy of a ML model is important. This value represents the performance of the whole ML model as a
+        total result. It could happen that the accuracy do not change when the misclassifications increase. Those changes could have the same effect on other ML metrics such as
+        F1-Score, or precision-recall. As these ML metrics are derived the values TP, TN, FP, and FN which represent the classification while the training time. These values could
+        show more detailed changes when a ML model is attacked. \label{itm:h2}
+  \item To execute an attack, the attacker must make a certain effort. This execution can be done by common criteria and be adjusted depending on the attack.
+        The weighting of the criteria depend on the attack and must be derived from the attack. \label{itm:h3}
+  \item The ISO 27004 proposes requirements and procedures to make measures and measurements. These requirements and procedures are not binding to fulfill the
+        requirements and procedures completely. This allows a derivation for the corresponding risk measurement of a ML model in this thesis. \label{itm:h4}
+\end{hypotheses}

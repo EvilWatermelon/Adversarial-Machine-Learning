@@ -5,7 +5,7 @@ import numpy as np
 
 def poison_func(x):
     return insert_image(x, backdoor_path='../rmf/backdoors/alert.png',
-                        size=(2, 10000), mode='RGB', blend=0.8, random=True)
+                        size=(10, 10), mode='RGB', blend=0.8, random=True)
 
 # Executing the PoisoningAttackCleanLabelBackdoor attack
 def clean_label(pattern):
@@ -32,6 +32,6 @@ def art_poison_backdoor_attack(x, y):
     y = y[random_selection]
 
     backdoor_class = PoisoningAttackBackdoor(poison_func)
-    backdoor_class.poison(x, y)
+    backdoor_class.poison(x[:20], y[:20])
 
     return x, y
