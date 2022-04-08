@@ -16,8 +16,10 @@ from sklearn.svm import SVC
 from sklearn import metrics
 
 from attacks.art.backdoors import *
-
 from visualizations.plot import *
+from measurement.monitoring import *
+
+start_ram_monitoring()
 
 np.random.seed(42)
 
@@ -201,3 +203,6 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 labels, pred = read_test_data(train_path, data_dir, image_data, image_labels)
 
 print(classification_report(labels, pred))
+ram_resources()
+cpu_resources()
+gpu_resources()
