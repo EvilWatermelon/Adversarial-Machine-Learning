@@ -1,5 +1,7 @@
 **Using Python 3.7.***
 
+[![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+
 # Risk-Measurement-Framework
 For my Masterthesis program a risk measurement framework called RMF. This framework should meausre risks with the common classic IT security management standard ISO 27000 (family). Different backdoor attacks and measuring the attackers effort by using a threat model is the main goal of this thesis.
 
@@ -23,3 +25,4 @@ This framework can be used by build in functions into a ML model.
 # Dataset 🛑
 
 For my case study I'm using a german traffic sign dataset that is already splittet in training and testing [Kaggle dataset](https://www.kaggle.com/meowmeowmeowmeowmeow/gtsrb-german-traffic-sign/version/1). The dataset is not committed but has no changes from the original dataset from Kaggle.
+It uses images from 43 different traffic signs.
