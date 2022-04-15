@@ -2,6 +2,15 @@
 \section{Framework functions}
 \label{sec:frame_func}
 
+\begin{lstlisting}
+  log(message, logging_levelname: str = 'INFO')
+\end{lstlisting}
+
+\noindent\textbf{message}
+output in the log \\ \\
+\textbf{logging\_levelname}
+(Optional) string value to show the logging level \\ \\
+
 The following functions are the attacks in the RMF: \\
 
 \begin{lstlisting}
@@ -74,3 +83,39 @@ The following functions show the data results of the risk measurement: \\
 \begin{lstlisting}
   list_probability()
 \end{lstlisting}
+
+The following functions represent the risk indicators in the RMF: \\
+These three functions form the computational resources risk indicator: \\
+\begin{lstlisting}
+  ram_resources()
+\end{lstlisting}
+
+\begin{lstlisting}
+  cpu_resources()
+\end{lstlisting}
+
+\begin{lstlisting}
+  gpu_resources()
+\end{lstlisting}
+
+The next function represent the ML metrics: \\
+
+\begin{lstlisting}
+  accuracy_log(true_values, predictions, normalize=False)
+\end{lstlisting}
+
+\noindent\textbf{true\_values}
+\\ \\
+\textbf{predictions}
+\\ \\
+\textbf{normalize=False}
+(Optional) the accuracy can be normalized but the default value is \textit{False}. \\ \\
+
+\begin{lstlisting}
+  precision_log(true_values, predictions)
+\end{lstlisting}
+
+\noindent\textbf{true\_values}
+\\ \\
+\textbf{predictions}
+\\ \\

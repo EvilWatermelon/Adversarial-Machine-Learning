@@ -19,7 +19,7 @@ After the explained measures and measurement development based on ISO 27004 in s
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=10cm]{pictures/relation_risk_ind.png}
-  \caption{Relation between the objects, attributes and the risk indicators adapted from \cite{ISO_27004_2009}}
+  \caption{Relation between the objects, attributes and the risk indicators adapted from \cite{ISO_27004_2009}.}
   \label{fig:relation_risk_ind}
 \end{figure}
 
@@ -31,7 +31,7 @@ The terms of the standard thus enable a better classification and relationship o
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=8cm]{pictures/measurement.jpg}
-  \caption{The measurement construct after executing the measurement methods adapted from \cite{ISO_27004_2009}}
+  \caption{The measurement construct after executing the measurement methods adapted from \cite{ISO_27004_2009}.}
   \label{fig:measurement}
 \end{figure}
 
@@ -87,7 +87,7 @@ For the RMF the objects are separated into an object for the attack and an objec
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=10cm]{pictures/classifi_attacks_ml.png}
-  \caption{Attack classifications on ML adapted from \cite{DBLP:journals/corr/abs-2012-04884}}
+  \caption{Attack classifications on ML adapted from \cite{DBLP:journals/corr/abs-2012-04884}.}
   \label{fig:classifi_attacks_ml}
 \end{figure}
 
@@ -113,7 +113,7 @@ The following backdoor attacks should represent what they can achieve when using
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=10cm]{pictures/backdoor_pattern_bad_net.jpg}
-  \caption{Backdoors in relation to the original image adapted from \cite{DBLP:journals/corr/abs-1708-06733}}
+  \caption{Backdoors in relation to the original image adapted from \cite{DBLP:journals/corr/abs-1708-06733}.}
   \label{fig:backdoor_pattern}
 \end{figure}
 
@@ -122,7 +122,7 @@ The implemented attacks from Gu et al. are Single Target attack and an All-to-Al
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=10cm]{pictures/stop_sign.jpg}
-  \caption{Stop sign as the clean version and with the three backdoors adapted from \cite{DBLP:journals/corr/abs-1708-06733}}
+  \caption{Stop sign as the clean version and with the three backdoors adapted from \cite{DBLP:journals/corr/abs-1708-06733}.}
   \label{fig:stop_sign}
 \end{figure}
 
@@ -132,19 +132,46 @@ In their work, Turner et al. \cite{turner2018clean} explain \textit{PoisoningAtt
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=10cm]{pictures/poisoned_clean_label.jpg}
-  \caption{Difference between an original image and the conversion into adversarial examples with different pertubations adapted from \cite{turner2018clean}}
+  \caption{Difference between an original image and the conversion into adversarial examples with different pertubations adapted from \cite{turner2018clean}.}
   \label{fig:poisoned_clean_label}
+\end{figure}
+
+The last backdoor attack from Saha et al. \cite{DBLP:journals/corr/abs-1910-00033} is the \textit{HiddenTriggerBackdoor} which goal is to let poisoned data look natural with correct labels. This backdoor attack uses a threat model defined from Gu et al. \cite{DBLP:journals/corr/abs-1708-06733}. In this threat model the attacker provides poisoned training data to a victim that uses it with a pre-trained ML model. The attacker uses a small image as a backdoor which changes the target label to a specific wrong label. This can be used for both attack specificity, targeted and untargeted. With this threat model it is possible to identify the poisoned data because as in \textit{PoisoningAttackCleanLabelBackdoor} already explained the missclassified images change their label. The threat model from Saha et al. propose a threat model inspired from Shafahi et al. \cite{DBLP:journals/corr/abs-1804-00792} and Sabour et al. \cite{DBLP:journals/corr/SabourCFF15} where the poisoned data are labeled correctly and the backdoor also remains not visible. This is done through optimization for poisoned images which pixel space is close to images from a target category while its feature space is close to source images that are patched with the backdoor. The next part is generalizing the attack for novel source images which means that the trigger cannot be found during poisoning. Also the trigger should be placed at any random location. In order to implement this, during the optimization the poisoned images pushed close to a cluster of source images that are patched. Based on the work of Moosavi-Dezfooli et al. \cite{DBLP:conf/cvpr/Moosavi-Dezfooli17} about universal adversarial examples Saha et al. minimzed the value of loss at all source images and trigger locations. This is done by choosing a random trigger location and source images for each iteration of optimization. Over every iteration a method optimizes randomly patched source images and assign them to poisoned images closest to the feature space. Algorithm \ref{alg:poisoning_hidden} shows formally how the images are poisoned.
+
+\begin{algorithm}
+  \caption{Poisoning data algorithm adapted from \cite{DBLP:journals/corr/abs-1910-00033}.}
+  \label{alg:poisoning_hidden}
+  \KwResult{$K$ poisoned images $z$ \\ 1. Sample $K$ random images \(t_{k}\) from the target category and initialize poisoned images \(z_{k}\) with them;}
+  \While{\textit{loss} is \textit{large}}{
+    2. Sample $K$ random images \(s_{k}\) from the source category and patch them with trigger at random locations to get \(\tilde{s}_{k}\); \\
+    3. Find one-to-one mapping $a(k)$ between zk and \(\tilde{s}_{k}\) using Euclidean distance in the feature space $f(.)$; \\
+    4. Perform one iteration of mini-batch projected gradient descent for the K-means clustering loss function;
+  }
+\end{algorithm}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=12cm]{pictures/procedure_hidden_trigger.jpg}
+  \caption{The left side visualize how an attacker generates a set of poisoned images. In the middle the visualization shows how the training data is extended by the poisoned data and then the victim trains the ML model. The right side visualize the test time. An attacker adds the backdoor trigger to images with the source category to manipulate the ML model without changing the label. This visualization is adapted from \cite{DBLP:journals/corr/abs-1910-00033}.}
+  \label{fig:procedure_hidden_trigger}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=11cm]{pictures/poisoned_hidden_trigger.jpg}
+  \caption{The left side visualize how an attacker generates a set of poisoned images. In the middle the visualization shows how the training data is extended by the poisoned data and then the victim trains the ML model. The right side visualize the test time. An attacker adds the backdoor trigger to images with the source category to manipulate the ML model without changing the label. This visualization is adapted from \cite{DBLP:journals/corr/abs-1910-00033}.}
+  \label{fig:poisoned_hidden_trigger}
 \end{figure}
 
 \subsection{Finding the attacker's effort}
 \label{sec:find_effort}
 
-Subsection \ref{sec:threat} explained a formal threat model to find the attackers effort with high-level and low-level attributes where the low-level attributes are mapped to with the high-level attributes. At first this subsection will discuss which of the characteristics are useful to find the attackers effort for attacking a ML model. Regarding to the mapping between the attributes, the low-level attributes will be discussed at first.
+Before explaining the basing threat model the RMF uses for the measurement methods this subsection explains how the attacker's effort should be measured with the risk indicators proposed in Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} and how the hypotheses \ref{itm:h2} and \ref{itm:h3} should be proven. Further, this subsection explains how the risk indicator from the hypothesis \ref{itm:h1} should be proven. The risk indicators to find the attacker's effort are the computational resources, the attacker's knowledge, and the attacker's goal. Starting with computational resources the RMF need to measure the computational resources that are mainly used to train a ML model. The attacker's knowledge is divided into three possible knowledge levels. The first knowledge level are black-box attacks where the attacker has no information about the ML model. \\ In their work, Papernot et al. \cite{DBLP:conf/ccs/PapernotMGJCS17} explain an attack strategy to misclassify a deep neural network by generated adversarial examples and get a misclassification rate of 84.24\%. Papernot et al. assume that the attacker has no knowledge about the structure, parameters, and does not have access to any training set. The goal is to train a deep neural network with synthetic input data and generated from the adversary. The output data are assigned labels from the targeted deep neural network and the adversary observe the output data. The input data are handwritten digits as images and the output data are one of the digits. \\ The goal is now to find out which attacks an attacker execute to get his knowledge. If it is clear which knowledge level bases on the attack the RMF can then determine what the attacker have to do to execute the attack based on pre-determined steps to execute the attack \cite{}.
 
 \subsection{Using the formal threat model}
 \label{sec:use_threat_model}
 
-For the risk measurement the attacker's effort is important to evaluate how high or low the risk is for an ML model. In this subsection the research questions \ref{itm:rq5}, \ref{itm:rq6} are addressed in more detail. In reference to the research question \ref{itm:rq8} this threat model could be a possible method for the RMF to measure risks which will be proved in Section \ref{sec:evaluation}.
+For the risk measurement the attacker's effort is important to evaluate how high or low the risk is for an ML model. In this subsection the research questions \ref{itm:rq5}, \ref{itm:rq6} are addressed in more detail. In reference to the research question \ref{itm:rq8} this threat model is a possible method for the RMF to measure risks which will be proved in Section \ref{sec:evaluation}.
 As in subsection \ref{sec:threat} explained the high- and low-level attributes have to be mapped to find the high-level attributes based on the low-level attributes.
 
 \subsubsection*{The low-level attributes}
@@ -172,6 +199,8 @@ Not every derived measure need to be calculated such as the accuracy.
 
 \subsection{Define an analytical model for each indicator}
 
+The indicators are the final results from the measurement and provide the transition to the measurement results. This is the last step before the measurement results.
+
 \subsection{Develop measurement results by evaluating the risk measurement}
 
 The measurment results term in table \ref{tab:iso_table} summarized how the results should be presented in the RMF. The implementation of the measurement results are possible through the decision criteria which are also defined in \cite{ISO_27004_2009}. The RMF show the results as visualized Python plots and calculated results. Both bases on the risk indicators.
@@ -189,12 +218,14 @@ In the RMF every Python function send its process and output into a log-file exc
 
 With regard to poisoning attacks, the goal is to decrease the accuracy \cite{DBLP:conf/icml/BiggioNL12}, \cite{DBLP:journals/corr/abs-1708-06733}. But the RMF should also use the precision-recall, the F1-score and shows learning curve of the training process. That should make it possible to identify everything of the attacks. Also with regard to the attacker's effort could be every collected information of the ML model and the training data a possible value.
 
-\subsubsection*{Python plots}
+\subsubsection*{Vizualising the risk measurement}
+
+To evaluate the risk measurement as good as possible all data should be visualized. This could show more possible insights from human judgment.
 
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=8cm]{pictures/learning_curve_example.png}
-  \caption{Learning curve example adapted from \url{https://scikit-learn.org/stable/auto_examples/model_selection/plot_learning_curve.html}}
+  \caption{Learning curve example adapted from \url{https://scikit-learn.org/stable/auto_examples/model_selection/plot_learning_curve.html}.}
   \label{fig:learning_curve_example}
 \end{figure}
 

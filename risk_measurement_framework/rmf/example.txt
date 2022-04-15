@@ -13,3 +13,9 @@ INFO - root - 04/07/2022 08:27:57 PM: Current memory usage: 113.329394MB; Peak m
 INFO - root - 04/07/2022 08:27:58 PM: Current CPU usage: 0.0%
 INFO - root - 04/07/2022 08:32:14 PM: Current memory usage: 113.329516MB; Peak memory usage: 1783.797105MB
 INFO - root - 04/07/2022 08:32:15 PM: Current CPU usage: 0.0%
+INFO - root - 04/14/2022 04:10:19 PM: Current memory usage: 113.325603MB; Peak memory usage: 1783.793314MB
+INFO - root - 04/14/2022 04:10:20 PM: Current CPU usage: 0.0%
+INFO - root - 04/14/2022 04:10:20 PM: Percent: 0%, GPU memory: 0
+INFO - root - 04/14/2022 04:21:49 PM: Current memory usage: 113.329088MB; Peak memory usage: 1783.796736MB
+INFO - root - 04/14/2022 04:21:50 PM: Current CPU usage: 0.0%
+INFO - root - 04/14/2022 04:21:50 PM: Percent: 0%, GPU memory: 0

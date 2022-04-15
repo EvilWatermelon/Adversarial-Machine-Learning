@@ -21,7 +21,7 @@ def cpu_resources():
     """
     Getting the current CPU usage. The status is read exactly where the function is called.
     The output is passed to the log function.
-    Using psuil for Windows and psutill for Linux.
+    Using psutil for Windows and psutill for Linux.
     """
     ml_process = psutil.Process()
 
@@ -31,14 +31,32 @@ def cpu_resources():
 
 def gpu_resources():
     """
-    Getting the current GPU usage. The status is read exactly where the function is called.
+    Getting the current GPU usage of all GPUs. The status is read exactly where the function is called.
     The output is passed to the log function.
     This function works with Linux and Windows. Mac is not tested.
     """
 
     available_device = GPUInfo.check_empty()
     percent, memory = GPUInfo.gpu_usage()
+
     min_percent = percent.index(min([percent[i] for i in available_device]))
     min_memory = memory.index(min([memory[i] for i in available_device]))
 
     log(f"Percent: {min_percent}%, GPU memory: {min_memory}")
+
+def accuracy_log(true_values, predictions, normalize=False):
+
+	accuracy = np.sum(np.equal(true_values, predictions)) / len(true_values)
+
+	if normalize:
+		log(f"Accurary: {accuracy}")
+	else:
+		log(f"Normalized accurary: {np.mean(accuracy)}")
+
+def precision_log(true_values, predictions):
+	TP = ((predictions == 1) & (true_values == 1)).sum()
+	FP = ((predictions == 1) & (true_values == 0)).sum()
+
+	precision = TP / (TP + FP)
+
+	log(f"Precision of the model: {precision}")
