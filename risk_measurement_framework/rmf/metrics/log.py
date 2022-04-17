@@ -14,7 +14,7 @@ def log(message, logging_levelname: str = 'INFO'):
 
 	logging.basicConfig(format='%(levelname)s - %(name)s - %(asctime)s: %(message)s',
 						datefmt='%m/%d/%Y %I:%M:%S %p',
-						filename='example.txt',
+						filename='measurement.log',
 						level=logging.DEBUG)
 
 	logging_levels[logging_levelname](msg_string)
