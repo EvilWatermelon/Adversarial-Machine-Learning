@@ -14,24 +14,37 @@ output in the log \\ \\
 The following functions are the attacks in the RMF: \\
 
 \begin{lstlisting}
-  art_poison_backdoor_attack(perturbation, x, y, broadcast)
+  art_poison_backdoor_attack(x, y, num_of_rand_images)
 \end{lstlisting}
 
-\noindent\textbf{perturbation}
-This argument... \\ \\
-\textbf{x}
+\noindent\textbf{x}
+This argument takes the array of training images. \\ \\
+\textbf{y}
+This argument takes the array of labels that are assigned to the training images. \\ \\
+\textbf{num\_of\_rand\_images}
+This argument takes the number of untargeted images that should get a trigger pattern. \\ \\
+
+\begin{lstlisting}
+  clean_label(x, y)
+\end{lstlisting}
+
+\noindent\textbf{x}
 This argument... \\ \\
 \textbf{y}
 This argument... \\ \\
-\textbf{broadcast}
-This argument... \\ \\
 
 \begin{lstlisting}
-  clean_label()
+  art_hidden_trigger_backdoor(x, y, target, source)
 \end{lstlisting}
 
-\noindent\textbf{pattern}
-Add a pattern that is implemented in images to create a trigger \\ \\
+\noindent\textbf{x}
+This argument... \\ \\
+\textbf{y}
+This argument... \\ \\
+\textbf{target}
+This argument... \\ \\
+\textbf{source}
+This argument... \\ \\
 
 The following functions visualize the ML model training process: \\
 
@@ -97,8 +110,6 @@ These three functions form the computational resources risk indicator: \\
 \begin{lstlisting}
   gpu_resources()
 \end{lstlisting}
-
-The next function represent the ML metrics: \\
 
 \begin{lstlisting}
   accuracy_log(true_values, predictions, normalize=False)

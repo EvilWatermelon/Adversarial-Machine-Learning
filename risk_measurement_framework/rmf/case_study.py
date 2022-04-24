@@ -133,8 +133,6 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     image_data = np.array(image_data)
     image_labels = np.array(image_labels)
 
-    print(image_data.shape, image_labels.shape)
-
     # Shuffling the training data
     shuffle_indexes = np.arange(image_data.shape[0])
     np.random.shuffle(shuffle_indexes)
@@ -147,12 +145,13 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     X_train = X_train/255
     X_val = X_val/255
 
-    poisoned_x, poisoned_y = art_poison_backdoor_attack(X_train, y_train)
+    x, y = art_poison_backdoor_attack(X_train, y_train, 100)
+    print(len(x))
 
-    print("X_train.shape", X_train.shape)
-    print("X_valid.shape", X_val.shape)
-    print("y_train.shape", y_train.shape)
-    print("y_valid.shape", y_val.shape)
+    #print("X_train.shape", X_train.shape)
+    #print("X_valid.shape", X_val.shape)
+    #print("y_train.shape", y_train.shape)
+    #print("y_valid.shape", y_val.shape)
 
     # Flatten images into two dimension
     X_train = X_train.reshape(27446,30*30*3)

@@ -3,36 +3,44 @@
 \label{sec:case_study_functions}
 
 \textbf{class\_num}
-This argument \\ \\
+This argument gets the key value from the labels which is an integer. \\ \\
 \textbf{train\_number}
-This argument \\ \\
+This argument gets the number of images from a labeled folder. \\ \\
 \textbf{train\_path}
-This argument \\ \\
+This argument gets the path where the local training data is stored. \\ \\
 \textbf{data\_dir}
-This argument \\ \\
+This argument gets the path where all local images are stored. \\ \\
 \textbf{image\_data}
-This argument \\ \\
+This argument gets an array with all images from a label. \\ \\
 \textbf{image\_labels}
-This argument \\ \\
+This argument gets the label which belongs to the corresponding images. \\ \\
 
 \begin{lstlisting}
   dataset_visualization(class_num, train_number)
 \end{lstlisting}
 
-\noindent In this function the number of images are visualized and sorted from the lowest to the highest number of images per label.
+\noindent With this function, the number of images are visualized and sorted from the lowest to the highest number of images per label.
 
 \begin{lstlisting}
   read_training_data(train_path, data_dir)
 \end{lstlisting}
 
+\noindent This function reads in the training data, calls the \textit{dataset\_visualization()} function and resize the images to $30x30$ pixels. The function is called by the \textit{preprocessing()} function.
+
 \begin{lstlisting}
   preprocessing(train_path, data_dir, image_data, image_labels)
 \end{lstlisting}
+
+\noindent After calling the \textit{read\_training\_data()} function, this function assign the \textbf{image\_date} and \textbf{image\_labels} arguments to shuffle the training data. Then the training data splits into training and validation data. The shape of the images must be reshaped for the SVM.
 
 \begin{lstlisting}
   model_training(train_path, data_dir, image_data, image_labels)
 \end{lstlisting}
 
+\noindent After calling the \textit{preprocessing()} function, this function calls a pipeline function with the \textit{SVC()} class and then fits the classifier.
+
 \begin{lstlisting}
   read_test_data(train_path, data_dir, image_data, image_labels)
 \end{lstlisting}
+
+\noindent After calling the \textit{model\_training()} function, this function reads in the test data, resizes the images to $30x30$ pixels and then reshape the images. The last step is the prediction with the test data.
