@@ -2,10 +2,10 @@ import numpy as np
 import pandas as pd
 import os
 import cv2
-
+import time
 import matplotlib.pyplot as plt
-from matplotlib import style
 
+from matplotlib import style
 from PIL import Image
 
 from sklearn.model_selection import train_test_split, learning_curve
@@ -139,39 +139,39 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     image_data = image_data[shuffle_indexes]
     image_labels = image_labels[shuffle_indexes]
 
-    # Splitting the data into train and validation set
-    X_train, X_val, y_train, y_val = train_test_split(image_data, image_labels, test_size=0.3, random_state=42, shuffle=True)
+    X_train = image_data
+    y_train = image_labels
 
+    # Execute the attack and replace the original with the poisoned data
+    poisoned_x, poisoned_y = art_poison_backdoor_attack(X_train, y_train, 100)
+
+    X_train = poisoned_x[shuffle_indexes]
     X_train = X_train/255
-    X_val = X_val/255
 
-    x, y = art_poison_backdoor_attack(X_train, y_train, 100)
-    print(len(x))
+    # Flatten images for the SVM
+    X_train = X_train.reshape(39209, 30*30*3)
 
-    #print("X_train.shape", X_train.shape)
-    #print("X_valid.shape", X_val.shape)
-    #print("y_train.shape", y_train.shape)
-    #print("y_valid.shape", y_val.shape)
-
-    # Flatten images into two dimension
-    X_train = X_train.reshape(27446,30*30*3)
-    X_val = X_val.reshape(11763,30*30*3)
-
-    return X_train, y_train, X_val, y_val
+    return X_train, y_train
 
 def model_training(train_path, data_dir, image_data, image_labels):
 
-    X_train, y_train, X_val, y_val = preprocessing(train_path, data_dir, image_data, image_labels)
+    X_train, y_train = preprocessing(train_path, data_dir, image_data, image_labels)
 
+    print("Start training...")
+
+    start = time.process_time()
     # Making the model
     svc = make_pipeline(StandardScaler(), SVC(kernel='linear', gamma='auto', C=3000))
-    clf = svc.fit(X_train, y_train)
+    svc.fit(X_train, y_train)
 
-    return clf
+    print(time.process_time() - start)
+    print("Finished training!")
+
+    return svc
 
 def read_test_data(train_path, data_dir, image_data, image_labels):
 
-    clf = model_training(train_path, data_dir, image_data, image_labels)
+    svc = model_training(train_path, data_dir, image_data, image_labels)
 
     # Loading test data and running predictions
     test = pd.read_csv(data_dir + '/Test.csv')
@@ -195,7 +195,7 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 
     X_test = X_test.reshape(12630, 30*30*3)
 
-    pred = clf.predict(X_test)
+    pred = svc.predict(X_test)
 
     return labels, pred
 

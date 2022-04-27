@@ -67,11 +67,11 @@ The first attack uses the \textit{PoisoningAttackBackdoor} class without any oth
   \end{minipage}
 \end{figure}
 
-After poisoning the images these image need be copied back into the original training data. Before this can be done the poisoned data must replace the original training data which contain no backdoor. When the RMF take the random original images, it save them into a temporary variable and then delete the images from the original training dataset. The next step is the poisoning while the poisoned data and the original training data nned the same shape and dimension which make it possible to copy the poisoned images. As mentioned before the poisoning function takes only two specific shapes which make it easy to have the same shape in the original training data and poisoned data.
+After poisoning the images these image need be copied back into the original training data. Before this can be done the poisoned data must replace the original training data which contain no backdoor. When the RMF take the random original images, it save them into a temporary variable and then delete the images from the original training data. The next step is the poisoning while the poisoned data and the original training data need the same shape and dimension which make it possible to copy the poisoned images. As mentioned before the poisoning function takes only two specific shapes which make it easy to have the same shape in the original training data and poisoned data. The implementation of the attack additionally shows the effort an attacker have to implement this attack. Thus the steps can be used for the attacker's knowledge risk indicator.
 
-The \textit{PoisoningAttackCleanLabelBackdoor} poison training images to misclassify the test. The training data is poisoned, than the ML model trains and while testing the backdoor attack must be executed.
+The \textit{PoisoningAttackCleanLabelBackdoor} poison training images to misclassify the test data. To use this attack the \textit{PoisoningAttackBackdoor} must be used before and then the clean label attack can be executed after training.
 
-The \textit{HiddenTriggerBackdoor} need to be executed after training. After training the poisoned data and a smaller number of clean training inputs are used to finetune the model. Finetuning means, taking a equal number of training inputs from each label. The following Python code shows the finetuning from the attack in the RMF.
+The \textit{HiddenTriggerBackdoor} need to be executed after training. To add the backdoor, the \textit{PoisoningAttackBackdoor} must be used before. After training the poisoned data and a smaller number of clean training inputs are used to finetune the model. Finetuning means, taking a equal number of training inputs from each label. The following Python code shows the finetuning from the attack in the RMF.
 
 \begin{lstlisting}
   dataset_size = size

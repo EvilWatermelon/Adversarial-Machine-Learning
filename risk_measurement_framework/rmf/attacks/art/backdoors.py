@@ -50,21 +50,11 @@ def art_poison_backdoor_attack(x, y, num_of_images):
     y = y[random_selection]
 
     backdoor_class = PoisoningAttackBackdoor(poison_func)
-    poisoned_x, poisoned_y = backdoor_class.poison(temp_x[:num_selection], y[:num_selection])
+    poisoned_x, poisoned_y = backdoor_class.poison(temp_x, y)
 
-    def __interweave(a, b):
-        N = a.shape[1]
-        M = a.shape[0] + b.shape[0]
-        out_dtype = np.result_type(a.dtype, b.dtype)
-        out = np.empty((M,N),dtype=out_dtype)
-        out[::2] = a
-        out[1::2] = b
-        return out
+    poisoned_data = np.concatenate((del_x, poisoned_x), axis=0)
 
-    comparison = del_x == poisoned_x
-    poisoned_data = comparison.all()
-    print(type(poisoned_data))
-    print(poisoned_data.shape)
+    print("Finished poisoning!")
 
     return poisoned_data, poisoned_y
 
