@@ -19,6 +19,8 @@ from attacks.art.backdoors import *
 from visualizations.plot import *
 from measurement.monitoring import *
 
+from art.estimators.classification import SklearnClassifier
+
 start_ram_monitoring()
 
 np.random.seed(42)
@@ -143,9 +145,9 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     y_train = image_labels
 
     # Execute the attack and replace the original with the poisoned data
-    poisoned_x, poisoned_y = art_poison_backdoor_attack(X_train, y_train, 100)
+    #poisoned_x, poisoned_y = art_poison_backdoor_attack(X_train, y_train, 100)
 
-    X_train = poisoned_x[shuffle_indexes]
+    #X_train = poisoned_x[shuffle_indexes]
     X_train = X_train/255
 
     # Flatten images for the SVM
@@ -162,16 +164,22 @@ def model_training(train_path, data_dir, image_data, image_labels):
     start = time.process_time()
     # Making the model
     svc = make_pipeline(StandardScaler(), SVC(kernel='linear', gamma='auto', C=3000))
-    svc.fit(X_train, y_train)
+    proxy = SklearnClassifier(model=SVC(kernel='linear', gamma='auto', C=3000))
+
+    proxy.fit(X_train, y_train)
+
+    poison_data, poison_label = clean_label(X_train, y_train, proxy, '0')
+
+    clf = svc.fit(poison_data, poison_label)
 
     print(time.process_time() - start)
     print("Finished training!")
 
-    return svc
+    return clf
 
 def read_test_data(train_path, data_dir, image_data, image_labels):
 
-    svc = model_training(train_path, data_dir, image_data, image_labels)
+    clf = model_training(train_path, data_dir, image_data, image_labels)
 
     # Loading test data and running predictions
     test = pd.read_csv(data_dir + '/Test.csv')
@@ -195,7 +203,7 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 
     X_test = X_test.reshape(12630, 30*30*3)
 
-    pred = svc.predict(X_test)
+    pred = clf.predict(X_test)
 
     return labels, pred
 

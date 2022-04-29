@@ -1,4 +1,5 @@
 from art.attacks.poisoning import *
+from art import *
 from art.attacks.poisoning.perturbations import insert_image, add_pattern_bd
 
 import matplotlib.pyplot as plt
@@ -21,16 +22,16 @@ def mod(x):
     return x.astype(original_dtype)
 
 # Executing the PoisoningAttackCleanLabelBackdoor attack (black-box)
-def clean_label(x, y):
+def clean_label(x, y, clf, target_label):
     """
     https://people.csail.mit.edu/madry/lab/cleanlabel.pdf
     """
     backdoor = PoisoningAttackBackdoor(add_pattern_bd)
-    attack = PoisoningAttackCleanLabelBackdoor(backdoor=backdoor, proxy_classifier=proxy.get_classifier(),
-                                               target=targets, pp_poison=.33, norm=2, eps=5,
+    attack = PoisoningAttackCleanLabelBackdoor(backdoor=backdoor, proxy_classifier=clf,
+                                               target=target_label, pp_poison=.33, norm=2, eps=5,
                                                eps_step=0.1, max_iter=200)
-    attack.poison(x, y)
-    return x, y
+    poison_data, poison_labels = attack.poison(x, y)
+    return poison_data, poison_labels
 
 # Untargeted attack (black-box)
 def art_poison_backdoor_attack(x, y, num_of_images):
@@ -59,17 +60,18 @@ def art_poison_backdoor_attack(x, y, num_of_images):
     return poisoned_data, poisoned_y
 
 # Targeted attack (white-box)
-def art_hidden_trigger_backdoor(x, y, target, source, size, label_size):
+def art_hidden_trigger_backdoor(x, y, target, source):
     """
     https://arxiv.org/pdf/1910.00033.pdf
     """
     backdoor = PoisoningAttackBackdoor(mod)
 
     poison_attack = HiddenTriggerBackdoor(classifier, eps=16/255, target=target, source=source, feature_layer=9, backdoor=backdoor,
-                                          learning_rate=0.01, decay_coeff = .1, decay_iter = 1000, max_iter=3000, batch_size=25, poison_percent=.015)
+                                          learning_rate=0.01, decay_coeff = .1, decay_iter = 1000, max_iter=3000, batch_size=25, poison_percent=.15)
 
-    poison_data, poison_indices = poison_attack.poison(x, y)
+    poison_data, poison_labels = poison_attack.poison(x, y)
 
+    """
     # Create finetuning dataset
     dataset_size = size
     num_labels = label_size
@@ -95,4 +97,6 @@ def art_hidden_trigger_backdoor(x, y, target, source, size, label_size):
 
     poison_y = np.copy(y_train)[poison_dataset_inds]
 
-    return x, y
+    """
+
+    return poison_data, poison_labels
