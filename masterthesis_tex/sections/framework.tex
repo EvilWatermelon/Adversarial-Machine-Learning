@@ -82,7 +82,7 @@ In conclusion, with regard to the research question \ref{itm:rq1}, it can be sta
 \subsection{Risk indicators}
 \label{sec:risk_indicators}
 
-The RMF measure risks by so called risk indicators. Risk indicators are in context of ISO 27004 \cite{ISO_27004_2009} objects and attributes and represent the input data for the measurement methods. The input data are an object's attributes and assigned to the corresponding measurement method. Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} in Section \ref{sec:approaches} present
+The RMF measure risks by so called risk indicators. Risk indicators are in context of ISO 27004 \cite{ISO_27004_2009} objects and attributes and represent the input data for the measurement methods. The input data are an object's attributes and assigned to the corresponding measurement method. Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} in section \ref{sec:approaches} present
 proposals that are the approach for the proposals of the risk indicators. These proposals are attack specificity, attack time, attacker's knowledge, and attacker's goal. The proposals have different subcategories which are visualized in figure \ref{fig:classifi_attacks_ml}. The attack specific proposals such as attack specificity, attack time are assigned to the low-level attributes. Attacker's knowledge and attacker's goal are assigned to the high-level attributes. These attributes are declared in the hypotheses \ref{itm:h2}, \ref{itm:h3}, \ref{itm:h5}, and \ref{itm:h6}.
 
 \subsubsection*{Attributes and objects based on ISO 27004}
@@ -98,14 +98,23 @@ For the RMF the objects are separated into an object for the attack and an objec
 
 \subsection{Measurement methods}
 
-Risk measurement in the RMF starts after the identification of suitable objects and attributes with the selection of measurement methods according to the procedure of ISO 27004. As already mentioned in the related work section \ref{sec:relWork}, there are different possibilities to execute poisoning attacks. At first, it is important to check where the training data come from. Xiao et al. \cite{DBLP:conf/sp/XiaoLZX18} describe that training data can be polluted or mislabled when they come from external sources. Turner et al. \cite{turner2018clean} train a classifier with a small set of clean input data where the input data are images from a trusted source that obtained or inspected the data. So, the more trustworthy a set of training data is, the lower the risk will be, and this process can be transferred to the RMF. After the training data is checked for trustworthiness, the next part is to measure how large the extent of damage would be after a successful attack against the ML model. The RMF needs to find out if the ML model is outsourced (Machine Learning as a Service, or MLaaS \cite{DBLP:journals/corr/abs-1708-06733}), if it is self-developed, or if the ML model comes from an external resource and only has to be trained. For example, Google's Cloud Machine Learning Engine \cite{google_ai2022} allow's users to upload training data and a TensorFlow ML model to train it
-in the cloud \cite{DBLP:journals/corr/abs-1708-06733}. \\ This thesis concentrates on backdoor attacks, which are executed while training and the attacker's effort for an attack. The following
-Sections \ref{sec:charac_backdoor}, \ref{sec:backdoor_types}, \ref{sec:ext_dmg}, \ref{sec:find_effort}, and \ref{sec:use_threat_model} explain the concept of the measurement methods in the RMF.
+Risk measurement in the RMF starts after the identification of suitable objects and attributes with the selection of measurement methods according to the procedure of ISO 27004. As already mentioned in
+the related work section \ref{sec:relWork}, there are different possibilities to execute poisoning attacks. At first, it is important to check where the training data come from. Xiao et al. 
+\cite{DBLP:conf/sp/XiaoLZX18} describe that training data can be polluted or mislabled when they come from external sources. Turner et al. \cite{turner2018clean} train a classifier with a small set of
+clean input data where the input data are images from a trusted source that obtained or inspected the data. So, the more trustworthy a set of training data is, the lower the risk will be, and this
+process can be transferred to the RMF. After the training data is checked for trustworthiness, the next part is to measure how large the extent of damage would be after a successful attack against the
+ML model. The RMF needs to find out if the ML model is outsourced (Machine Learning as a Service, or MLaaS \cite{DBLP:journals/corr/abs-1708-06733}), if it is self-developed, or if the ML model comes
+from an external resource and only has to be trained. For example, Google's Cloud Machine Learning Engine \cite{google_ai2022} allow's users to upload training data and a TensorFlow ML model to train it
+in the cloud \cite{DBLP:journals/corr/abs-1708-06733}. \\ The other measurement method is used to find the attacker's effort. Finding the attacker's effort works according to the threat model of
+Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20} by analyzing the data from an attack. Therefore the measurement method to measure the extent of damage must be executed before measuring the
+attacker's effort. The following sections \ref{sec:charac_backdoor}, \ref{sec:backdoor_types}, \ref{sec:ext_dmg}, \ref{sec:find_effort}, and \ref{sec:use_threat_model} explain the concept of the
+measurement methods in the RMF.
 
 \subsection{Characteristics of backdoor attacks}
 \label{sec:charac_backdoor}
 
-After discussing and evaluating the standards for the risk measurement in the RMF in section \ref{sec:standard}, this subsection explains which characteristics of backdoor attacks are measured in the RMF. Biggio et al. \cite{DBLP:conf/icml/BiggioNL12} explain that poisoning attacks and therefore also backdoor attacks are causative attacks which means manipulations against training data is the focus of them. Further, Xiao et al. \cite{DBLP:conf/sp/XiaoLZX18} describe that training data can be polluted or mislabled when they come from external sources. Xiao et al. explain that poisoning attacks are not based on software vulnerabilities, which means that software bugs are not the execution point of backdoor attacks when implementing them into the RMF.
+After discussing and evaluating the standards for the risk measurement in the RMF in section \ref{sec:standard}, this subsection explains which characteristics of backdoor attacks are measured in the
+RMF. Biggio et al. \cite{DBLP:conf/icml/BiggioNL12} explain that poisoning attacks and therefore also backdoor attacks are causative attacks which means manipulations against training data is the focus of them. Further, Xiao et al. \cite{DBLP:conf/sp/XiaoLZX18} describe that training data can be polluted or mislabled when they come from external sources. Xiao et al. explain that poisoning attacks are not based on software vulnerabilities, which means that software bugs are not the execution point of backdoor attacks when implementing them into the RMF. This means the RMF measures conspicuities in the training data and measures the computational resources. Furthermore, the RMF measures before and after an attack to compare the differences between the original and manipulated ML model.
 
 \subsection{Types of backdoor attacks}
 \label{sec:backdoor_types}
@@ -194,7 +203,8 @@ iteration of optimization. Over every iteration a method optimizes randomly patc
 \subsection{Measure the extent of damage}
 \label{sec:ext_dmg}
 
-Based on the attacks, this subsection explains how the extent of damage is measured in the RMF. As the hypotheses \ref{itm:h4}, \ref{itm:h5}, and \ref{itm:h6} assume, the attack specificity, attack time, and the binary problem whith the positive and negative label are risk indicators. Based on \cite{DBLP:journals/corr/abs-1708-06733}, \cite{turner2018clean}, and \cite{DBLP:journals/corr/abs-1910-00033}, the accuracy metric of a ML model for a specific labeled image is a value that represents the success of a backdoor attack. Therefore the accuracy is also a risk indicator to measure the extent of damage. All of these risk indicators are assigned with values that represent the training and testing of the ML model. These data can be collected directly from ML model which represents the low-level attributes in the threat model from Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}.
+Based on the attacks, this subsection explains how the extent of damage is measured in the RMF. As the hypotheses \ref{itm:h4}, \ref{itm:h5}, and \ref{itm:h6} assume, the attack specificity, attack time, and the binary problem whith the positive and negative label are risk indicators. Based on \cite{DBLP:journals/corr/abs-1708-06733}, \cite{turner2018clean}, and \cite{DBLP:journals/corr/abs-1910-00033}, the accuracy metric of a ML model for a specific labeled image is a value that represents the success of a backdoor attack. Therefore the accuracy is also a risk indicator to measure the extent of damage. All of these risk indicators are assigned with values that represent the training and testing of the ML model. These data can be collected directly from ML model which represents the low-
+level attributes in the threat model from Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}.
 
 \subsection{Measure the attacker's effort}
 \label{sec:find_effort}
@@ -224,12 +234,12 @@ Prinz and Flexer \cite{DBLP:journals/corr/abs-2007-14714} and Papernot et al. \c
 \subsection{Using the formal threat model}
 \label{sec:use_threat_model}
 
-For the risk measurement the attacker's effort is important to evaluate how high or low the risk is for an ML model. In this subsection the research questions \ref{itm:rq5}, \ref{itm:rq6} are addressed in more detail. In reference to the research question \ref{itm:rq8} this threat model is a possible method for the RMF to measure risks which will be proved in Section \ref{sec:evaluation}.
-As in Section \ref{sec:threat} explained the high- and low-level attributes have to be mapped to find the high-level attributes based on the low-level attributes.
+For the risk measurement the attacker's effort is important to evaluate how high or low the risk is for an ML model. In this subsection the research questions \ref{itm:rq5}, \ref{itm:rq6} are addressed in more detail. In reference to the research question \ref{itm:rq8} this threat model is a possible method for the RMF to measure risks which will be proved in section \ref{sec:evaluation}.
+As in section \ref{sec:threat} explained the high- and low-level attributes have to be mapped to find the high-level attributes based on the low-level attributes.
 
 \subsubsection*{The low-level attributes}
 
-To find the attacker's effort there is a need to collect data which can be measured from every attack on a ML model. These data is classified and explained in Section \ref{sec:threat}. Doynikova et al. explained which data is required to meausre the low-level attributes.
+To find the attacker's effort there is a need to collect data which can be measured from every attack on a ML model. These data is classified and explained in section \ref{sec:threat}. Doynikova et al. explained which data is required to meausre the low-level attributes.
 
 \begin{enumerate}
   \item The first requirement is a dataset which contains information about the attack actions against a ML model. The information must be based on the skills, resources, intention, and motivation of the attacker.
