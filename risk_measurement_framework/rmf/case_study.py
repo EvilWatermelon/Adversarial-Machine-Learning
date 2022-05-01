@@ -5,21 +5,36 @@ import cv2
 import time
 import matplotlib.pyplot as plt
 
+import tensorflow as tf
+tf.compat.v1.disable_eager_execution()
+tf.get_logger().setLevel('ERROR')
+
+import warnings
+warnings.filterwarnings('ignore')
+
 from matplotlib import style
 from PIL import Image
 
-from sklearn.model_selection import train_test_split, learning_curve
+from attacks.art.backdoors import *
+from visualizations.plot import *
+from measurement.monitoring import *
+
+from art.estimators.classification import KerasClassifier, SklearnClassifier
+from art.defences.trainer import AdversarialTrainerMadryPGD
+from art.utils import load_mnist, preprocess, to_categorical
+
+from keras.models import Sequential
+from keras.layers import Dense, Flatten, Conv2D, MaxPooling2D, Activation, Dropout
+
+from tensorflow import keras
+
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn import metrics
 
-from attacks.art.backdoors import *
-from visualizations.plot import *
-from measurement.monitoring import *
-
-from art.estimators.classification import SklearnClassifier
+from typing import Union
 
 start_ram_monitoring()
 
@@ -86,6 +101,20 @@ CLASSES = { 0:'Speed limit (20km/h)',
             41:'End of no passing',
             42:'End no passing veh > 3.5 tons' }
 
+def create_model(X_train):
+    model = Sequential()
+    model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=X_train.shape[1:]))
+    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+    model.add(Flatten())
+    model.add(Dense(128, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(43, activation='softmax'))
+
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    return model
+
 # Visualizing The Dataset
 def dataset_visualization(class_num, train_number):
     plt.figure(figsize=(21,10))
@@ -141,8 +170,7 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     image_data = image_data[shuffle_indexes]
     image_labels = image_labels[shuffle_indexes]
 
-    X_train = image_data
-    y_train = image_labels
+    X_train, y_train = preprocess(image_data, image_labels, nb_classes=43)
 
     # Execute the attack and replace the original with the poisoned data
     #poisoned_x, poisoned_y = art_poison_backdoor_attack(X_train, y_train, 100)
@@ -163,12 +191,13 @@ def model_training(train_path, data_dir, image_data, image_labels):
 
     start = time.process_time()
     # Making the model
+    #clf = KerasClassifier(create_model(X_train))
+    #proxy = KerasClassifier(create_model(X_train))
     svc = make_pipeline(StandardScaler(), SVC(kernel='linear', gamma='auto', C=3000))
-    proxy = SklearnClassifier(model=SVC(kernel='linear', gamma='auto', C=3000))
-
+    proxy =  SklearnClassifier(model=SVC(kernel='linear', gamma='auto', C=3000))
     proxy.fit(X_train, y_train)
 
-    poison_data, poison_label = clean_label(X_train, y_train, proxy, '0')
+    poison_data, poison_label = clean_label(X_train, y_train, proxy, to_categorical([9], 10)[0])
 
     clf = svc.fit(poison_data, poison_label)
 
@@ -201,7 +230,7 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
     X_test = np.array(data)
     X_test = X_test/255
 
-    X_test = X_test.reshape(12630, 30*30*3)
+    #X_test = X_test.reshape(12630, 30*30*3)
 
     pred = clf.predict(X_test)
 

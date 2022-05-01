@@ -26,10 +26,15 @@ def clean_label(x, y, clf, target_label):
     """
     https://people.csail.mit.edu/madry/lab/cleanlabel.pdf
     """
+
     backdoor = PoisoningAttackBackdoor(add_pattern_bd)
     attack = PoisoningAttackCleanLabelBackdoor(backdoor=backdoor, proxy_classifier=clf,
                                                target=target_label, pp_poison=.33, norm=2, eps=5,
                                                eps_step=0.1, max_iter=200)
+
+    x.reshape(-1, 30, 30, 3)
+    print(x.shape)
+
     poison_data, poison_labels = attack.poison(x, y)
     return poison_data, poison_labels
 
