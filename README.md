@@ -8,9 +8,9 @@ For my Masterthesis program a risk measurement framework called RMF. This framew
 The case study is a SVM trained for image classification to simulate traffic sign detection for autonomous-driving. The dataset will be manipulated by different backdoor attacks.
 
 # Installation 💻
-- Core Framework is [Adversarial-Robustness-Toolbox](https://github.com/Trusted-AI/adversarial-robustness-toolbox).  
+- Core Framework is [Adversarial-Robustness-Toolbox](https://github.com/Trusted-AI/adversarial-robustness-toolbox) (ART).  
 - To use ART as a module in your project, you have to install `pip install adversarial-robustness-toolbox`
-- For my ML model I use `sklearn` but you can use whatever you want
+- For my ML model I use `keras` because the backdoor attacks in the ART only work with NN
 - Another important point is that you need `pip install numba==0.54` and `pip install numpy==1.19.5`
 - You also need `pip install opencv-python`
 
