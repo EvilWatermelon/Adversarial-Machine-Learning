@@ -75,9 +75,10 @@ model = KerasClassifier(create_model())
 proxy = AdversarialTrainerMadryPGD(KerasClassifier(create_model()), nb_epochs=10, eps=0.15, eps_step=0.001)
 proxy.fit(x_train, y_train)
 
-model = KerasClassifier(create_model())
-proxy = AdversarialTrainerMadryPGD(KerasClassifier(create_model()), nb_epochs=10, eps=0.15, eps_step=0.001)
-proxy.fit(x_train, y_train)
+attack = PoisoningAttackCleanLabelBackdoor(backdoor=backdoor, proxy_classifier=proxy.get_classifier(),
+                                           target=targets, pp_poison=percent_poison, norm=2, eps=5,
+                                           eps_step=0.1, max_iter=200)
+pdata, plabels = attack.poison(x_train, y_train)
 
 poisoned = pdata[np.all(plabels == targets, axis=1)]
 poisoned_labels = plabels[np.all(plabels == targets, axis=1)]
@@ -85,3 +86,40 @@ print(len(poisoned))
 idx = 0
 plt.imshow(poisoned[idx].squeeze())
 print(f"Label: {np.argmax(poisoned_labels[idx])}")
+
+
+model.fit(pdata, plabels, nb_epochs=10)
+
+clean_preds = np.argmax(model.predict(x_test), axis=1)
+clean_correct = np.sum(clean_preds == np.argmax(y_test, axis=1))
+clean_total = y_test.shape[0]
+
+clean_acc = clean_correct / clean_total
+print("\nClean test set accuracy: %.2f%%" % (clean_acc * 100))
+
+# Display image, label, and prediction for a clean sample to show how the poisoned model classifies a clean sample
+
+c = 0 # class to display
+i = 0 # image of the class to display
+
+c_idx = np.where(np.argmax(y_test, 1) == c)[0][i] # index of the image in clean arrays
+
+plt.imshow(x_test[c_idx].squeeze())
+plt.show()
+clean_label = c
+print("Prediction: " + str(clean_preds[c_idx]))
+
+not_target = np.logical_not(np.all(y_test == targets, axis=1))
+px_test, py_test = backdoor.poison(x_test[not_target], y_test[not_target])
+poison_preds = np.argmax(model.predict(px_test), axis=1)
+clean_correct = np.sum(poison_preds == np.argmax(y_test[not_target], axis=1))
+clean_total = y_test.shape[0]
+
+clean_acc = clean_correct / clean_total
+print("\nPoison test set accuracy: %.2f%%" % (clean_acc * 100))
+
+c = 0 # index to display
+plt.imshow(px_test[c].squeeze())
+plt.show()
+clean_label = c
+print("Prediction: " + str(poison_preds[c]))

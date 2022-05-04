@@ -76,32 +76,4 @@ def art_hidden_trigger_backdoor(x, y, target, source):
 
     poison_data, poison_labels = poison_attack.poison(x, y)
 
-    """
-    # Create finetuning dataset
-    dataset_size = size
-    num_labels = label_size
-    num_per_label = dataset_size/num_labels
-
-    poison_dataset_inds = []
-
-    for i in range(num_labels):
-      label_inds = np.where(np.argmax(y_train, axis=1) == i)[0]
-      num_select = int(num_per_label)
-      if np.argmax(target) == i:
-          num_select = int(num_select - min(num_per_label, len(poison_data)))
-          poison_dataset_inds.append(poison_indices)
-
-      if num_select != 0:
-          poison_dataset_inds.append(np.random.choice(label_inds, num_select, replace=False))
-
-    poison_dataset_inds = np.concatenate(poison_dataset_inds)
-
-    poison_x = np.copy(x_train)
-    poison_x[poison_indices] = poison_data
-    poison_x = poison_x[poison_dataset_inds]
-
-    poison_y = np.copy(y_train)[poison_dataset_inds]
-
-    """
-
     return poison_data, poison_labels

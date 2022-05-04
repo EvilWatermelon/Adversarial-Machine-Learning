@@ -171,15 +171,7 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     image_labels = image_labels[shuffle_indexes]
 
     X_train, y_train = preprocess(image_data, image_labels, nb_classes=43)
-
-    # Execute the attack and replace the original with the poisoned data
-    #poisoned_x, poisoned_y = art_poison_backdoor_attack(X_train, y_train, 100)
-
-    #X_train = poisoned_x[shuffle_indexes]
     X_train = X_train/255
-
-    # Flatten images for the SVM
-    X_train = X_train.reshape(39209, 30*30*3)
 
     return X_train, y_train
 
@@ -190,16 +182,14 @@ def model_training(train_path, data_dir, image_data, image_labels):
     print("Start training...")
 
     start = time.process_time()
-    # Making the model
-    #clf = KerasClassifier(create_model(X_train))
-    #proxy = KerasClassifier(create_model(X_train))
-    svc = make_pipeline(StandardScaler(), SVC(kernel='linear', gamma='auto', C=3000))
-    proxy =  SklearnClassifier(model=SVC(kernel='linear', gamma='auto', C=3000))
+    # Train the model
+    model = KerasClassifier(create_model(X_train))
+    proxy = AdversarialTrainerMadryPGD(KerasClassifier(create_model(X_train)), nb_epochs=10, eps=0.15, eps_step=0.001)
     proxy.fit(X_train, y_train)
 
-    poison_data, poison_label = clean_label(X_train, y_train, proxy, to_categorical([9], 10)[0])
+    poison_data, poison_label = clean_label(X_train, y_train, proxy.get_classifier(), to_categorical([9], 43)[0])
 
-    clf = svc.fit(poison_data, poison_label)
+    clf = model.fit(poison_data, poison_label)
 
     print(time.process_time() - start)
     print("Finished training!")
@@ -216,7 +206,7 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
     labels = test["ClassId"].values
     imgs = test["Path"].values
 
-    data =[]
+    data = []
 
     for img in imgs:
         try:
@@ -227,18 +217,18 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
         except:
             print("Error in " + img)
 
-    X_test = np.array(data)
+    test_images = np.array(data)
+    X_test = preprocess(test_images, nb_classes=43)
     X_test = X_test/255
 
-    #X_test = X_test.reshape(12630, 30*30*3)
-
     pred = clf.predict(X_test)
+    #clean_preds = np.argmax(pred, axis=1)
 
     return labels, pred
 
 labels, pred = read_test_data(train_path, data_dir, image_data, image_labels)
 
-print(classification_report(labels, pred))
+#print(classification_report(labels, pred))
 ram_resources()
 cpu_resources()
 gpu_resources()

@@ -169,13 +169,12 @@ These metrics will be used as risk indicators which will be further explained in
 \label{sec:approaches}
 
 This thesis is divided into two approaches. Jakub Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} propose in their paper different proposals to measure risks with different
-aspects. These aspects are used in this thesis as proposals for for the risk indicators and will be extended in subsection \ref{sec:risk_indicators}. These different proposals are attack specificity, attack time, attacker's knowledge, and attacker's goal. Attack time is split in training time and deployment time. Training time is the attack time when the model gets manipulated while it trains. Deployment time is the attack time when the hacker attacks a
-ML model after its release. Attacker's knowledge is the amount of information the hacker has available. Attackers specificity is the amount an attacker needs to manipulate the output of a
+aspects. These aspects are used in this thesis as proposals for for the risk indicators and will be extended in subsection \ref{sec:risk_indicators}. These different proposals are attack specificity, attack time, attacker's knowledge, and attacker's goal. Attack time is split in training time and deployment time. Training time is the attack time when the model gets manipulated while it trains. Deployment time is the attack time when the hacker attacks a ML model after its release. Attacker's knowledge is the amount of information the hacker has available. Attackers specificity is the amount an attacker needs to manipulate the output of a
 ML model. Attacker's goal is a classification about what the attacker try to achieve with an attack. These four proposals may serve as a basis for further risk indicators for risk measurement. Since these suggestions overlap with the characteristics from the threat model of Doynikova et al. these suggestions can be raised from the low-level and high-level properties.\\
 Paul Schwerdtner et al. \cite{DBLP:journals/corr/abs-2011-04328} is the second approach of this thesis. Schwerdtner et al. show a technical framework to evaluate the risks for ML models.
 Schwerdtner et al. give an evaluation whether it is secure to deploy a ML model or not. The ML model in Schwerdtner et al. must be a fully developed ML model that is trained and tested.
 Schwerdtner et al. concentrate on input data when the ML model has finished training and testing. The technical framework can test ML models under specific conditions in a scenario but can not find or measure risks while the training process. At this point the RMF would then find use.\\
-This third approach is for poisoning attacks and SVMs directly. Biggio et al. \cite{DBLP:conf/icml/BiggioNL12} describe an investigation on poisoning attacks against SVMs. Attacks against ML models are classified in causative and exploratory attacks \cite{DBLP:conf/ccs/BarrenoNSJT06}. Causative attacks are manipulations against training data and exploratory attacks are exploitations against the classifier. Poisoning attacks are refered to causative attacks. These attacks are important when the attacker have no direct access to the training database and provides his own training data from a web-based repository. Biggio et al. explain that the attacker's goal on a data poisoning attack is to find a point where the SVM's accuracy can be maximally decreased. Further, most learning assume that training datasets come from natural or well-behaved distributions. In their work, Biggio et al. assumes a worst case of the attacker's capabilities. The attacker also knows the ML model and can get the data from from a underlying data distribution platform. That is the security analysis methology \cite{DBLP:journals/ml/BarrenoNJT10}. Biggio et al. shows a method where the attacker construct a data point which decreases the SVM's classification accuracy. This method base on the on the SVM's optimal solution of the training problem. The training problem is formulated as the quadratic
+This third approach is for poisoning attacks. Biggio et al. \cite{DBLP:conf/icml/BiggioNL12} describe an investigation on poisoning attacks against SVMs. Attacks against ML models are classified in causative and exploratory attacks \cite{DBLP:conf/ccs/BarrenoNSJT06}. Causative attacks are manipulations against training data and exploratory attacks are exploitations against the classifier. Poisoning attacks are refered to causative attacks. These attacks are important when the attacker have no direct access to the training database and provides his own training data from a web-based repository. Biggio et al. explain that the attacker's goal on a data poisoning attack is to find a point where the SVM's accuracy can be maximally decreased. Further, most learning assume that training datasets come from natural or well-behaved distributions. In their work, Biggio et al. assumes a worst case of the attacker's capabilities. The attacker also knows the ML model and can get the data from from a underlying data distribution platform. That is the security analysis methology \cite{DBLP:journals/ml/BarrenoNJT10}. Biggio et al. shows a method where the attacker construct a data point which decreases the SVM's classification accuracy. This method base on the on the SVM's optimal solution of the training problem. The training problem is formulated as the quadratic
 programming problem and for further explanation, please see \cite{Papadonikolakis2009PerformanceCO}. \\
 An attacker can attack this SVM by inserting special attack points. Biggio et al. shows such a way assuming that the optimal solution of the SVM's training problem is retained. The SVM must be trained and the training points are as margin, and error support vectors, and reserve points referred. The attack is initialized by an attack vector which clones and arbitrary point from the attacked class and flipping the label from the point. For this thesis this work is a very generalized approach. There is no explanation of the type of poisoning attack and it does not show what affect this attack have on real-world scenarios. This approach goes more into the implementation and evaluation parts of the thesis and should show a first method how to attack a SVM.
 
@@ -185,89 +184,60 @@ An attacker can attack this SVM by inserting special attack points. Biggio et al
 For this thesis the technical framework Adversarial-Robustness-Toolbox \cite{art2018} is a main component. Nicolae et al. \cite{DBLP:journals/corr/abs-1807-01069} evaluate in their work
 the technical framework ART. ART is a Python library that supports several ML frameworks for example TensorFlow and PyTorch to increase the defense of ML models. It is designed for developers who want to secure ML models. ART support 39 attacks and 29 defense functions. The attacks are evasion, extraction, inference, and poisoning attacks. The defences are detector, postprocessor, preprocessor, trainer, and transformer defences. This thesis only focuses on the attack functions for poisoning attacks. The implementation of backdoor attacks from the ART will be nearer explained in Section \ref{sec:implementation}.
 
-\subsection{Scikit-learn}
+\subsection{Keras}
 
-For this thesis the Python library scikit-learn is used for the case study in Section \ref{sec:evaluation}. Scikit-learn support supervised and unsupervised learning ML models \cite{scikit-learn}. The underlying basis library is Numpy for model and data parameters. The data input is declared as numpy arrays. \cite{harris2020array} For linear algebra, special and basic statistical functions, and sparse matrix, scikit-learn uses Scipy \cite{2020SciPy-NMeth}. The last library is Cython \cite{behnel2011cython} which combines C in Python. For the thesis case study the focus is on supervised Support-Vector-Machines (SVM). \\
-In his book, Bisong \cite{Bisong_2019} explains sci-kit learn and using sci-kit learn in context to supervised ML. Scikit-learn contains modules to implement ML models. These modules are sample datasets, preprocessing of the data, evaluation of the ML model and optimizing the performance of a ML model \cite{sklearn_api}.
+In this thesis Keras is the main technical framework to implement the case study. Keras is a so called high-level neural network Application Programming Interface (API) which is implemented in Python. High-level frameworks are used to increase the flexibility to design a ML model and simplify the implementation \cite{moolayil_2019}. The second level behind Keras are low-level frameworks such as TensorFlow, PyTorch and MxNet. Keras converts its implementation to TensorFlow which runs the ML model.
 
-\subsection{Support-Vector-Machine}
+\subsubsection*{TensorFlow}
 
-In their book, Cristianini and Shawe-Taylor \cite{cristianini_shawe-taylor_2000} explain linear learning and kernel-induced feature spaces that are relevant to understand SVM for this thesis.
+TensorFlow is the low-level framework that is used behind Keras \cite{moolayil_2019} for this thesis.
 
-\subsubsection*{Linear learning}
+\subsection{Neural network}
 
-In linear learning, linear classification classifies two training sets. Training sets are collections of training data. A hyperplane divides the space into two subspaces.
-\cite{cristianini_shawe-taylor_2000} Figure \ref{fig:hyperplane} shows an example hyperplane where the parameters $w$ and $b$ control the function. $w$ is the weight vector and $b$ the
-bias. $b$ moves the hyperplane parallel to itself and $w$ declares a direction vertical to the hyperplane. The output is a set of $w$, one for each feature. The linear combination of the
-output predicts the value of the output result $y$.
+A neural network (NN) \cite{Maas2013RectifierNI}, \cite{DBLP:journals/corr/ZhangZLS17} is a ML model which basis is a hierarchical neuron organization where the neurons are connected. In the neurons the computation for the output is executed.
+The first layer are input data which are called tensors. Tensors are vectors in a n-dimensional matrix. The input data can be various types but only assigned as numeric data. The following example shows a $m x n$ shape which represents a two dimensional tensor (vector $a_{11}$ to $a_{m1}$ is one training sample):
+\[
+  A_{m\times n} =
+  \left[ {\begin{array}{cccc}
+    a_{11} & a_{12} & \cdots & a_{1n}\\
+    a_{21} & a_{22} & \cdots & a_{2n}\\
+    \vdots & \vdots & \ddots & \vdots\\
+    a_{m1} & a_{m2} & \cdots & a_{mn}\\
+  \end{array} } \right]
+\]
+
+The first hidden layer gets inputs from the input layer which receives the input data. The neurons in the hidden layer have a activation function which calculates the input data multiplied with weights.
+Every ML model can have a stack of hidden layers one after another.
 
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=12cm]{pictures/hyperplane.jpg}
-  \caption{A hyperplane $(w, b)$ showed in Cristianini and Shawe-Taylor \cite{cristianini_shawe-taylor_2000} with a two-dimensional training dataset}
-  \label{fig:hyperplane}
+  \includegraphics[width=10cm]{pictures/single_neuron.jpg}
+  \caption{A single neuron adapted from \cite{moolayil_2019}.}
+  \label{fig:single_neuron}
 \end{figure}
 
-\subsubsection*{Kernel-Induced Feature Spaces}
-
-If the target problem cannot be viewed as a linear combination of attributes, a SVM uses kernel presentations. In Kernel-Induced Feature Spaces the data are projected in
-\textit{N-dimensional} feature spaces to increase the used computational power of linear learning. To classify the data in case of more than two subspaces, the SVM performs a multi-class
-classification. The idea of multi-class classification is separating the classes to a linear classification \cite{tzotsos2008support}.
-
-\subsubsection*{Classification with Support-Vector-Machines}
-
-The support vector classification devises an efficient way to learn separating high dimensional feature space hyperplanes. Efficient describes algorithms that can classify sample sizes of 100
-000 instances. The easiest classifier is the maximal margin classifier that separates data which are linearly separable in the feature space. The maximal margin classifier separates the
-data by the maximal margin hyperplane while the dimnensionality of the feature space is not relevant. This separation can be done in every kernel-induced feature space.
-\cite{cristianini_shawe-taylor_2000}  \\
-
-\begin{adjustbox}{center}
-  \begin{tikzpicture}[
-    scale=2,
-          important line/.style={thick}, dashed line/.style={dashed, thin},
-          every node/.style={color=black},
-      ]
-      \centering
-      \draw[->] (-0.2,0) -- (3.5,0) node[right](xline) {};
-      \draw[->] (0,-0.2) -- (0,3.5) node[right](yline) {};
-      \draw[dashed line, yshift=.7cm]
-         (.2,.2) coordinate (sls) -- (2.5,2.5) coordinate (sle)
-         node[solid,circle,minimum width=2.8ex,fill=none,thick,draw] (name) at (2,2){}
-         node[leftNodeInLine] (name) at (2,2){}
-         node[solid,circle,minimum width=2.8ex,fill=none,thick,draw] (name) at (1.5,1.5){}
-         node[leftNodeInLine] (name) at (1.5,1.5){}
-         node [above right] {$w\cdot x + b > 1$};
-
-      \draw[important line]
-         (.7,.7) coordinate (lines) -- (3,3) coordinate (linee)
-         node [above right] {$w\cdot x + b = 0$};
-
-      \draw[dashed line, xshift=.7cm]
-         (.2,.2) coordinate (ils) -- (2.5,2.5) coordinate (ile)
-         node[solid,circle,minimum width=2.8ex,fill=none,thick,draw] (name) at (1.8,1.8){}
-         node[rightNodeInLine] (name) at (1.8,1.8){}
-         node [above right] {$w\cdot x + b < -1$};
-
-      \draw[very thick,<->] ($(sls)+(.2,.2)$) -- ($(ils)+(.2,.2)$)
-         node[sloped,above, near end] {Margin};
-
-      \foreach \Point in {(.9,2.4), (1.3,2.5), (1.3,2.1), (2,3), (1,2.9)}{
-        \draw \Point node[leftNode]{};
-      }
-
-      \foreach \Point in {(2.9,1.4), (2.3,.5), (3.3,.1), (2,0.9), (2.5,1)}{
-        \draw \Point node[rightNode]{};
-      }
-    \end{tikzpicture}
-\end{adjustbox}
-
-\subsubsection*{Support Vector}
-
-Support vectors are all inputs which lie closest to the hyperplane and the functional margin is $1$. Only these points are involved for the weight vector and for that reason they are called support vectors. For further explanation of the mathematical structure, please see \cite{cristianini_shawe-taylor_2000}. Figure \ref{fig:sv} visualizes a maximal margin hyperplane example with support vectors as a binary classification.
+The most common activation functions \cite{DBLP:conf/bmvc/Misra20} are the rectified linear unit (ReLU) function $Relu(z) = max(0, z)$ and the sigmoid function $\sigma(z) = \frac{1} {1 + e^{-z}}$ which are shown in Figure \ref{fig:sigmoid} and \ref{fig:relu}.
 
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=10cm]{pictures/support_vectors.png}
-  \caption{Maximal margin hyperplane with its support vectors adapted from \cite{cristianini_shawe-taylor_2000}.}
-  \label{fig:sv}
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=6cm]{pictures/sigmoid.jpg}
+    \caption{Sigmoid function adapted from \cite{moolayil_2019}}
+    \label{fig:sigmoid}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=6cm]{pictures/relu.jpg}
+    \caption{ReLu function adapted from \cite{moolayil_2019}}
+    \label{fig:relu}
+  \end{minipage}
+\end{figure}
+
+After the hidden layers the NN has an output layer which shows the output as the name says. The next part of a NN is the loss function metric to measure the target loss. Popular loss functions \cite{DBLP:conf/cvpr/WanLC21} are the mean squared error $\sum_{i=1}^{D}(x_i-y_i)^2$ or the mean absolute error $\sum_{i=1}^{D}|x_i-y_i|$. \\ The main part of the ML model training is the optimizer which optimizes the ML model with an algorithm that is called backpropagation. Backpropagation executes after the ML model has started with the activation function and random weights in the defined structure explained earlier in this section. After this structure the loss function takes the ouput data to tell the NN how well it has predicted the input data based on the used weights. To update the weights for each neuron to reduce the loss, the optimizer algorithm uses a chain rule in calculus, derivates, and partial derivates. An example of an optimizer is stochastic gradient descent $Weights = Weights - learning rate * Loss$. The learning rate must be defined as a parameter in the NN architecture.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=10cm]{pictures/neural_network.jpg}
+  \caption{NN example adapted from \cite{moolayil_2019}.}
+  \label{fig:neural_network}
 \end{figure}
