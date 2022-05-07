@@ -1,4 +1,5 @@
 [![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+
 ![python: 3.7](https://img.shields.io/badge/python-3.7-blue)
 
 # Risk-Measurement-Framework
