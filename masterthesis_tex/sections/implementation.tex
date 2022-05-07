@@ -27,6 +27,10 @@ The RMF is structured as follows:
 .2 case\_study.py.
 }
 
+\subsection{Implement the risk indicatiors}
+
+The risk indicators are the main part for the risk measurement. Therefore the risk indicators are used through the complete risk measurement. Every risk indicator is implemented as an own function in the RMF. This makes it possible to measure the risk indicator values at every step during the ML model training. The goal is to use measure the risk indicator values with the original training data and the manipulated training data.
+
 \subsection{Using ART as the basis for the technical framework}
 
 The ART implemented two backdoor attacks which will be explained in \ref{sec:backdoors_art}. Since art is an open-source technical framework, the two backdoor attacks can also be used as a basis for simplifying the implementation of other attacks.
@@ -99,13 +103,16 @@ The \textit{HiddenTriggerBackdoor} need to be executed after training. To add th
   poison_y = np.copy(y_train)[poison_dataset_inds]
 \end{lstlisting}
 
-\subsection{Implement the risk indicatiors}
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=9cm]{pictures/attack_relationship.png}
+  \caption{Both attack classes (\textit{PoisoningAttackCleanLabelBackdoor} and \textit{HiddenTriggerBackdoor}) get the backdoor from the \textit{PoisoningAttackBackdoor}}
+  \label{fig:relation_risk_ind}
+\end{figure}
 
-The risk indicators are the main part for the risk measurement. Therefore the risk indicators are used through the complete risk measurement. Every risk indicator is implemented as an own function in the RMF. This makes it possible to measure the risk indicator values at every step during the ML model training. The goal is to use measure the risk indicator values with the original training data and the manipulated training data.
+\subsection{The logging function}
 
-\subsection{Implementation of the logging function}
-
-Show measured risks is able with logging from the Python logging module. The function waits for two parameters. A message string and the wanted logging level (i.e. INFO or DEBUG). The called log function in the RMF could look like this:
+Assigned values of the risk indicators are represented with an optimized logging function, based on the Python logging module. The function waits for two parameters. A message string and the wanted logging level (i.e. INFO or DEBUG). The called log function in the RMF could look like this:
 \begin{lstlisting}
   log(f"{variable_name}", 'INFO')
 \end{lstlisting}
@@ -113,6 +120,6 @@ Show measured risks is able with logging from the Python logging module. The fun
 In order not to depend on the different ML libraries the rmf gets its own functions of the different metrics. That increases the support of different Python libraries for ML risk
 measurement.
 
-\subsection{Implementation of the visualization}
-
-For the visualization Python modules like sci-kit learn have implemented different plots that are signed as metrics.
+\subsection{Using the threat model}
+\subsection{Evaluation with the measurement construct of ISO 27004}
+\subsection{Show the measurement results}

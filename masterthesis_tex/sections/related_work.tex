@@ -186,11 +186,25 @@ the technical framework ART. ART is a Python library that supports several ML fr
 
 \subsection{Keras}
 
-In this thesis Keras is the main technical framework to implement the case study. Keras is a so called high-level neural network Application Programming Interface (API) which is implemented in Python. High-level frameworks are used to increase the flexibility to design a ML model and simplify the implementation \cite{moolayil_2019}. The second level behind Keras are low-level frameworks such as TensorFlow, PyTorch and MxNet. Keras converts its implementation to TensorFlow which runs the ML model.
+In this thesis Keras \cite{DBLP:journals/corr/abs-2006-12138} is the main technical framework to implement the case study. Keras is a so called high-level neural network Application Programming Interface (API) which is implemented in Python. High-level frameworks are used to increase the flexibility to design a ML model and simplify the implementation \cite{moolayil_2019}. The second level behind Keras are low-level frameworks such as TensorFlow, PyTorch and MxNet which are called Backend-Engine in Keras. Keras converts its implementation to TensorFlow which runs the ML model. The hierarchical structure behind Keras is shown in Figure \ref{fig:keras_layer} with possible frameworks that Keras can use. Keras can be used without any changes in the Backend-Engine and be executed on the CPU and GPU \cite{chollet_francois_2018}.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=6cm]{pictures/keras_layer.jpg}
+  \caption{Hierarchical structure of Keras adapted from \cite{chollet_francois_2018}}
+  \label{fig:keras_layer}
+\end{figure}
 
 \subsubsection*{TensorFlow}
 
-TensorFlow is the low-level framework that is used behind Keras \cite{moolayil_2019} for this thesis.
+TensorFlow \cite{DBLP:journals/corr/AbadiBCCDDDGIIK16} is the low-level framework that is used behind Keras \cite{moolayil_2019} for this thesis. It executes with dataflow graphs for computation representation, shared state, and with operations to mutate the state. Dataflow makes it possible to communicate between subcomputations and executing parallel independet computation. In TensorFLow all data is modelled as tensors which are $n$-dimensional arrays where each element have a small number of primitive datatypes. Furthermore, TensorFlow uses operations where one operation takes $m \geq 0$ inputs and computates $n \geq 0$ outputs.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=11cm]{pictures/tensorflow_dataflow.jpg}
+  \caption{TensorFlow dataflow graph that shows a training pipeline with subgraphs that take input data, preprocessing, training, and checkpointing state - adapted from \cite{DBLP:journals/corr/AbadiBCCDDDGIIK16}}
+  \label{fig:tensorflow_dataflow}
+\end{figure}
 
 \subsection{Neural network}
 
