@@ -1,6 +1,6 @@
-**Using Python 3.7.***
-
 [![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+
+![python: 3.7](https://img.shields.io/badge/python-3.7-blue)
 
 # Risk-Measurement-Framework
 For my Masterthesis program a risk measurement framework called RMF. This framework should meausre risks with the common classic IT security management standard ISO 27000 (family). Different backdoor attacks and measuring the attackers effort by using a threat model is the main goal of this thesis.
