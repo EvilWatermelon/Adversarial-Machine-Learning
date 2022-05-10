@@ -113,6 +113,7 @@ def create_model(X_train):
     model.add(Dense(43, activation='softmax'))
 
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    #tf.keras.utils.plot_model(model, to_file='nn.png', show_shapes=False)
     return model
 
 # Visualizing The Dataset

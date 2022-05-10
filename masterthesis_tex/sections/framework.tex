@@ -215,6 +215,13 @@ iteration of optimization. Over every iteration a method optimizes randomly patc
 Based on the attacks, this subsection explains how the extent of damage is measured in the RMF. As the hypotheses \ref{itm:h4}, \ref{itm:h5}, and \ref{itm:h6} assume, the attack specificity, attack time, and the binary problem whith the positive and negative label are risk indicators. Based on \cite{DBLP:journals/corr/abs-1708-06733}, \cite{turner2018clean}, and \cite{DBLP:journals/corr/abs-1910-00033}, the accuracy metric of a ML model for a specific labeled image is a value that represents the success of a backdoor attack. Therefore, the accuracy is also a risk indicator to measure the extent of damage. All of these risk indicators are assigned with values before and after attack during training of the ML model. These data can be collected directly from the ML model which represents the low-level attributes in the threat model from Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}. To get these risk indicators assigned data the RMF needs a measurement method based on the low-
 level attributes which concept describe subsection \ref{sec:use_threat_model}. After ML model training the RMF assigns the values of the risk indicators to the base measures which further process the values which subsection \ref{sec:derived_measures} describes.
 
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=9cm]{pictures/measure_damage.png}
+  \caption{Risk indicators of the attack object in relation to the low-level attributes measurement method}
+  \label{fig:measure_damage}
+\end{figure}
+
 \subsection{Measure the attacker's effort}
 \label{sec:find_effort}
 
@@ -240,28 +247,36 @@ targeted attacks are adaptions from the  Carlini and Wagner \cite{DBLP:conf/sp/C
 
 Prinz and Flexer \cite{DBLP:journals/corr/abs-2007-14714} and Papernot et al. \cite{DBLP:conf/ccs/PapernotMGJCS17} show both ways to attack ML models and in both works they used specific attacks for specific ML models. Both attacks bases on white-box or black-box attacks which shows that it is possible to find out if an attack is a black- or white-box attack. And when that is found out it should be possible measure the knowledge by pre-determined steps to execute the attack \cite{bsi_2013}. In the RMF, this is how the knowledge of the attacker is measured.
 
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=9cm]{pictures/measure_effort.png}
+  \caption{Risk indicators of the attacker object in relation to the high-level attributes measurement method}
+  \label{fig:measure_effort}
+\end{figure}
+
 \subsection{Using the formal threat model}
 \label{sec:use_threat_model}
 
-To measure the extent of damage, subsection \ref{sec:ext_dmg} describe which risk indicators are the RMF uses to get the corresponding values. As already explained in subsection \ref{sec:ext_dmg}, these values must be collected from the measurement method of the low-level attributes which explain this subsection. For the risk measurement the attacker's effort must also be evaluated how high or low the risk is for an ML model. The concept to measure the corresponding values that are assigned to the risk indicators describe subsection \ref{sec:find_effort} and is further explained here on by the threat model. In this subsection the research questions \ref{itm:rq5}, \ref{itm:rq6} are addressed in more detail. In reference to the research question \ref{itm:rq8} this threat model is a
-possible method for the RMF to measure risks which will be proved in section \ref{sec:evaluation}. As in section \ref{sec:threat} explained the high- and low-level attributes have to be mapped to find the high-level attributes based on the low-level attributes.
+To measure the extent of damage, subsection \ref{sec:ext_dmg} describe which risk indicators the RMF uses to get the corresponding values. As already explained in subsection \ref{sec:ext_dmg}, these values must be collected from the measurement method of the low-level attributes which explains this subsection. For this risk measurement the attacker's effort must also be evaluated how high or low the risk is for a ML model. The concept to measure the corresponding values that are assigned to the risk indicators describe subsection \ref{sec:find_effort} and is further explained here by the threat model. In this subsection the research questions \ref{itm:rq5}, \ref{itm:rq6} are addressed in more detail. In reference to the research question \ref{itm:rq8} this threat model is a
+possible method for the RMF to measure risks which will be proved in section \ref{sec:evaluation}. As in section \ref{sec:threat} explained, the high- and low-level attributes have to be mapped to find the high-level attributes based on the low-level attributes.
 
 \subsubsection*{The low-level attributes}
 
-To find the attacker's effort there is a need to collect data which can be measured from every attack on a ML model. These data is classified and explained in section \ref{sec:threat}. Doynikova et al. explained which data is required to meausre the low-level attributes.
+To find the attacker's effort there is a need to collect data which can be measured from every attack on a ML model. These data are classified and explained in section \ref{sec:threat}. Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20} explained which data is required to meausre the low-level attributes. The low-level attributes that Doynikova et al. use in their work, event logs, network traffic, namely, and their source are possible to use in relation with the risk indicators. A possibilty for this is monitoring the values for the risk indicators with event logs, namely, and their source. The network can not be used because the RMF only measures an attack on a ML model without considering the network traffic because this thesis does not concentrate on MLaaS \cite{DBLP:conf/hci/HaraA21}.
 
 \begin{enumerate}
   \item The first requirement is a dataset which contains information about the attack actions against a ML model. The information must be based on the skills, resources, intention, and motivation of the attacker.
   \item The second requirment for the dataset is that everything is marked in such a way that the analysis shows which actions the attacker performed. But this requirement is more about having multiple attackers or the analysis accross multiple attackers.
 \end{enumerate}
 
-The low-level attributes will also be used to measure the extent of damage based on the collected data.
+The low-level attributes measure the extent of damage based on the collected data. Doynikova et al. also explain that the low-level attributes must be mapped to the high-level attributes to measure the attacker's effort. That means the data from the attack are collected only with the low-level attributes. Nevertheless the high-level attributes have delimited attributes which are not measured at the low-level attributes. This means the attributes must be evaluated in a separate measurement method afterwards.
 
 \subsubsection*{The high-level attributes}
 
-The high-level attributes show the attacker's effort based on the risk indicators attacker's knowledge, attacker's goal, and the computational resources used for the ML model.
+The high-level attributes show the attacker's effort based on the risk indicators attacker's knowledge, attacker's goal, and the computational resources used for the ML model. The four groups explained in subsection \ref{sec:threat} are placed in relation to the risk indicators. The first group includes characteristics such as skills, motivation and intention. The motivation and intention correspond to the attacker's goal. The skills are a characteristic that are represented in all risk indicators to find the attacker's effort. The second group characterizes the attacker's capabilities and show the characteristics as used resources. This group represents the computational resources risk indicator. This risk indicators measures which hardware an attacker needs to execute an attack. The third group incorporates the attacker in relation with the attacked system. This group includes the attacker's location, the privileges, his goals, the access and the attacker's knowledge. This part can be used for the RMF with the attacker's goals and attacker's knowledge. The attacker's location and privileges are not part of the risk measurement. The last group relates the attacker with the attack and the steps that are included to execute the attack. This group can be used to map the low- and high-level attributes what is explained next.
 
 \subsubsection*{Mapping the low-level with the high-level attributes}
+\label{sec:map_low_high}
 
 For the measurment method it is important to measure the risks of an attack. That makes it possible to measure the risks of the attacker. Therefore the mapping must also lead the high- and low-level attributes to each other. This is designed in such a way that all risk indicators are measured while the ML model is trained and after it is attacked.
 

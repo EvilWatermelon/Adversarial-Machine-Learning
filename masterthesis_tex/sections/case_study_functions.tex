@@ -14,6 +14,8 @@ This argument gets the path where all local images are stored. \\ \\
 This argument gets an array with all images from a label. \\ \\
 \textbf{image\_labels}
 This argument gets the label which belongs to the corresponding images. \\ \\
+\textbf{X\_train}
+This argument gets the training data. \\
 
 \begin{lstlisting}
   dataset_visualization(class_num, train_number)
@@ -37,10 +39,16 @@ This argument gets the label which belongs to the corresponding images. \\ \\
   model_training(train_path, data_dir, image_data, image_labels)
 \end{lstlisting}
 
-\noindent After calling the \textit{preprocessing()} function, this function calls a pipeline function with the \textit{SVC()} class and then fits the classifier.
+\noindent After calling the \textit{preprocessing()} function, this function calls the \textit{KerasClassifier()} class which is an ART class to use Keras. This class must be used because the attacks only takes these classes for the proxy model training.
 
 \begin{lstlisting}
   read_test_data(train_path, data_dir, image_data, image_labels)
 \end{lstlisting}
 
 \noindent After calling the \textit{model\_training()} function, this function reads in the test data, resizes the images to $30x30$ pixels and then reshape the images. The last step is the prediction with the test data.
+
+\begin{lstlisting}
+  create_model(X_train)
+\end{lstlisting}
+
+\noindent This function builds the ML model architecture for the classifier class of the ART.
