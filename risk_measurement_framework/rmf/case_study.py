@@ -1,6 +1,16 @@
+from __future__ import absolute_import, division, print_function, unicode_literals # for future releases
+
+print("Import modules...")
 import numpy as np
 import pandas as pd
-import os
+import os, sys
+
+from os.path import abspath
+
+module_path = os.path.abspath(os.path.join('..'))
+if module_path not in sys.path:
+    sys.path.append(module_path)
+
 import cv2
 import time
 import matplotlib.pyplot as plt
@@ -28,15 +38,10 @@ from keras.layers import Dense, Flatten, Conv2D, MaxPooling2D, Activation, Dropo
 
 from tensorflow import keras
 
-from sklearn.metrics import accuracy_score, classification_report
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.svm import SVC
-from sklearn import metrics
-
-from typing import Union
-
-start_ram_monitoring()
+print("Declare variables...")
+monitoring_attacker = Attacker()
+monitoring_attack = Attack()
+monitoring_attacker.start_ram_monitoring()
 
 np.random.seed(42)
 
@@ -125,6 +130,8 @@ def dataset_visualization(class_num, train_number):
 
 def read_training_data(train_path, data_dir):
 
+    print("Import training data...")
+
     folders = os.listdir(train_path)
 
     train_number = []
@@ -160,6 +167,7 @@ def read_training_data(train_path, data_dir):
 def preprocessing(train_path, data_dir, image_data, image_labels):
 
     read_training_data(train_path, data_dir)
+    print("Preprocess...")
 
     # Changing the list to numpy array
     image_data = np.array(image_data)
@@ -172,7 +180,14 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     image_labels = image_labels[shuffle_indexes]
 
     X_train, y_train = preprocess(image_data, image_labels, nb_classes=43)
-    X_train = X_train/255
+    #X_train = np.expand_dims(X_train, axis=3)
+
+    # Shuffle training data
+    n_train = np.shape(y_train)[0]
+    shuffled_indices = np.arange(n_train)
+    np.random.shuffle(shuffled_indices)
+    X_train = X_train[shuffled_indices]
+    y_train = y_train[shuffled_indices]
 
     return X_train, y_train
 
@@ -188,19 +203,23 @@ def model_training(train_path, data_dir, image_data, image_labels):
     proxy = AdversarialTrainerMadryPGD(KerasClassifier(create_model(X_train)), nb_epochs=10, eps=0.15, eps_step=0.001)
     proxy.fit(X_train, y_train)
 
-    poison_data, poison_label = clean_label(X_train, y_train, proxy.get_classifier(), to_categorical([9], 43)[0])
+    targets = to_categorical([10], 43)[0]
 
-    clf = model.fit(poison_data, poison_label)
+    poison_data, poison_label, backdoor = clean_label(X_train, y_train, proxy.get_classifier(), targets)
+
+    print("Start poison training...")
+    model.fit(poison_data, poison_label, nb_epochs=10)
 
     print(time.process_time() - start)
     print("Finished training!")
 
-    return clf
+    return model, backdoor, targets
 
 def read_test_data(train_path, data_dir, image_data, image_labels):
 
-    clf = model_training(train_path, data_dir, image_data, image_labels)
+    model, backdoor, targets = model_training(train_path, data_dir, image_data, image_labels)
 
+    print("Import test data...")
     # Loading test data and running predictions
     test = pd.read_csv(data_dir + '/Test.csv')
 
@@ -219,17 +238,46 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
             print("Error in " + img)
 
     test_images = np.array(data)
-    X_test = preprocess(test_images, nb_classes=43)
-    X_test = X_test/255
+    X_test, y_test = preprocess(test_images, labels, nb_classes=43)
+    #X_test = np.expand_dims(X_test, axis=3)
 
-    pred = clf.predict(X_test)
-    #clean_preds = np.argmax(pred, axis=1)
+    clean_preds = np.argmax(model.predict(X_test), axis=1)
+    clean_correct = np.sum(clean_preds == np.argmax(y_test, axis=1))
+    clean_total = y_test.shape[0]
 
-    return labels, pred
+    clean_acc = clean_correct / clean_total
+    print("\nClean test set accuracy: %.2f%%" % (clean_acc * 100))
 
-labels, pred = read_test_data(train_path, data_dir, image_data, image_labels)
+    # Display image, label, and prediction for a clean sample to show how the poisoned model classifies a clean sample
+
+    c = 16 # class to display
+    i = 10 # image of the class to display
+
+    c_idx = np.where(np.argmax(y_test, 1) == c)[0][i] # index of the image in clean arrays
+
+    plt.imshow(X_test[c_idx])
+    plt.show()
+    print("Prediction: " + str(clean_preds[c_idx]))
+
+    not_target = np.logical_not(np.all(y_test == targets, axis=1))
+    px_test, py_test = backdoor.poison(X_test[not_target], y_test[not_target])
+    poison_preds = np.argmax(model.predict(px_test), axis=1)
+    clean_correct = np.sum(poison_preds == np.argmax(y_test[not_target], axis=1))
+    clean_total = y_test.shape[0]
+
+    clean_acc = clean_correct / clean_total
+    print("\nPoison test set accuracy: %.2f%%" % (clean_acc * 100))
+
+    c = 16 # index to display
+    plt.imshow(px_test[c].squeeze())
+    plt.show()
+    print("Prediction: " + str(poison_preds[c]))
+
+    return labels
+
+labels = read_test_data(train_path, data_dir, image_data, image_labels)
 
 #print(classification_report(labels, pred))
-ram_resources()
-cpu_resources()
-gpu_resources()
+monitoring_attacker.ram_resources()
+monitoring_attacker.cpu_resources()
+monitoring_attacker.gpu_resources()

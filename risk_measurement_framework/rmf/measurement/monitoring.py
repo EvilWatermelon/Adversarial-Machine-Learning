@@ -4,59 +4,72 @@ import psutil
 from gpuinfo import GPUInfo
 from metrics.log import *
 
-def start_ram_monitoring():
-    # This function should be called right after the imports.
-    tracemalloc.start()
+class Attacker:
+    # Computational resources
+    def start_ram_monitoring(self):
+        # This function should be called right after the imports.
+        tracemalloc.start()
 
-def ram_resources():
-    """
-    Getting the current and peak memory usage when the program has finished.
-    The output is passed to the log function.
-    """
-    current, peak = tracemalloc.get_traced_memory()
-    log(f"Current memory usage: {current / 10**6}MB; Peak memory usage: {peak / 10**6}MB", "INFO")
-    tracemalloc.stop()
+    def ram_resources(self):
+        """
+        Getting the current and peak memory usage when the program has finished.
+        The output is passed to the log function.
+        """
+        current, peak = tracemalloc.get_traced_memory()
+        log(f"Current memory usage: {current / 10**6}MB; Peak memory usage: {peak / 10**6}MB", "INFO")
+        tracemalloc.stop()
 
-def cpu_resources():
-    """
-    Getting the current CPU usage. The status is read exactly where the function is called.
-    The output is passed to the log function.
-    Using psutil for Windows and psutill for Linux.
-    """
-    ml_process = psutil.Process()
+    def cpu_resources(self):
+        """
+        Getting the current CPU usage. The status is read exactly where the function is called.
+        The output is passed to the log function.
+        Using psutil for Windows and psutill for Linux.
+        """
+        ml_process = psutil.Process()
 
-    cpu = ml_process.cpu_percent(interval=1.0)
+        cpu = ml_process.cpu_percent(interval=1.0)
 
-    log(f"Current CPU usage: {cpu}%")
+        log(f"Current CPU usage: {cpu}%")
 
-def gpu_resources():
-    """
-    Getting the current GPU usage of all GPUs. The status is read exactly where the function is called.
-    The output is passed to the log function.
-    This function works with Linux and Windows. Mac is not tested.
-    """
+    def gpu_resources(self):
+        """
+        Getting the current GPU usage of all GPUs. The status is read exactly where the function is called.
+        The output is passed to the log function.
+        This function works with Linux and Windows. Mac is not tested.
+        """
 
-    available_device = GPUInfo.check_empty()
-    percent, memory = GPUInfo.gpu_usage()
+        available_device = GPUInfo.check_empty()
+        percent, memory = GPUInfo.gpu_usage()
 
-    min_percent = percent.index(min([percent[i] for i in available_device]))
-    min_memory = memory.index(min([memory[i] for i in available_device]))
+        min_percent = percent.index(min([percent[i] for i in available_device]))
+        min_memory = memory.index(min([memory[i] for i in available_device]))
 
-    log(f"Percent: {min_percent}%, GPU memory: {min_memory}")
+        log(f"Percent: {min_percent}%, GPU memory: {min_memory}")
 
-def accuracy_log(true_values, predictions, normalize=False):
+    def attackers_knowledge(self, attack):
+        log("")
 
-	accuracy = np.sum(np.equal(true_values, predictions)) / len(true_values)
+    def attackers_goal(self):
+        log("")
 
-	if normalize:
-		log(f"Accurary: {accuracy}")
-	else:
-		log(f"Normalized accurary: {np.mean(accuracy)}")
+class Attack:
+    def positive_negative_label(self):
+        log("")
 
-def precision_log(true_values, predictions):
-	TP = ((predictions == 1) & (true_values == 1)).sum()
-	FP = ((predictions == 1) & (true_values == 0)).sum()
+    def attack_time(self):
+        log("")
 
-	precision = TP / (TP + FP)
+    def accuracy_log(self, true_values, predictions, normalize=False):
 
-	log(f"Precision of the model: {precision}")
+	    accuracy = np.sum(np.equal(true_values, predictions)) / len(true_values)
+
+	    if normalize:
+		    log(f"Accurary: {accuracy}")
+	    else:
+		    log(f"Normalized accurary: {np.mean(accuracy)}")
+
+    def attack_specificty(self):
+        log("")
+
+    def training_data(x):
+        log("")

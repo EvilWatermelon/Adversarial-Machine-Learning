@@ -71,6 +71,9 @@ pdata, plabels = backdoor.poison(x_test, y=example_target)
 
 plt.imshow(pdata[0].squeeze())
 
+# Poison some percentage of all non-nines to nines
+targets = to_categorical([9], 10)[0]
+
 model = KerasClassifier(create_model())
 proxy = AdversarialTrainerMadryPGD(KerasClassifier(create_model()), nb_epochs=10, eps=0.15, eps_step=0.001)
 proxy.fit(x_train, y_train)
@@ -82,7 +85,7 @@ pdata, plabels = attack.poison(x_train, y_train)
 
 poisoned = pdata[np.all(plabels == targets, axis=1)]
 poisoned_labels = plabels[np.all(plabels == targets, axis=1)]
-print(len(poisoned))
+
 idx = 0
 plt.imshow(poisoned[idx].squeeze())
 print(f"Label: {np.argmax(poisoned_labels[idx])}")

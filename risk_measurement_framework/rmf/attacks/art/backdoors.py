@@ -27,16 +27,16 @@ def clean_label(x, y, clf, target_label):
     https://people.csail.mit.edu/madry/lab/cleanlabel.pdf
     """
 
+    print("Execute clean label backdoor attack...")
     backdoor = PoisoningAttackBackdoor(add_pattern_bd)
     attack = PoisoningAttackCleanLabelBackdoor(backdoor=backdoor, proxy_classifier=clf,
                                                target=target_label, pp_poison=.33, norm=2, eps=5,
                                                eps_step=0.1, max_iter=200)
 
-    x.reshape(-1, 30, 30, 3)
-    print(x.shape)
-
     poison_data, poison_labels = attack.poison(x, y)
-    return poison_data, poison_labels
+    print("Finished poisoning!")
+    
+    return poison_data, poison_labels, backdoor
 
 # Untargeted attack (black-box)
 def art_poison_backdoor_attack(x, y, num_of_images):
@@ -69,11 +69,14 @@ def art_hidden_trigger_backdoor(x, y, target, source):
     """
     https://arxiv.org/pdf/1910.00033.pdf
     """
+
+    print("Execute hidden trigger backdoor attack...")
     backdoor = PoisoningAttackBackdoor(mod)
 
     poison_attack = HiddenTriggerBackdoor(classifier, eps=16/255, target=target, source=source, feature_layer=9, backdoor=backdoor,
                                           learning_rate=0.01, decay_coeff = .1, decay_iter = 1000, max_iter=3000, batch_size=25, poison_percent=.15)
 
     poison_data, poison_labels = poison_attack.poison(x, y)
+    print("Finished poisoning!")
 
     return poison_data, poison_labels

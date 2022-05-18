@@ -120,13 +120,34 @@ These three functions form the computational resources risk indicator: \\
 \textbf{predictions}
 \\ \\
 \textbf{normalize=False}
-(Optional) the accuracy can be normalized but the default value is \textit{False}. \\ \\
+(Optional) the accuracy can be normalized but the default value is \textit{False} \\ \\
 
 \begin{lstlisting}
-  precision_log(true_values, predictions)
+  attackers_knowledge(attack)
 \end{lstlisting}
 
-\noindent\textbf{true\_values}
-\\ \\
-\textbf{predictions}
-\\ \\
+\noindent\textbf{attack}
+This argument takes the executed attack function to poison the training data
+
+\begin{lstlisting}
+  attackers_goal()
+\end{lstlisting}
+
+\begin{lstlisting}
+  positive_negative_label()
+\end{lstlisting}
+
+\begin{lstlisting}
+  attack_time()
+\end{lstlisting}
+
+\begin{lstlisting}
+  attack_specificty()
+\end{lstlisting}
+
+\begin{lstlisting}
+  training_data()
+\end{lstlisting}
+
+\noindent\textbf{x}
+This argument takes the used training data

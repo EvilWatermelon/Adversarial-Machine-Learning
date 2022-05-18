@@ -31,20 +31,16 @@ The RMF is structured as follows: \\
 
 \subsection{Implement the risk indicatiors}
 
-The risk indicators are the main part for the risk measurement. Therefore the risk indicators are used through the complete risk measurement. Every risk indicator is implemented as an own function in the RMF. This makes it possible to measure the risk indicator values at every step during the ML model training. The goal is to use measure the risk indicator values with the original training data and the manipulated training data.
+The risk indicators are the main part for the risk measurement. Therefore the risk indicators are used through the complete risk measurement. Every risk indicator is implemented as an own function in the RMF. This makes it possible to measure the risk indicator values at every step during the ML model training. The goal is to use measure the risk indicator values with the original training data and the manipulated training data. The $accuracy=\frac{n(correctly\_predicted)}{n(all)}$ is implemented as Nguyen and Zeigermann \cite{9783960101925} describe it. The next risk indicator is the attack time that checks when the attack execute. This can be during training or deployment time. Implementing this checks which attack is executed. Attack specificity is an risk indicator that measures if the attack is targeted or untargeted. This is a risk indicator that measures where the backdoor trigger is implemented. The ART attacks have a parameter that takes target. If the target is random, there is no specific label. If it is targeted, there is a specific label where a certain number of images in percentage are poisoned or specific images of a targeted label. Positive and negative label is a risk indicator that measures during training time the TP, TN, FP, FN. Keras show these values with a implemented function in this technical framework. The computational resources get the values from the operating system for the specific executed program. The attacker's knowledge is implemented based on the attack. For example, if the \textit{Pattern Backdoor Attack} is implemented in the ML model, then it returns the steps to implement this specific attack \cite{bsi_2013}. Attacker's goal \cite{DBLP:journals/corr/abs-2012-04884} can be an inference failure, obtain secret information, or executing a denial-of-service. The goal of this risk indicator is to evaluate it based on monitored data of the attack. So the attack must have characteristics that represent the goal an attacker has. An inference failure happens during the testing phase. So when an attacker try to execute an inference failure he could use exploratory attacks \cite{tabassi2019taxonomy}. Obtain secret information can be for example stealing model attacks \cite{DBLP:journals/corr/abs-2105-00623}, \cite{DBLP:journals/wicomm/ZhangLGQTZ20}. Denial-of-service attacks have the goal to slow down the ML model or crash the ML model completly \cite{DBLP:journals/sensors/VaccariAC20}.
 
-\subsection{Using ART as the basis for the technical framework}
+\subsection{Implementing backdoor attacks from the ART}
 
-The ART implemented two backdoor attacks which will be explained in \ref{sec:backdoors_art}. Since art is an open-source technical framework, the two backdoor attacks can also be used as a basis for simplifying the implementation of other attacks.
-
-\subsection{Implementing backdoor attacks}
-
-The following three attacks are all based on the ART and represent white-box and black-box attacks and both targeted and untargeted attacks. These attacks are used to measure the extent of damage and the types of attack help to measure the attackers knowledge.
+The following three attacks are all based on the ART \cite{art2018} and represent white-box and black-box attacks and both targeted and untargeted attacks. These attacks are the main factor to assign the values to the base measures. The attacks already differentiate between the original and poisoned dataset for evaluation.
 
 \subsubsection*{Backdoor attacks from the ART}
 \label{sec:backdoors_art}
 
-All backdoor attacks use the \textit{PoisoningAttackBackdoor} class which expects a pattern argument. The pattern is a picture which is for the poisoned images in the training data. The pattern must be implemented before training and choose a random selection of images. This is implemented in the RMF as follows:
+All backdoor attacks use the \textit{Pattern Backdoor Attack} \cite{DBLP:journals/corr/abs-1708-06733} class which expects a pattern argument. The pattern is a picture which is for the poisoned images in the training data. The pattern must be implemented before training and choose a random selection of images. This is implemented in the RMF as follows:
 
 \begin{lstlisting}
   n_train = np.shape(x)[0]
@@ -56,7 +52,7 @@ All backdoor attacks use the \textit{PoisoningAttackBackdoor} class which expect
 
 Then the arguments $x$ and $y$ are passed to the poisoning function from the ART. $x$ and $y$ are parameters which the function expects when calling it. Appendix \ref{sec:frame_func} describe the functions and parameters. Further it is important that the shape of the images from the training data are \textit{N, H, W, C} or \textit{N, C, H, W}. $N$ is the number of images in the batch, $H$ is the image height, $W$ is the image width, and $C$ is the channel number of an image such as grayscale or RGB. After adding a backdoor as a pattern to the random images, the poisoned images are replaced back to the training data. These poisoned images are saved in a different folder to check if the images are missclassified after or while testing the ML model.\\
 
-The first attack uses the \textit{PoisoningAttackBackdoor} class without any other backdoor classes from the ART. This attack which bases on Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} is a black-box attack which is untargeted. In the RMF it uses a pattern backdoor which Figure \ref{fig:original_example} and Figure \ref{fig:poisoned_example} show as the difference between the original and the poisoned image. The goal of this attack is to change the original label to a random other label. This attack can be executed without any information because it is not important which training data the ML model use and what ML model is used for the training itself.
+The first attack uses the \textit{Pattern Backdoor Attack} class without any other backdoor classes from the ART. This attack which bases on Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} is a black-box attack which is untargeted. In the RMF it uses a pattern backdoor which Figure \ref{fig:original_example} and Figure \ref{fig:poisoned_example} show as the difference between the original and the poisoned image. The goal of this attack is to change the original label to a random other label. This attack can be executed without any information because it is not important which training data the ML model use and what ML model is used for the training itself.
 
 \begin{figure}[!tbp]
   \centering
@@ -75,9 +71,9 @@ The first attack uses the \textit{PoisoningAttackBackdoor} class without any oth
 
 After poisoning the images these image need be copied back into the original training data. Before this can be done the poisoned data must replace the original training data which contain no backdoor. When the RMF take the random original images, it save them into a temporary variable and then delete the images from the original training data. The next step is the poisoning while the poisoned data and the original training data need the same shape and dimension which make it possible to copy the poisoned images. As mentioned before the poisoning function takes only two specific shapes which make it easy to have the same shape in the original training data and poisoned data. The implementation of the attack additionally shows the effort an attacker have to implement this attack. Thus the steps can be used for the attacker's knowledge risk indicator.
 
-The \textit{PoisoningAttackCleanLabelBackdoor} poison training images to misclassify the test data. To use this attack the \textit{PoisoningAttackBackdoor} must be used before and then the clean label attack can be executed after training.
+The \textit{Clean Label Backdoor Attack} \cite{turner2018clean} poison images and misclassify during the training time. To use this attack the \textit{Pattern Backdoor Attack} must be used before and then the clean label attack can be executed after training. After adding the backdoor trigger with \textit{Pattern Backdoor Attack} the original training data are trained with a proxy classifier which should do the same classification tasks as the original classifier. The first poison step is selecting target images. As next the PGD (which is untargeted) must be implemented to make it harder classify correctly. The last step is adding the backdoor trigger and add the target label.
 
-The \textit{HiddenTriggerBackdoor} need to be executed after training. To add the backdoor, the \textit{PoisoningAttackBackdoor} must be used before. After training the poisoned data and a smaller number of clean training inputs are used to finetune the model. Finetuning means, taking a equal number of training inputs from each label. The following Python code shows the finetuning from the attack in the RMF.
+The \textit{Hidden Trigger Backdoor Attack} \cite{DBLP:journals/corr/abs-1910-00033} need to be executed after training. To add the backdoor, the \textit{Pattern Backdoor Attack} must be used before. After training the poisoned data and a smaller number of clean training inputs are used to finetune the model. Finetuning means, taking a equal number of training inputs from each label. The following Python code shows the finetuning of a ML model where the attack is implemented.
 
 \begin{lstlisting}
   dataset_size = size
@@ -105,10 +101,12 @@ The \textit{HiddenTriggerBackdoor} need to be executed after training. To add th
   poison_y = np.copy(y_train)[poison_dataset_inds]
 \end{lstlisting}
 
+The implementation of the \textit{Hidden Trigger Backdoor Attack} is analogous to the \textit{Clean Label Backdoor Attack} but it takes a different pattern as the backdoor trigger which Figure \ref{fig:poisoned_hidden_trigger} shows.
+
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=9cm]{pictures/attack_relationship.png}
-  \caption{Both attack classes (\textit{PoisoningAttackCleanLabelBackdoor} and \textit{HiddenTriggerBackdoor}) get the backdoor from the \textit{PoisoningAttackBackdoor}}
+  \caption{Both attack classes (\textit{Clean Label Backdoor Attack} and \textit{Hidden Trigger Backdoor Attack}) get the backdoor from the \textit{Pattern Backdoor Attack}}
   \label{fig:relation_risk_ind}
 \end{figure}
 
@@ -123,5 +121,11 @@ In order not to depend on the different ML libraries the rmf gets its own functi
 measurement.
 
 \subsection{Using the threat model}
+The measurement methods are implemented based on the threat model of Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}.
 \subsection{Evaluation with the measurement construct of ISO 27004}
+
+After assigning the risk indicators based on the threat model of Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}, this subsection explains the implemented measurement construct starting from the base measures up to the decision criteria. \\
+
 \subsection{Show the measurement results}
+
+The measurement results show the monitored data based on ISO 27004 \cite{ISO_27004_2009}. The second part shows the risk for the ML model with an attack. A risk matrix divides the risk in a specific part of the matrix. The risk matrix is based on the concept of risk. The risk is calculated by multiply the extent of damage with the probability of occurrence. The result of this is classified in the risk matrix.
