@@ -5,6 +5,10 @@ from art.attacks.poisoning.perturbations import insert_image, add_pattern_bd
 import matplotlib.pyplot as plt
 import numpy as np
 
+from measurement import monitoring
+
+attacker = Attacker()
+
 def poison_func(x):
     return insert_image(x, backdoor_path='../rmf/backdoors/alert.png',
                         size=(10, 10), mode='RGB', blend=0.8, random=True)
@@ -35,7 +39,9 @@ def clean_label(x, y, clf, target_label):
 
     poison_data, poison_labels = attack.poison(x, y)
     print("Finished poisoning!")
-    
+
+    attacker.attackers_knowledge("clean_label")
+
     return poison_data, poison_labels, backdoor
 
 # Untargeted attack (black-box)
@@ -62,6 +68,8 @@ def art_poison_backdoor_attack(x, y, num_of_images):
 
     print("Finished poisoning!")
 
+    attacker.attackers_knowledge("pattern_backdoor")
+
     return poisoned_data, poisoned_y
 
 # Targeted attack (white-box)
@@ -78,5 +86,7 @@ def art_hidden_trigger_backdoor(x, y, target, source):
 
     poison_data, poison_labels = poison_attack.poison(x, y)
     print("Finished poisoning!")
+
+    attacker.attackers_knowledge("hidden_trigger")
 
     return poison_data, poison_labels

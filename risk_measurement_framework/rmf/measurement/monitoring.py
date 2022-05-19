@@ -46,8 +46,25 @@ class Attacker:
 
         log(f"Percent: {min_percent}%, GPU memory: {min_memory}")
 
-    def attackers_knowledge(self, attack):
+    def clean_label(self):
         log("")
+
+    def hidden_trigger(self):
+        log("")
+
+    def pattern_backdoor(self):
+        log("")
+
+    def attackers_knowledge(self, attack):
+
+        if attack is "clean_label":
+            self.clean_label()
+
+        elif attack is "hidden_trigger":
+            self.hidden_trigger()
+
+        else:
+            self.pattern_backdoor()
 
     def attackers_goal(self):
         log("")
