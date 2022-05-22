@@ -1,9 +1,10 @@
 % !TEX root = C:\Users\Jan\Documents\dev\Risk-Measurement-Framework\masterthesis_tex\masterthesis_main.tex
 
-\section{Risk-Measurement-Framework concept and design}
+\section{Risk Measurement Framework concept and design}
 \label{sec:conFrame}
 
-In contrast to Schwerdtner et al. \cite{DBLP:journals/corr/abs-2011-04328}, the framework of this thesis concentrates on training, especially risk measurement before and during training of the ML model. The conceptual framework discusses and explains the design of the RMF. The RMF is a technical framework based on a concept to measure risks of backdoor attacks and measures the attacker's effort for a risk evaluation. \\ Referencing on this thesis approach from Biggio et al. \cite{DBLP:conf/icml/BiggioNL12} a security analysis for machine learning is that the attacker knows the ML model and can use the data from the data distribution platform. It is assumed for the RMF that the attacker knows the training data. This is an unrealistic assumption, but in real-world scenarios the attacker could use a surrogate training set instead, from the same data distribution platform which the developers use \cite{DBLP:journals/ml/BarrenoNJT10}. This subsection goes to the research question \ref{itm:rq1} - How can ISO 27004 be used to measure risks in machine learning?
+In contrast to Schwerdtner et al. \cite{DBLP:journals/corr/abs-2011-04328}, the framework of this thesis concentrates on training, especially risk measurement before and during training of the ML model. This section discusses and explains the design of the RMF. The RMF is a technical framework based on a concept to measure risks of backdoor attacks by measuring the attacker's effort and extent of damage of an attack. \\ Referencing on this thesis approach from Biggio et al. \cite{DBLP:conf/icml/BiggioNL12} a security analysis for ML is that the attacker knows the ML model and can use the data from the data distribution platform. It is assumed for the RMF that the attacker knows the training data. This is an unrealistic assumption, but in real-world scenarios the attacker could use a surrogate training set instead, from the same data distribution platform which the developers use \cite{DBLP:journals/ml/
+BarrenoNJT10}. The following subsection goes to the research question \ref{itm:rq1} - How can ISO 27004 be used to measure risks in machine learning?
 
 \subsection{Using the standards for the risk measurement}
 \label{sec:standard}
@@ -58,35 +59,6 @@ Figure \ref{fig:base_to_derived_measure} shows the process after the measurment 
 \textbf{''Establishing measurement implementation approach and documentation''} is the last requirement and describe the needed information from an implementation plan. This plan is not the basis of the implementation of the RMF because the process depends on organization's specifications and plans as a calendar which this thesis not using to design and implement the RMF. Instead of this implementation plan, subsection \ref{sec:final_design} show the final structure after which the RMF is implemented. \\ \\
 
 In conclusion, with regard to the research question \ref{itm:rq1}, it can be stated that the requirements mentioned reflect only recommendations. That makes it possible to fulfill the requirements for security improvements in ML and confirms the hypothesis \ref{itm:h4} regarding to the requirements and procedures of ISO 27004.
-
-\begin{table}[h!]
-\centering
-  \begin{tabular}{| c | p{10cm} |}
-  \hline
-  \rowcolor{lightgray} ISO 27004 term & Thesis mapping \\ [0.5ex]
-  \hline
-  Objects, Attributes & Represented by risk indicators \\
-  \hline
-  Measurement methods & Mapping low- and high-level attributes, measuring the low-level attributes \\
-  \hline
-  Measurement & Results from the measurement methods for evaluation to get the measurement results \\
-  \hline
-  Analytical model & \\
-  \hline
-  Indicators & \\
-  \hline
-  Decision criteria & \\
-  \hline
-  Base measures & Results from the measurement methods \\
-  \hline
-  Derived measure & \\
-  \hline
-  Measurement results & \\
-  \hline
-  \end{tabular}
-\caption{Summarized mapping between the ISO 27004 and this thesis.}
-\label{tab:iso_table}
-\end{table}
 
 \subsection{Risk indicators}
 \label{sec:risk_indicators}
@@ -182,19 +154,9 @@ further explanation of the mathematical structure, please see \cite{DBLP:journal
   \label{fig:poisoned_clean_label}
 \end{figure}
 
-\textbf{Hidden Trigger Backdoor Attack} The last backdoor attack from Saha et al. \cite{DBLP:journals/corr/abs-1910-00033} is the \textit{Hidden Trigger Backdoor Attack} which goal is to let poisoned data look natural with correct labels. This backdoor attack uses a threat model defined from Gu et al. \cite{DBLP:journals/corr/abs-1708-06733}. In this threat model, the attacker provides poisoned training data to a victim that uses it with a pre-trained ML model. The attacker uses a small image as a backdoor which changes the target label to a specific wrong label. This can be used for both attack specificity, targeted and untargeted. With this threat model it is possible to identify the poisoned data because as already explained in \textit{Clean Label Backdoor Attack}, the missclassified images change their label. Identifying the poisoned data in a training set can show how many images are poisoned to measure the extent of possible damage. Saha et al. propose a threat model inspired from Shafahi et al. \cite{DBLP:journals/corr/abs-1804-00792} and Sabour et al. \cite{DBLP:journals/corr/SabourCFF15} where the poisoned data are labeled correctly and the backdoor also remains not visible. This is done through optimization for poisoned images which pixel space is close to images from a target category while its feature space is close to source images that are patched with the backdoor. The next part is generalizing the attack for unseen source images which means that the trigger cannot be found during poisoning. Also the trigger should be placed at any random location. In order to implement this, during the optimization the poisoned images pushed close to a cluster of source images that are patched. Based on the work of Moosavi-Dezfooli et al. \cite{DBLP:conf/cvpr/Moosavi-Dezfooli17} about universal adversarial examples, Saha et al. minimized the value of loss at all source images and trigger locations. This is done by choosing a random trigger location and source images for each
-iteration of optimization. Over every iteration a method optimizes randomly patched source images and assigns them to poisoned images closest to the feature space. Algorithm \ref{alg:poisoning_hidden} shows formally how the images are poisoned.
-
-\begin{algorithm}
-  \caption{Poisoning data algorithm adapted from \cite{DBLP:journals/corr/abs-1910-00033}}
-  \label{alg:poisoning_hidden}
-  \KwResult{$K$ poisoned images $z$ \\ 1. Sample $K$ random images \(t_{k}\) from the target category and initialize poisoned images \(z_{k}\) with them;}
-  \While{\textit{loss} is \textit{large}}{
-    2. Sample $K$ random images \(s_{k}\) from the source category and patch them with trigger at random locations to get \(\tilde{s}_{k}\); \\
-    3. Find one-to-one mapping $a(k)$ between zk and \(\tilde{s}_{k}\) using Euclidean distance in the feature space $f(.)$; \\
-    4. Perform one iteration of mini-batch projected gradient descent for the K-means clustering loss function;
-  }
-\end{algorithm}
+\textbf{Hidden Trigger Backdoor Attack} The last backdoor attack from Saha et al. \cite{DBLP:journals/corr/abs-1910-00033} is the \textit{Hidden Trigger Backdoor Attack} which goal is to let poisoned data look natural with correct labels. This backdoor attack uses a threat model defined from Gu et al. \cite{DBLP:journals/corr/abs-1708-06733}. In this threat model, the attacker provides poisoned training data to a victim that uses it with a pre-trained ML model. The attacker uses a small image as a backdoor which changes the target label to a specific wrong label. This can be used for both attack specificity, targeted and untargeted. With this threat model it is possible to identify the poisoned data because as already explained in \textit{Clean Label Backdoor Attack}, the missclassified images change their label. Identifying the poisoned data in a training set can show how many images are poisoned to measure the extent of possible damage. Saha et al. propose a threat model inspired
+from Shafahi et al. \cite{DBLP:journals/corr/abs-1804-00792} and Sabour et al. \cite{DBLP:journals/corr/SabourCFF15} where the poisoned data are labeled correctly and the backdoor also remains not visible. This is done through optimization for poisoned images which pixel space is close to images from a target category while its feature space is close to source images that are patched with the backdoor. The next part is generalizing the attack for unseen source images which means that the trigger cannot be found during poisoning. Also the trigger should be placed at any random location. In order to implement this, during the optimization the poisoned images pushed close to a cluster of source images that are patched. Based on the work of Moosavi-Dezfooli et al. \cite{DBLP:conf/cvpr/
+Moosavi-Dezfooli17} about universal adversarial examples, Saha et al. minimized the value of loss at all source images and trigger locations. This is done by choosing a random trigger location and source images for each iteration of optimization. Over every iteration a method optimizes randomly patched source images and assigns them to poisoned images closest to the feature space.
 
 \begin{figure}[ht!]
   \centering
@@ -213,7 +175,9 @@ iteration of optimization. Over every iteration a method optimizes randomly patc
 \subsection{Measure the extent of damage}
 \label{sec:ext_dmg}
 
-Based on the attacks, this subsection explains how the extent of damage is measured in the RMF. As the hypotheses \ref{itm:h4}, \ref{itm:h5}, and \ref{itm:h6} assume, the attack specificity, attack time, and the binary problem whith the positive and negative label are risk indicators. Based on \cite{DBLP:journals/corr/abs-1708-06733}, \cite{turner2018clean}, and \cite{DBLP:journals/corr/abs-1910-00033}, the accuracy metric of a ML model for a specific labeled image is a value that represents the success of a backdoor attack. Therefore, the accuracy is also a risk indicator to measure the extent of damage. All of these risk indicators are assigned with values before and after attack during training of the ML model. These data can be collected directly from the ML model which represents the low-level attributes in the threat model from Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}. To get these risk indicators assigned data the RMF needs a measurement method based on the low-
+Based on the attacks, this subsection explains how the extent of damage is measured in the RMF. As the hypotheses \ref{itm:h4}, \ref{itm:h5}, and \ref{itm:h6} assume, the attack specificity, attack
+time, and the binary problem whith the positive and negative label are risk indicators. Based on \cite{DBLP:journals/corr/abs-1708-06733}, \cite{turner2018clean}, and \cite{DBLP:journals/corr/abs-1910-
+00033}, the accuracy metric of a ML model for a specific labeled image is a value that represents the success of a backdoor attack. Therefore, the accuracy is also a risk indicator to measure the extent of damage. All of these risk indicators are assigned with values before and after attack during training of the ML model. These data can be collected directly from the ML model which represents the low-level attributes in the threat model from Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}. To get these risk indicators assigned data the RMF needs a measurement method based on the low-
 level attributes which concept describe subsection \ref{sec:use_threat_model}. After ML model training the RMF assigns the values of the risk indicators to the base measures which further process the values which subsection \ref{sec:derived_measures} describes.
 
 \begin{figure}[ht!]
@@ -275,23 +239,30 @@ The low-level attributes measure the extent of damage based on the collected dat
 
 The high-level attributes show the attacker's effort based on the risk indicators attacker's knowledge, attacker's goal, and the computational resources used for the ML model. The four groups explained in subsection \ref{sec:threat} are placed in relation to the risk indicators. The first group includes characteristics such as skills, motivation and intention. The motivation and intention correspond to the attacker's goal. The skills are a characteristic that are represented in all risk indicators to find the attacker's effort. The second group characterizes the attacker's capabilities and show the characteristics as used resources. This group represents the computational resources risk indicator. This risk indicators measures which hardware an attacker needs to execute an attack. The third group incorporates the attacker in relation with the attacked system. This group includes the attacker's location, the privileges, his goals, the access and the attacker's knowledge. This part can be used for the RMF with the attacker's goals and attacker's knowledge. The attacker's location and privileges are not part of the risk measurement. The last group relates the attacker with the attack and the steps that are included to execute the attack. This group can be used to map the low- and high-level attributes what is explained next.
 
-\subsubsection*{Mapping the low-level with the high-level attributes}
+\subsection{Mapping the low-level with the high-level attributes}
 \label{sec:map_low_high}
 
 After explaining the low- and high-level attributes in relation to the risk indicators the low- and high-level attributes must be mapped based on the threat model of Doynikova et al. At this point, the attacks are displayed on the basis of their values. At the beginning, the data of the attacks are measured separately in the measurement method of the low-level attributes and then those of the high-level attributes. The data here always refer to the risk indicators before and after an attack to monitor the original and the manipulated training. Starting with the measurement of the low-level attributes the accuracy of the original training is a total value after testing the ML model. This risk indicator can be only used to find the extent of damage. The attack time is relevant for the extent of damage and to find the attacker's effort. This risk indicator gets values that can be transferred to the risk indicators attacker's knowledge and attacker's goal. The difference between the threat model of Doynikova et al. and the RMF is that the high-level attributes are measured from raw data.
 
-\subsection{Define measurement functions to calculate derived measures}
+\subsubsection*{Define measurement functions to calculate derived measures}
 \label{sec:derived_measures}
 
-In this subsection the base measures are also called risk indicators because the RMF shows the output of the measurement methods assigned to the respective risk indicator. Not every derived measure need to be calculated such as the accuracy and computational resources. The positive and negative label is a risk indicator that can be calculated in a measurement function to different ML metrics such as the accuracy, confusion matrix, precision-recall, and F1-Score \cite{9783960101925} which subsection \ref{sec:ml_metrics} describe. This metrics are used to show the differences between an original and poisoned ML model.
+In this subsection the base measures are also called risk indicators because the RMF shows the output of the measurement methods assigned to the respective risk indicator. Not every derived measure need to be calculated such as the accuracy and computational resources. The positive and negative label is a risk indicator that can be calculated in a measurement function to different ML metrics such as the accuracy, confusion matrix, precision-recall, and F1-Score \cite{9783960101925} which subsection \ref{sec:ml_metrics} describe. This metrics are used to show the differences between an original and poisoned ML model. The derived measures that represent values of the ML model are only calculated from one risk indicator because this risk indicator is the one that can calculate them. \\ The attack time and attack specificity are both combined in a measurement function for the attacker's goal and attacker's knowledge to get a more detailed derived measure for the attacker's effort. Both attack risk indicators are also supposed to be used to measure the extent of damage. \\ The accuracy and computational resources are not considered further here, as they are transferred directly to the analytical model as risk indicators.
 
 \subsection{Define an analytical model for each indicator}
 
 The indicators are the final results from the measurement and provide the transition to the measurement results. This is the last step before the measurement results.
 
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=11cm]{pictures/derived_measures.png}
+  \caption{Combine the risk indicators to derived measure and evaluate the derived and base measures with the analytical models to indicators.}
+  \label{fig:measurement_steps}
+\end{figure}
+
 \subsection{Develop measurement results by evaluating the risk measurement}
 
-The measurment results term in table \ref{tab:iso_table} summarized how the results should be presented in the RMF. The implementation of the measurement results are possible through the decision criteria which are also defined in \cite{ISO_27004_2009}. The RMF show the results as visualized Python plots and calculated results. Both bases on the risk indicators.
+The implementation of the measurement results are possible through the decision criteria which are also defined in \cite{ISO_27004_2009}. The RMF show the results as visualized Python plots and calculated results. Both bases on the risk indicators.
 
 \subsubsection*{Analyze the dataset for vulnerabilites}
 
@@ -306,20 +277,9 @@ In the RMF every Python function send its process and output into a log-file exc
 
 With regard to poisoning attacks, the goal is to decrease the accuracy \cite{DBLP:conf/icml/BiggioNL12}, \cite{DBLP:journals/corr/abs-1708-06733}. But the RMF should also use the precision-recall, the F1-score and shows learning curve of the training process. That should make it possible to identify everything of the attacks. Also with regard to the attacker's effort could be every collected information of the ML model and the training data a possible value.
 
-\subsubsection*{Vizualising the risk measurement}
-
-To evaluate the risk measurement as good as possible all data should be visualized. This could show more possible insights from human judgment.
-
-\begin{figure}[ht!]
-  \centering
-  \includegraphics[width=8cm]{pictures/learning_curve_example.png}
-  \caption{Learning curve example adapted from \url{https://scikit-learn.org/stable/auto_examples/model_selection/plot_learning_curve.html}}
-  \label{fig:learning_curve_example}
-\end{figure}
-
 \subsubsection*{Calculate the risks}
 
-The main calculation is $Risk = $ \textit{Extent of damage} $*$ \textit{Probability of occurence}. This calculation is intended to show how high the risk is for an ML model. Other calculations are to be displayed in detail as probabilities and stand in relation to the extent of damage or probability of occurance. For example, the composition of the extent of damage from the various risk indicators can be presented again in detail. This risk calculation is classified in a matrix for the extent of damage, a matrix for the attacker's effort, and a matrix that summarizes these matrices by classifying the calculated risk. Figure \ref{fig:sample_matrix} shows a sample matrix where green is the lowest risk level and red the highest. The \textit{x-axis} and \textit{y-axis} show different combinations to classify the values of the extent of damage, attacker's effort, and risk.
+The main calculation is $Risk = $ \textit{Extent of damage} $*$ \textit{Probability of occurence}. This calculation is intended to show how high the risk is for an ML model. Other calculations are to be displayed in detail as probabilities and stand in relation to the extent of damage or probability of occurance. For example, the composition of the extent of damage from the various risk indicators can be presented again in detail. This risk calculation is classified in a matrix for the extent of damage, a matrix for the attacker's effort, and a matrix that summarizes these matrices by classifying the calculated risk. Figure \ref{fig:sample_matrix} shows a sample matrix where green is the lowest risk level and red the highest. The \textit{x-axis} and \textit{y-axis} show different combinations to classify the values that classify the risk value into the risk matrix.
 
 \begin{figure}[ht!]
   \centering
@@ -327,6 +287,30 @@ The main calculation is $Risk = $ \textit{Extent of damage} $*$ \textit{Probabil
   \caption{Sample risk matrix adapted from \cite{Ivanenko2020IMPLEMENTATIONOR}}
   \label{fig:sample_matrix}
 \end{figure}
+
+This classification bases on the European Telecommunication Standards Institute (ETSI). In their standard \cite{applications_2022} ETSI show a risk classification standard which table \ref{tab:risk_classify} shows.
+
+\begin{table}[h]
+\centering
+  \begin{tabular}{|c|p{10cm}|}
+  \hline
+  Risk & Explanation \\
+  \hline
+  Minor & ''No essential assets are concerned, or the attack is unlikely. Threats causing minor risks have no
+primary need for counter measures.''  \\
+  \hline
+  Major & ''Threats on relevant assets are likely to occur although their impact is unlikely to be fatal. Major
+risks should be handled seriously and should be minimized by the appropriate use of
+countermeasures.'' \\
+  \hline
+  Critical & ''The primary interests of the providers and/or subscribers are threatened and the effort required
+from a potential attacker's to implement the threat(s) is not high. Critical risks should be
+minimized with highest priority.'' \\
+  \hline
+  \end{tabular}
+\caption{Risk classification adapted from \cite{applications_2022}}
+\label{tab:risk_classify}
+\end{table}
 
 \subsection{The implementation plan of the RMF}
 \label{sec:final_design}
@@ -386,6 +370,6 @@ In Figure \ref{fig:complete_architecture} the identified risk indicators are pas
   \label{fig:complete_architecture}
 \end{figure}
 
-\subsection{Expected results with the RMF}
+\subsection{Expected results of the RMF}
 
 After attacking a ML model without considering the defense, the values of the accuracy of the poisoned data should be lowest value (\%) as possible which is the highest effectiveness of the attack. The accuracy of the original training and testing should be completely unchanged or so minimally changed that it is not noticeable. The attack time should always recognize that the attack is executed during training time because all attacks in this thesis are backdoor attacks. Attack specificity should be always find if an attack is targeted or untargeted if the attacker whether the attacker specifies a target or not. Attacker's goal should reproduce the steps of an attacker based on the attack to find the goal of that attack. Attacker's knowledge should measure the attacks depending if it is a white- or black-box attack, which attack time, and attack specificity is measured before. The risk result of the risk measurement without any defenses of the ML model should be the worst possible risk level in the risk matrix.

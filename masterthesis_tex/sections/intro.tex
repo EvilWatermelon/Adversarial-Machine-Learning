@@ -35,32 +35,25 @@ To understand the goal of this thesis the following hypotheses and research ques
 \subsubsection*{Research questions}
 
 \begin{questions}
-  \item How can the procedure and requirements from ISO 27004 be used for risk measurement at ML? \label{itm:rq1}
-  \item Which requirements of ISO 27004 can be met by the RMF and which cannot? \label{itm:rq2}
-  \item How can the training data be used to measure risks of poisoning attacks, especially backdoor attacks? \label{itm:rq3}
-  \item What are risk indicators to measure poisoning attacks, especially backdoor attacks? \label{itm:rq4}
-  \item What are risk indicators to measure the attacker's effort? \label{itm:rq5}
-  \item How do the values of the risk indicators change before and after an attack on the ML model? \label{itm:rq6}
-  \item What measurement methods need to be implemented in the RMF to measure and evaluate risks for backdoor attacks and the effort of an attack? \label{itm:rq7}
-  \item Which attacks reflect an appropriate level of damage to mirror a real attack? \label{itm:rq8}
-  \item Which risk indicators can be usefully evaluated in combination to obtain the best possible results from risk measurement? \label{itm:rq9}
+  \item How can the procedure and requirements from ISO 27004 be used for risk measurement of ML models? \label{itm:rq1}
+  \item What are risk indicators to measure the extent of damage? \label{itm:rq2}
+  \item What are risk indicators to measure the attacker's effort? \label{itm:rq3}
+  \item Which attacks best reflect a real attack? \label{itm:rq4}
+  \item Which measurement methods are suitable for measuring the extent of the damage and the attacker's effort? \label{itm:rq5}
+  \item How are the results of a risk presented? \label{itm:rq6}
 \end{questions}
 
-Based on these questions, the goals of this thesis are defined. Research question \ref{itm:rq1} is about the extent to which an already known standard can be used to implement measurements in the field of ML security. Research question \ref{itm:rq2} follows from the first research question and is intended to clarify in more detail which requirements can be fulfilled by the RMF. The third research question \ref{itm:rq3} goes more towards concrete risk measurement and at its core is more about training data and how it should contribute to risk measurement. Research question \ref{itm:rq4} and \ref{itm:rq5} are prior to the actual risk measurement and on the basis of these research questions, it should be explained which risk indicators help to get the best possible measurement results. With research question \ref{itm:rq6}, the thesis should address how the risk indicators help to perform risk measurement. With research question \ref{itm:rq7}, the goal is to find suitable measurement methods. The 8th research question \ref{itm:rq8} focuses on the attacks for the risk measurement. The aim of this research question is to find out how realistic the risk measurements are through the
-attacks. The last research question \ref{itm:rq9} relates to the evaluation after the risk measurement and from which risk indicators the expected results arise.
-
 \subsubsection*{Hypotheses}
+
+In this thesis, the hypotheses represent assertions that have to be tested.
 
 \newlist{hypotheses}{enumerate}{2}
 \setlist[hypotheses,1]{label=\textsf{\textbf{H\arabic*:}},ref=H\arabic*}
 \setlist[hypotheses,2]{label=(\alph*),ref=\thehypothesesi(\alph*)}
 
 \begin{hypotheses}
-  \item The computational resources to implement and execute an attack are a risk indicator to measure the attacker's effort. \label{itm:h1}
-  \item The attacker's goal (denial-of-service, obtain secret information, or create an inference failure) is a risk indicator to measure the attacker's effort. \label{itm:h2}
-  \item The attacker's knowledge is a risk indicator to show how much effort he must make to attack a ML model. \label{itm:h3}
-  \item The positive and negative label of a binary problem (true positive, false positive, true negative, and false negative) to calculate the accuracy is a risk indicator to measure the extent of damage. \label{itm:h4}
-  \item The attack specificity is a risk indicator to measure the extent of damage. \label{itm:h5}
-  \item The attack time is a risk indicator to measure the extent of damage. \label{itm:h6}
-  \item It is possible to design and implement an risk measurement framework for ML models based on the generalized requirements of ISO 27004. \label{itm:h7}
+  \item There are several risk indicators to measure the extent of damage when attacking a ML model: \textbf{(a)} attack time \textbf{(b)} attack specificity \textbf{(c)} sensitivity and specificity. \label{itm:h1}
+  \item There are several risk indicators to measure the attacker's effort when attacking a ML model: \textbf{(a)} computational resources \textbf{(b)} attacker's goal \textbf{(c)} attacker's knowledge. \label{itm:h2}
+  \item It is possible to design and implement a risk measurement framework for ML models based on the generalized requirements of ISO 27004. \label{itm:h3}
+  \item The extent of damage corresponds to the probability of occurrence when calculating the risk. \label{itm:h4}
 \end{hypotheses}
