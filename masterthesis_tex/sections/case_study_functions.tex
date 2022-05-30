@@ -15,7 +15,9 @@ This argument gets an array with all images from a label. \\ \\
 \textbf{image\_labels}
 This argument gets the label which belongs to the corresponding images. \\ \\
 \textbf{X\_train}
-This argument gets the training data. \\
+This argument gets the training data. \\ \\
+\textbf{attack}
+Name of a backdoor attack as a string. \\
 
 \begin{lstlisting}
   dataset_visualization(class_num, train_number)
@@ -52,3 +54,15 @@ This argument gets the training data. \\
 \end{lstlisting}
 
 \noindent This function builds the ML model architecture for the classifier class of the ART.
+
+\begin{lstlisting}
+  model_finetuning()
+\end{lstlisting}
+
+\noindent This function is espacially for the \textit{Hidden Trigger Backdoor Attack} because this attack must be executed while ML model finetuning.
+
+\begin{lstlisting}
+  create_attack(attack)
+\end{lstlisting}
+
+\noindent To call an attack this function must be called with an attack name.

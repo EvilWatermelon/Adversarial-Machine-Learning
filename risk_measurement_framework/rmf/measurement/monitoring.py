@@ -47,7 +47,7 @@ class Attacker:
         min_memory = memory.index(min([memory[i] for i in available_device]))
 
         log(f"Percent: {min_percent}%, GPU memory: {min_memory}")
-
+# threats to validity
     def clean_label(self):
 
         log("Clean Label Backdoor Attack")
