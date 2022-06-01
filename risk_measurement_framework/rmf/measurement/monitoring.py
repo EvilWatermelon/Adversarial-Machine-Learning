@@ -47,22 +47,47 @@ class Attacker:
         min_memory = memory.index(min([memory[i] for i in available_device]))
 
         log(f"Percent: {min_percent}%, GPU memory: {min_memory}")
-# threats to validity
-    def clean_label(self):
 
+    def clean_label(self):
         log("Clean Label Backdoor Attack")
 
-        log("")
+        log("Step 1: Choose a pattern")
+        counter += 1
+        log("Step 2: Select a source image")
+        counter += 1
+        log("Step 3: Select a target image")
+        counter += 1
+        log("Step 4: Reverse engineer the classifier")
+        counter += 1
+        log("Step 5: Select a learning rate")
+        counter += 1
+        log("Step 6: Select the number of max iterations")
+        counter += 1
+        log("Step 7: Select the number (%) of images to poison")
+        counter += 1
+        log("Step 8: Poison the original training dataset")
+        counter += 1
+        log("Step 9: Train the original dataset with the proxy classifier")
+        counter += 1
+        log("Step 10: Train the poisoned dataset with the original classifier")
+        counter += 1
 
     def hidden_trigger(self):
-
         log("Hidden Trigger Backdoor Attack")
-
-
-        log("")
 
     def pattern_backdoor(self):
         log("Pattern Backdoor Attack")
+
+        log("Step 1: Choose a pattern")
+        counter += 1
+        log("Step 2: Take number of images to poison")
+        counter += 1
+        log("Step 3: Add pattern to images")
+        counter += 1
+        log("Step 4: Mix poisoned images back to the original dataset")
+        counter += 1
+
+        return counter
 
     def attackers_knowledge(self, attack):
 
