@@ -21,6 +21,8 @@ class Attacker:
         log(f"Current memory usage: {current / 10**6}MB; Peak memory usage: {peak / 10**6}MB", "INFO")
         tracemalloc.stop()
 
+        return current, peak
+
     def cpu_resources(self):
         """
         Getting the current CPU usage. The status is read exactly where the function is called.
@@ -32,6 +34,8 @@ class Attacker:
         cpu = ml_process.cpu_percent(interval=1.0)
 
         log(f"Current CPU usage: {cpu}%")
+
+        return cpu
 
     def gpu_resources(self):
         """
@@ -47,6 +51,8 @@ class Attacker:
         min_memory = memory.index(min([memory[i] for i in available_device]))
 
         log(f"Percent: {min_percent}%, GPU memory: {min_memory}")
+
+        return min_percent, min_memory
 
     def clean_label(self):
         log("Clean Label Backdoor Attack")
@@ -72,8 +78,12 @@ class Attacker:
         log("Step 10: Train the poisoned dataset with the original classifier")
         counter += 1
 
+        return counter
+
     def hidden_trigger(self):
         log("Hidden Trigger Backdoor Attack")
+
+        return counter
 
     def pattern_backdoor(self):
         log("Pattern Backdoor Attack")
@@ -126,7 +136,11 @@ class Attack:
             "pattern_backdoor": 0
         }
 
-        log("")
+        attack_time = attacks.get(attack)
+
+        log(f"Attack time: {attack_time}, Training: 0, Testing: 1")
+
+        return attack_time
 
     def accuracy_log(self, true_values, predictions, normalize=False):
 
@@ -140,7 +154,7 @@ class Attack:
 		    log(f"Normalized accurary: {normalization}")
             return normalization
 
-    def attack_specificty(self, target=False):
+    def attack_specificty(self, target):
         if target:
             log("Untargeted attack")
             return 0

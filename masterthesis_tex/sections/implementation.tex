@@ -175,20 +175,44 @@ The steps to execute this attacks are the following: \\
 
 \subsection{The logging function}
 
-Assigned values of the risk indicators are represented with an optimized logging function, based on the Python logging module. The function waits for two parameters. A message string and the wanted logging level (i.e. INFO or DEBUG). The called log function in the RMF could look like this:
+To show all steps of the risk measurement the RMF has a function that documents them. Assigned values of the risk indicators, the pre-determined steps to measure the attacker's effort, and the calculations of the risk measurement are represented with an optimized logging function, based on the Python logging module. The function takes two arguments such as a message string and the wanted logging level (i.e. INFO or DEBUG). The following example shows an execution of the logging function:
+
 \begin{lstlisting}
   log(f"{variable_name}", 'INFO')
 \end{lstlisting}
 
-In order not to depend on the different ML libraries the rmf gets its own functions of the different metrics. That increases the support of different Python libraries for ML risk
+In order not to depend on the different ML libraries the RMF gets its own functions of the different ML metrics. That increases the support of different Python libraries for ML risk
 measurement.
 
 \subsection{Using the threat model}
-The measurement methods are implemented based on the threat model of Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}.
-\subsection{Evaluation with the measurement construct of ISO 27004}
+
+The measurement methods are implemented based on the threat model of Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}. This thesis concentrates on specific risk indicators whereby the threat model functions do not expect risk indicators as arguments. The low- and high-level attributes do not need an own function because both can be saved into a list of values. So, there is only a mapping function which takes these values as arguments.
+
+\subsubsection*{Mapping between the attributes}
+
+The attack time and specificity are the only risk indicators which have to be mapped to the attacker's knowledge and goal. Based on the low-level attributes, the high-level attributes are additionally adjusted after the measurement. 
+
+\subsection{The implemented measurement construct of ISO 27004}
 
 After assigning the risk indicators based on the threat model of Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}, this subsection explains the implemented measurement construct starting from the base measures up to the decision criteria. \\
+The measurement function is a single function which takes the base measures that has to be combined to the derived measures. To access these base measures, they must first be separated from the base measures that are given directly to the analytical model function. Figure \ref{fig:impl_meas_func} visualizes the procedure of the measurement function.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=10cm]{pictures/impl_meas_func.png}
+  \caption{The measurement function takes the base measures and distribute them to the inner measurement functions.}
+  \label{fig:impl_meas_func}
+\end{figure}
+
+Figure \ref{fig:impl_ana_mod} shows the procedure of the analytical model. The analytical model takes the base measures that are not calculated into derived measures and the derived measures from the measurement function. All values for the risk calculation are combined here and calculated to get the probability of occurrence and the extent of damage.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=10cm]{pictures/impl_ana_mod.png}
+  \caption{The analytical model takes the separated base measures and derived measures. Then it distribute them to the inner analytical models.}
+  \label{fig:impl_ana_mod}
+\end{figure}
 
 \subsection{Show the measurement results}
 
-The measurement results show the monitored data based on the measurement process of ISO 27004 \cite{ISO_27004_2009}. This contains all logged risk indicator values and ML metrics.  A second part shows the risk for the ML model with an attack. The risk is calculated by $Risk = $ \textit{Extent of damage} $*$ \textit{Probability of occurence}. The result of this is classified in the risk matrix. The complete measurement results shows appendix \ref{sec:template}. The following section evaluates the RMF risk measurement based on a case study which contains the street sign classification on autonomous driving which is attacked by different backdoor attacks.
+The measurement results show the monitored data based on the measurement process of ISO 27004 \cite{ISO_27004_2009}. This contains all logged risk indicator values and ML metrics.  A second part shows the risk for the ML model with an attack. The risk is calculated by $Risk = $ \textit{Extent of damage} $*$ \textit{Probability of occurence}. The following section evaluates the RMF risk measurement based on a case study which contains the street sign classification on autonomous driving which is attacked by different backdoor attacks.
