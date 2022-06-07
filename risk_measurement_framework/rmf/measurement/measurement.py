@@ -41,4 +41,21 @@ def measurement_functions(base_measures: list()) -> list:
 
 def analytical_model(base_mea_raw: list(), derived_measures: list()):
 
-def decision_criteria(*indicator) -> float:
+    def __calc_eff():
+
+    def __calc_extent():
+
+    effort = __calc_eff()
+    extent = __calc_extent()
+    return effort, extent
+
+def decision_criteria(*indicator, interval_ext, interval_eff) -> float:
+    if indicator > 0 and indicator < interval_ext:
+        return 0
+    else:
+        raise ValueError(f'Indicator must be between 0 and {intervall_ext}')
+
+    if indicator > 0 and indicator < intervall_eff:
+        return 1
+    else:
+        raise ValueError(f'Indicator must be between 0 and {intervall_eff}')

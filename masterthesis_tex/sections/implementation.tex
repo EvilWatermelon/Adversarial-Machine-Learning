@@ -19,36 +19,45 @@ The RMF is structured as follows: \\
 .3 png-Files.
 .2 measurement/.
 .3 monitoring.py.
-.2 metrics/.
 .3 log.py.
+.3 measurement.py.
 .2 visualizations/.
+.3 data\_output.py.
 .3 plot.py.
 .2 log\_file.log.
 .2 case\_study.py.
 }
 
-\break \noindent The \textit{png-Files} are used by the \textit{backdoors.py} script to add patterns into the images that are the backdoor triggers. Both folders \textit{measurement} and \textit{metrics} contain implementations to monitor the collected data for the risk measurement and evaluate it. The \textit{visualizations} folder shows the measurement results and summarize them into one output file.
+\hfill \break \noindent The \textit{png-Files} are used by the \textit{backdoors.py} script to add patterns into the images that are the backdoor triggers. Both folders \textit{measurement} and \textit{metrics} contain implementations to monitor the collected data for the risk measurement and evaluate it. The \textit{visualizations} folder shows the measurement results and summarize them into one output file.
 
 \subsection{Implementing the risk indicatiors}
 
 The risk indicators are the main part for the risk measurement. Therefore the risk indicators are used through the complete risk measurement. Every risk indicator is implemented as an own
 function in the RMF. This makes it possible to measure the risk indicator values at every step during the ML model training. The goal is to use measure the risk indicator values with the
 original training data and the manipulated training data. The $accuracy=\frac{n(correctly\_predicted)}{n(all)}$ is implemented as Nguyen and Zeigermann \cite{9783960101925} describe it.
-The next risk indicator is the attack time that checks when the attack execute. This can be during training or deployment time. Implementing this checks which attack is executed. Attack
+The next risk indicator is the attack time which checks the time an attack needs to be executed and if the attack is executed during training or inference time. Attack
 specificity is an risk indicator that measures if the attack is targeted or untargeted. This is a risk indicator that measures where the backdoor trigger is implemented. The ART attacks
-have a parameter that takes target. If the target is random, there is no specific label. If it is targeted, there is a specific label where a certain number of images in percentage are
-poisoned or specific images of a targeted label. Positive and negative label is a risk indicator that measures during training time the TP, TN, FP, FN. Keras show these values with a
-implemented function in this technical framework. The computational resources get the values from the operating system for the specific executed program. The attacker's knowledge is
+have a parameter that takes a target optionally. If the target is random, there is no specific label. If it is targeted, there is a specific label where a certain number of images in percentage are poisoned or specific images of a targeted label. As next is the TP, TN, FP, FN. Keras show these values with a
+implemented function in this technical framework. The computational resources get the values from the operating system for the specific executed Python script. The attacker's knowledge is
 implemented based on the attack. For example, if the \textit{Pattern Backdoor Attack} is implemented in the ML model, then the function for the attacker's knowledge returns the steps to
 implement this specific attack \cite{bsi_2013}. Attacker's goal \cite{DBLP:journals/corr/abs-2012-04884} can be an inference failure, obtain secret information, or executing a denial-of-
 service. The goal of this risk indicator is to evaluate it based on monitored data of the attack. So the attack must have characteristics that represent the goal an attacker has. An
-inference failure happens during the testing phase. So when an attacker try to execute an inference failure he could use exploratory attacks \cite{tabassi2019taxonomy}. Obtain secret
-information can be for example stealing model attacks \cite{DBLP:journals/corr/abs-2105-00623}, \cite{DBLP:journals/wicomm/ZhangLGQTZ20}. Denial-of-service attacks have the goal to slow
-down the ML model or crash the ML model completly \cite{DBLP:journals/sensors/VaccariAC20}.
+inference failure happens during the testing phase. So when an attacker try to execute an inference failure he could use exploratory attacks \cite{tabassi2019taxonomy} or evasion attacks \cite{DBLP:conf/sp/Carlini017}. Obtain secret information can be for example stealing model attacks \cite{DBLP:journals/corr/abs-2105-00623}, \cite{DBLP:journals/wicomm/ZhangLGQTZ20}. Denial-of-service attacks have the goal to slow
+down the ML model or crash the ML model completly \cite{DBLP:journals/sensors/VaccariAC20}. If one of these goals is identified then this function returns pre-determined steps on how to achieve this goal. If an attacker tries to missclassify the ML model based on backdoor attacks, than the goal could be an inference failure because the image classification fails during inference time. To achieve this goal the attacker has develop a backdoor attack. The difference between achieving this goal and getting the knowledge of the attacker is about how he develop the backdoor attack to get what he wants and how much he knows to implement the attack into the ML model. The goal do not concentrate on specific attacks, only on what the attacker have to do in general. \\
+The next subsection explain how the attacks are implemented and what an attacker have to do to implement them into a ML model.
 
 \subsection{Implementing backdoor attacks from the ART}
 
-The following three attacks are all based on the ART \cite{art2018} and represent white-box and black-box attacks and both targeted and untargeted attacks. These attacks are the main factor to assign the values to the base measures. The attacks already differentiate between the original and poisoned dataset for evaluation.
+The following three attacks are all based on the ART \cite{art2018} and represent white-box and black-box attacks and both targeted and untargeted attacks. These attacks are the main factor to assign the values to the base measures. The attacks already differentiate between the original and poisoned dataset for evaluation. To implement the attacks and measure the attacker's goal to get an inference failure, the following steps has an attacker to do \cite{DBLP:journals/corr/abs-2003-03675}: \\
+
+\begin{enumerate}
+  \item Taking one or more backdoor pattern
+  \item Taking target labels corresponding to the patterns
+  \item Place it at a specific or random location
+  \item Place the backdoor trigger to a subset of the original data
+  \item Mix it with the original data
+  \item Mapping the backdoor triggers to the corresponding target labels
+\end{enumerate}
 
 \subsubsection*{Backdoor attacks from the ART}
 \label{sec:backdoors_art}
@@ -70,8 +79,7 @@ random images, the poisoned images are replaced back to the training data. These
 testing the ML model.\\
 
 
-The first attack uses the \textit{Pattern Backdoor Attack} class without any other backdoor classes from the ART. This attack which bases on Gu et al. \cite{DBLP:journals/corr/abs-1708-
-06733} is a black-box attack which is untargeted. In the RMF it uses a pattern backdoor which Figure \ref{fig:original_example} and Figure \ref{fig:poisoned_example} show as the
+The first attack uses the \textit{Pattern Backdoor Attack} class without any other backdoor classes from the ART. This attack which bases on Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} is a black-box attack which is untargeted. In the RMF it uses a pattern backdoor which Figure \ref{fig:original_example} and Figure \ref{fig:poisoned_example} show as the
 difference between the original and the poisoned image. The goal of this attack is to change the original label to a random other label. This attack can be executed without any
 information because it is not important which training data the ML model use and what ML model is used for the training itself.
 
@@ -79,13 +87,13 @@ information because it is not important which training data the ML model use and
   \centering
   \begin{minipage}[b]{0.4\textwidth}
     \includegraphics[width=8cm]{pictures/original_example.png}
-    \caption{Street sign without a backdoor pattern with the label \textit{Right-of-way at intersection}}
+    \caption{Street sign without a backdoor pattern with the label \textit{Right-of-way at intersection}.}
     \label{fig:original_example}
   \end{minipage}
   \hfill
   \begin{minipage}[b]{0.4\textwidth}
     \includegraphics[width=8cm]{pictures/poisoned_example.png}
-    \caption{Street sign with a backdoor pattern but still with the original label \textit{Right-of-way at intersection}}
+    \caption{Street sign with a backdoor pattern but still with the original label \textit{Right-of-way at intersection}.}
     \label{fig:poisoned_example}
   \end{minipage}
 \end{figure}
@@ -93,8 +101,8 @@ information because it is not important which training data the ML model use and
 After poisoning the images these image need be copied back into the original training data. Before this can be done the poisoned data must replace the original training data which contain
 no backdoor. When the RMF take the random original images, it save them into a temporary variable and then delete the images from the original training data. The next step is the
 poisoning while the poisoned data and the original training data need the same shape and dimension which make it possible to copy the poisoned images. As mentioned before the poisoning
-function takes only two specific shapes which make it easy to have the same shape in the original training data and poisoned data. The implementation of the attack additionally shows the
-effort an attacker have to implement this attack. Thus the steps can be used for the attacker's knowledge risk indicator. The steps to execute this attacks are the following: \\
+function takes four specific shapes which make it easy to have the same shape in the original training data and poisoned data. The implementation of the attack additionally shows the
+effort an attacker have to implement this attack. Thus the steps can be used for the attacker's knowledge risk indicator. The steps to execute this attack are the following: \\
 
 \begin{enumerate}
   \item Choose a backdoor pattern
@@ -106,7 +114,7 @@ effort an attacker have to implement this attack. Thus the steps can be used for
 The \textit{Clean Label Backdoor Attack} \cite{turner2018clean} poison images and misclassify during the training time. To use this attack the \textit{Pattern Backdoor Attack} must be
 used before and then the clean label attack can be executed after training. After adding the backdoor trigger with \textit{Pattern Backdoor Attack} the original training data are trained
 with a proxy classifier which should do the same classification tasks as the original classifier. The first poison step is selecting target images. As next the PGD (which is untargeted)
-must be implemented to make it harder classify correctly. The last step is adding the backdoor trigger and add the target label. The steps to execute this attacks are the following: \\
+must be implemented to make it harder classify correctly. The last step is adding the backdoor trigger and add the target label. The steps to execute this attack are the following: \\
 
 \begin{enumerate}
   \item Choose a backdoor pattern
@@ -157,11 +165,11 @@ The parameters of the \textit{Hidden Trigger Backdoor Attack} are analog to the 
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=9cm]{pictures/attack_relationship.png}
-  \caption{Both attack classes (\textit{Clean Label Backdoor Attack} and \textit{Hidden Trigger Backdoor Attack}) get the backdoor from the \textit{Pattern Backdoor Attack}}
-  \label{fig:relation_risk_ind}
+  \caption{Both attack classes (\textit{Clean Label Backdoor Attack} and \textit{Hidden Trigger Backdoor Attack}) get the backdoor from the \textit{Pattern Backdoor Attack}.}
+  \label{fig:attack_relationship}
 \end{figure}
 
-The steps to execute this attacks are the following: \\
+The steps to execute this attack are the following: \\
 
 \begin{enumerate}
   \item Choose a backdoor pattern
@@ -181,21 +189,20 @@ To show all steps of the risk measurement the RMF has a function that documents 
   log(f"{variable_name}", 'INFO')
 \end{lstlisting}
 
-In order not to depend on the different ML libraries the RMF gets its own functions of the different ML metrics. That increases the support of different Python libraries for ML risk
-measurement.
+This function should make it possible for human judgment to find the critical parts where the ML model is particularly vulnerable for backdoor attacks.
 
 \subsection{Using the threat model}
 
-The measurement methods are implemented based on the threat model of Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}. This thesis concentrates on specific risk indicators whereby the threat model functions do not expect risk indicators as arguments. The low- and high-level attributes do not need an own function because both can be saved into a list of values. So, there is only a mapping function which takes these values as arguments.
+The measurement methods are implemented based on the threat model of Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}. This thesis concentrates on specific risk indicators whereby the threat model functions do not expect risk indicators as arguments. The low- and high-level attributes do not need an own function because both can be saved into a list of values. So, there is only the mapping function which takes these values as arguments.
 
 \subsubsection*{Mapping between the attributes}
 
-The attack time and specificity are the only risk indicators which have to be mapped to the attacker's knowledge and goal. Based on the low-level attributes, the high-level attributes are additionally adjusted after the measurement. 
+The attack time and specificity are the only risk indicators which have to be mapped to the attacker's knowledge and goal. Based on the low-level attributes, the high-level attributes are additionally adjusted after the measurement. After the execution of the attacks, the values of the attack itself - specificlly the attack time - is used to measure the time an attacker needed to execute its attack \cite{DBLP:journals/corr/abs-2012-04884}. This measurement is based on the difference between training of the ML model without and with the attack. The attack time for measuring the extent of damage is used to see which vulnerabilities a ML model has during the training or test time \cite{DBLP:journals/csur/RosenbergSER21}.
 
 \subsection{The implemented measurement construct of ISO 27004}
 
 After assigning the risk indicators based on the threat model of Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}, this subsection explains the implemented measurement construct starting from the base measures up to the decision criteria. \\
-The measurement function is a single function which takes the base measures that has to be combined to the derived measures. To access these base measures, they must first be separated from the base measures that are given directly to the analytical model function. Figure \ref{fig:impl_meas_func} visualizes the procedure of the measurement function.
+The measurement function is a single function which takes the base measures that has to be combined to the derived measures. To access these base measures, they must first be separated from the base measures that are given directly to the analytical model function. Figure \ref{fig:impl_meas_func} visualizes the procedure of the measurement function. The first measurement function calculates the derived measures of the TP, TN, FP, FN into the ML metrics such as F1-Score, precision-recall, and confusion matrix with the mathematical functions from Nguyen and Zeigermann \cite{9783960101925}. In order not to depend on the different ML libraries the RMF gets its own functions of the different ML metrics. That increases the support of different Python libraries for ML risk measurement. The next function combines the attack steps. Due to the backdoor attacks only the training time is considered here because the risk indicator only returns this attack time. The attack time at the attacker refers to the time needed to perform the corresponding attack for the training.
 
 \begin{figure}[ht!]
   \centering
@@ -213,6 +220,15 @@ Figure \ref{fig:impl_ana_mod} shows the procedure of the analytical model. The a
   \label{fig:impl_ana_mod}
 \end{figure}
 
+The last step to get the measurement results shows Figure \ref{fig:impl_dec_criteria} where is input for the decision criteria are the two possible indicators from Figure \ref{fig:impl_ana_mod}. The attacker's effort have to be in an interval which have to be specified as an information need. The extent of damage must also be checked based on an information need \cite{ISO_27004_2009}.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=10cm]{pictures/impl_dec_criteria.png}
+  \caption{The analytical model takes the separated base measures and derived measures. Then it distribute them to the inner analytical models.}
+  \label{fig:impl_dec_criteria}
+\end{figure}
+
 \subsection{Show the measurement results}
 
-The measurement results show the monitored data based on the measurement process of ISO 27004 \cite{ISO_27004_2009}. This contains all logged risk indicator values and ML metrics.  A second part shows the risk for the ML model with an attack. The risk is calculated by $Risk = $ \textit{Extent of damage} $*$ \textit{Probability of occurence}. The following section evaluates the RMF risk measurement based on a case study which contains the street sign classification on autonomous driving which is attacked by different backdoor attacks.
+The measurement results show the monitored data based on the measurement process of ISO 27004 \cite{ISO_27004_2009}. This contains all logged risk indicator values and ML metrics. A second part shows the risk for the ML model with an attack. The risk is calculated by $Risk = $ \textit{Extent of damage} $*$ \textit{Probability of occurence}. The following section evaluates the RMF risk measurement based on a case study which contains the street sign classification on autonomous driving which is attacked by different backdoor attacks separately.

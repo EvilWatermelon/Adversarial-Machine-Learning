@@ -63,7 +63,6 @@ figure systems. ISO 27005 is the standard for risk management, ISO 27006 makes r
   \label{fig:standard_relations}
 \end{figure}
 
-
 \subsubsection*{ISO standard for risk measurement}
 
 Kersten et al. \cite{kersten_reuter_schroeder_wolfenstetter_2013} explain if a security system wants a certification then ISO 27001 must be fulfilled. The other related standards shown in figure \ref{fig:standard_relations} are optional and are not bound to get the certification. For the RMF, ISO 27004 is the standard to measure risks and the other ISO 27000 standards are not considered further.
@@ -168,9 +167,9 @@ These metrics will be used as risk indicators which will be further explained in
 \subsection{Approaches for risk measurement proposals and evaluation of risks of a ML model}
 \label{sec:approaches}
 
-This thesis is divided into two approaches. Jakub Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} propose in their paper different proposals to measure risks with different
-aspects. These aspects are used in this thesis as proposals for for the risk indicators and will be extended in subsection \ref{sec:risk_indicators}. These different proposals are attack specificity, attack time, attacker's knowledge, and attacker's goal. Attack time is split in training time and deployment time. Training time is the attack time when the model gets manipulated while it trains. Deployment time is the attack time when the hacker attacks a ML model after its release. Attacker's knowledge is the amount of information the hacker has available. Attackers specificity is the amount an attacker needs to manipulate the output of a
-ML model. Attacker's goal is a classification about what the attacker try to achieve with an attack. These four proposals may serve as a basis for further risk indicators for risk measurement. Since these suggestions overlap with the characteristics from the threat model of Doynikova et al. these suggestions can be raised from the low-level and high-level properties.\\
+This thesis is divided into two approaches. Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} propose in their paper different proposals to measure risks with different
+aspects. These aspects are used in this thesis as proposals for for the risk indicators and will be extended in subsection \ref{sec:risk_indicators}. These different proposals are attack specificity, attack time, attacker's knowledge, and attacker's goal. Attack time is split in training time and deployment time. Training time is the attack time when the model gets manipulated while it trains. Deployment time is the attack time when the hacker attacks a ML model after its release. Attacker's knowledge is the amount of information the hacker has available. Attacker's specificity is the amount an attacker needs to manipulate the output of a
+ML model. Attacker's goal is a classification about what the attacker try to achieve with an attack. These four proposals may serve as a basis for further risk indicators for risk measurement. Since these suggestions overlap with the characteristics from the threat model of Doynikova et al. these suggestions can be raised from the low-level and high-level properties. The work of Breier et al. do not concentrate on the attack, which is a research gap this thesis is trying to fill.  \\
 Paul Schwerdtner et al. \cite{DBLP:journals/corr/abs-2011-04328} is the second approach of this thesis. Schwerdtner et al. show a technical framework to evaluate the risks for ML models.
 Schwerdtner et al. give an evaluation whether it is secure to deploy a ML model or not. The ML model in Schwerdtner et al. must be a fully developed ML model that is trained and tested.
 Schwerdtner et al. concentrate on input data when the ML model has finished training and testing. The technical framework can test ML models under specific conditions in a scenario but can not find or measure risks while the training process. At this point the RMF would then find use.\\

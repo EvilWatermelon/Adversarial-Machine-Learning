@@ -127,27 +127,69 @@ These three functions form the computational resources risk indicator: \\
 \end{lstlisting}
 
 \noindent\textbf{attack}
-This argument takes the executed attack function to poison the training data
+This argument takes the executed attack function to poison the training data \\
 
 \begin{lstlisting}
   attackers_goal()
 \end{lstlisting}
 
 \begin{lstlisting}
-  positive_negative_label()
+  positive_negative_label(thresholds=None, name=None, dtype=None)
 \end{lstlisting}
+
+\noindent\textbf{thresholds=None}
+\\ \\
+\textbf{name=None}
+\\ \\
+\textbf{dtype=None}
+\\ \\
 
 \begin{lstlisting}
-  attack_time()
+  attack_time(attack)
 \end{lstlisting}
+
+\noindent\textbf{attack}
+This argument takes the executed attack function to poison the training data \\
 
 \begin{lstlisting}
-  attack_specificty()
+  attack_specificty(target)
 \end{lstlisting}
+
+\noindent\textbf{target}
+This argument expects if the attack is targeted or untargeted \\
+
+The following functions are used for the measurement construct: \\
 
 \begin{lstlisting}
-  training_data()
+  mapping(low_l, high_l)
 \end{lstlisting}
 
-\noindent\textbf{x}
-This argument takes the used training data
+\noindent\textbf{low\_l}
+This argument must be a list of all low-level attributes \\
+
+\noindent\textbf{high\_l}
+This argument must be a list of all high-level attributes \\
+
+\begin{lstlisting}
+  measurement_functions(base_measures)
+\end{lstlisting}
+
+\noindent\textbf{base\_measures}
+This argument have to be a list of the assigend risk indicators \\ \\
+
+\begin{lstlisting}
+  analytical_model(base_mea_raw, derived_measures)
+\end{lstlisting}
+
+\noindent\textbf{base\_mea\_raw}
+This argument takes a list of all base measures that are not used for the derived measures \\
+
+\noindent\textbf{derived\_measures}
+This argument takes a list of all derived measures from the measurement function \\
+
+\begin{lstlisting}
+  decision_criteria(*indicator)
+\end{lstlisting}
+
+\noindent\textbf{*indicator}
+This \textbf{*args} is an argument that takes all indicators from the analytical model

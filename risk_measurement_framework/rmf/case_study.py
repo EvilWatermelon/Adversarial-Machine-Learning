@@ -28,6 +28,7 @@ from PIL import Image
 from attacks.art.backdoors import *
 from visualizations.plot import *
 from measurement.monitoring import *
+from measurement.measurement import *
 
 from art.estimators.classification import KerasClassifier, SklearnClassifier
 from art.defences.trainer import AdversarialTrainerMadryPGD
@@ -39,8 +40,13 @@ from keras.layers import Dense, Flatten, Conv2D, MaxPooling2D, Activation, Dropo
 from tensorflow import keras
 
 print("Declare variables...")
+
 monitoring_attacker = Attacker()
 monitoring_attack = Attack()
+
+low_l = list()
+high_l = list()
+
 monitoring_attacker.start_ram_monitoring()
 
 np.random.seed(42)
@@ -197,8 +203,9 @@ def model_training(train_path, data_dir, image_data, image_labels):
 
     print("Start training...")
 
-    start = time.process_time()
+    sta_tim = attack.start_time()
     # Train the model
+
     model = KerasClassifier(create_model(X_train))
     proxy = AdversarialTrainerMadryPGD(KerasClassifier(create_model(X_train)), nb_epochs=10, eps=0.15, eps_step=0.001)
     proxy.fit(X_train, y_train)
@@ -210,8 +217,14 @@ def model_training(train_path, data_dir, image_data, image_labels):
     print("Start poison training...")
     model.fit(poison_data, poison_label, nb_epochs=10)
 
-    print(time.process_time() - start)
+    end_tim = attack.end_time()
+    cpu = monitoring_attacker.cpu_resources()
+    min_percent, min_memory = monitoring_attacker.gpu_resources()
     print("Finished training!")
+
+    attack_time = monitoring_attack.attack_time(sta_tim, end_tim, "clean_label")
+    attackers_goal = monitoring_attacker.attackers_goal("clean_label")
+    attackers_knowledge = monitoring_attacker.attackers_knowledge("clean_label")
 
     return model, backdoor, targets
 
@@ -278,6 +291,6 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 labels = read_test_data(train_path, data_dir, image_data, image_labels)
 
 #print(classification_report(labels, pred))
-monitoring_attacker.ram_resources()
-monitoring_attacker.cpu_resources()
-monitoring_attacker.gpu_resources()
+current, peak = monitoring_attacker.ram_resources()
+
+mapping(low_l, high_l)

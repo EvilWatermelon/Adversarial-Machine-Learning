@@ -2,7 +2,7 @@ import tracemalloc
 import psutil
 
 from gpuinfo import GPUInfo
-from metrics.log import *
+from measurement.log import *
 
 counter = 0
 
@@ -124,11 +124,22 @@ class Attack:
         return tp, tn, fp, fn
 
 
-    def attack_time(self, attack):
+    def start_time():
+        start = time.process_time()
+        return start
+
+    def end_time():
+        end = time.time()
+        return end
+
+    def attack_time(self, start_time, end_time, attack):
         """
-        0: training times
+        0: training time
         1: test time
         """
+
+        attack_time = end_time - start_time
+        log(f"Time to execute the attack: {attack_time}")
 
         attacks = {
             "clean_label": 0,
@@ -136,11 +147,10 @@ class Attack:
             "pattern_backdoor": 0
         }
 
-        attack_time = attacks.get(attack)
-
+        attack_phase = attacks.get(attack)
         log(f"Attack time: {attack_time}, Training: 0, Testing: 1")
 
-        return attack_time
+        return attack_time, attack_phase
 
     def accuracy_log(self, true_values, predictions, normalize=False):
 
@@ -154,10 +164,22 @@ class Attack:
 		    log(f"Normalized accurary: {normalization}")
             return normalization
 
-    def attack_specificty(self, target):
+    def attack_specificty(self, target: bool, poison_number: float, training_images: int):
         if target:
             log("Untargeted attack")
-            return 0
+            log("Choose a target label")
+            counter += 1
+            log("Choose a number of images to poison")
+            counter += 1
+            return counter
         else:
             log("Targeted attack")
-            return 1
+            log("Identify the labels")
+            counter += 1
+            log("Choose a source label")
+            counter += 1
+            log("Choose a number of images to poison on the sourced label")
+            counter += 1
+            log("Choose a target label")
+            counter += 1
+            return counter
