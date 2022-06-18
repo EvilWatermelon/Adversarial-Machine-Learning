@@ -3,20 +3,20 @@
 \label{sec:evaluation}
 
 A common example to show backdoor attacks is traffic sign detection (\cite{DBLP:journals/corr/abs-2102-10369}, \cite{DBLP:journals/corr/abs-1708-06733}, \cite{DBLP:conf/codaspy/NudingM20},
-\cite{DBLP:journals/tdsc/LiXZZZ21}). That makes it easier to find datasets and already finished ML models to make a case study. In the following subsections the focus lies on the case study which concept and its implementation is evaluated here. In addition, this section describes real-world examples for which the RMF could be used.
+\cite{DBLP:journals/tdsc/LiXZZZ21}). That makes it easier to find datasets and already finished ML models to make a case study. In the following subsections the focus lies on the case study which concept and its implementation is evaluated here. \\ Further, the requirements and procedures from ISO 27004 in relation with the RMF is discussed in this section. In addition, this section describes real-world examples for which the RMF could be used.
 
 \subsection{Evaluation of the ISO 27004 standard in context to the RMF}
 
-After mapping the ISO 27004 to the RMF one result is that this standard should be mapped to a framework if the process stands in relation to a organization and an implemented ISMS.
+Sections \ref{sec:conFrame} and \ref{sec:implementation} show both that it is possible to design and implement a technical framework for ML security especially risk measurement based on ISO 27004 \cite{ISO_27004_2009}. Also, the decisions that come individually from the organization had to be disregarded by using specific attacks and risk indicators because there is no choice available at this point. However, as soon as individual decisions are required, such as information needs and stakeholder identification, it is no longer possible to implement this without human decisions.
 
 \subsection{Case Study: Developing a SVM for traffic sign detection}
 
 For the case study scikit-learn \cite{scikit-learn} and for preparation of the dataset in Python OpenCV2 have different function to load and resize images \cite{opencv_library}. In their work, Stallkamp et al. \cite{DBLP:conf/ijcnn/StallkampSSI11} built a mulit-category classification dataset. The mulit-category classification dataset contains german traffic signs for image classification. That mulit-category classification dataset uses the german traffic signs from a approx. 10 hours daytime video from different roads.
 This case study is an example to show the functions and results of the RMF. After showing this case study there will be explain and discuss realistic case studies where backdoor attacks could have a more realistic impact for scores of ML models.
 
-\subsection{Structure of the ML model for the case study}
+\subsubsection*{Structure of the ML model for the case study}
 
-The original dataset from Stallkamp et al. \cite{DBLP:conf/ijcnn/StallkampSSI11} is splitted between a training and testing folder. The training folder separate 43 signs into subfolders. This subfolders make it easy to use specific traffic signs which decrease the training time. The information of the folders are written in an eponymous csv-file that are not needed further in this case study. In Figure \ref{fig:traffic_signs} the shown traffic signs can be used for training the SVM and are all labeled in the data preprocessing like the subfolder name 0 - 42.
+The original dataset from Stallkamp et al. \cite{DBLP:conf/ijcnn/StallkampSSI11} is splitted between a training and testing folder. The training folder separate 43 signs into subfolders. This subfolders make it easy to use specific traffic signs which decrease the training time. The information of the folders are written in an eponymous csv-file that are not needed further in this case study. In Figure \ref{fig:traffic_signs} the shown traffic signs can be used for training the SVM and are all labeled in the data preprocessing like the subfolder name 0 - 42. The training set contains traffic signs such as speed limit, prohibitory, derestriction, mandatory, danger, and unique signs.
 
 \begin{figure}[h!]
   \centering
@@ -32,7 +32,7 @@ The original dataset from Stallkamp et al. \cite{DBLP:conf/ijcnn/StallkampSSI11}
   \label{fig:num_of_images}
 \end{figure}
 
-All signs are resized to 30x30 pixel to optimize the performance of the NN. The training sets are also scaled with Keras and TensorFlow to execute the attacks successfully. The training data and test data load from two different folders. All functions, the arguments and a description of them can be found in appendix \ref{sec:case_study_functions}. Figure \ref{fig:nn} shows the NN architecture.
+All signs are resized to 50x50 pixel to optimize the performance of the NN. The training sets are also scaled with Keras and TensorFlow to execute the attacks successfully. The training data and test data load from two different folders. All functions, the arguments and a description of them can be found in appendix \ref{sec:case_study_functions}. Figure \ref{fig:nn} shows the NN architecture.
 
 \begin{figure}[h!]
   \centering
@@ -41,15 +41,22 @@ All signs are resized to 30x30 pixel to optimize the performance of the NN. The 
   \label{fig:nn}
 \end{figure}
 
-The computer to execute the ML model have resources such as, AMD Ryzen \cite{DBLP:conf/hotchips/AroraBW20} 7 5800X 8-Core Processor with 3.80 GHz, 16 GB of RAM, and a NVIDIA GeForce RTX \cite{DBLP:journals/pcs/SanzharovFG20} 3060 Ti. These resources can be used for the risk indicator computational resources to measure the original and attacked ML model.
-
-\subsubsection*{Expected results of the case study}
+The computer to execute the ML model have resources such as, AMD Ryzen \cite{DBLP:conf/hotchips/AroraBW20} 7 5800X 8-Core Processor with 3.80 GHz, 16 GB of RAM, and a NVIDIA GeForce RTX \cite{DBLP:journals/pcs/SanzharovFG20} 3060 Ti. These resources are available to the attacker and to measure the computational resources to get the attacker's effort.
 
 \subsection{Differences between manipulated and original dataset}
 
-The Python plots from the case study show in this subsection examples images to show the differences between the original and manipulated dataset.
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=10cm]{pictures/backdoor_example_rmf.png}
+  \caption{The left image shows a clean output. The right image shows a poisoned output with a wrong prediction. Both images are the output from the ML model with the \textit{Clean Label Backdoor Attack} from the RMF.}
+  \label{fig:backdoor_example_rmf}
+\end{figure}
 
-\subsection{Results from the risk measurement based on the risk indicators}
+The Python plots from the case study show in this subsection examples images to show the differences between the original and manipulated dataset. Figure \ref{fig:backdoor_example_rmf} visualizes the prediction of the ML model with the attack of the RMF. If the ML model is executed multiple times, the poisoned image show always the same wrong label because the attack specificity is targeted.
+
+\subsection{Results from the measurement methods}
+
+For this case study, the ML model is attacked by a \textit{Clean Label Backdoor Attack} with a backdoor trigger that Figure \ref{fig:poisoned_hidden_trigger} shows.
 
 \subsubsection*{Risk indicators to measure the attacker's effort}
 \textbf{Attacker's goal} \\
@@ -57,9 +64,18 @@ The Python plots from the case study show in this subsection examples images to 
 \textbf{Computational resources} The computational resources that are measured are the CPU, GPU, and RAM. The RAM measurement starts at the beginning of the implemented ML model and shows after finishing the training and testing time of the ML model how much RAM resources the ML model used. When the ML model has no attacks implemented, the ML model needs \%
 
 \subsubsection*{Risk indicators to measure the extent of damage}
-\textbf{Attack time} All backdoor attacks are executing during training time. \\
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=8cm]{pictures/feature_match.jpg}
+  \caption{Backdoor image feature point matched with the backdoor in the poisoned image. To show the success of this matching, the backdoor trigger in the image on the right has been enlarged. The size of the backdoor trigger makes no difference.}
+  \label{fig:feature_match}
+\end{figure}
+
+\textbf{Attack time} All backdoor attacks are executing during training time. Figure \ref{fig:feature_match} shows that FLANN and SIFT found the backdoor in a poisoned image. The time to train a ML model without the attack and inference time takes $962.14$ seconds. When the attack is added, it is $1037.23$ seconds.
+
 \textbf{Positiv and negative label} \\
-\textbf{Accuracy} The accuracy is a risk indicator should be decreased as much as possible if an ML model is attacked with a backdoor attack. The original ML model has an accuracy of $96\%$ \\
+\textbf{Accuracy} The accuracy is a risk indicator should be decreased as much as possible if an ML model is attacked with a backdoor attack. The original ML model has an accuracy of $94.61\%$ \\
 \textbf{Attack specificity} The \textit{PoisoningAttackBackdoor} is a untargeted attack, \textit{PoisoningAttackCleanLabelBackdoor} is a targeted attack, and the \textit{HiddenTriggerBackdoor} is a targeted attack.
 
 \subsection{Poisoning and backdoor attacks in real applications}

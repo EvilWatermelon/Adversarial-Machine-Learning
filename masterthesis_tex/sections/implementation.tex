@@ -2,7 +2,7 @@
 \section{Implementation}
 \label{sec:implementation}
 
-Afer explaining and discussing the concept this section describe the implementation of the technical framework RMF by following the procedures of ISO 27004 \cite{ISO_27004_2009}. The technical RMF uses Python 3.7 as the programming language and ART as the basis. Beside the attacks given by the ART, there is a function from the technical RMF to execute individual attacks. This technical RMF should be used a step ahead of using the framework of Schwerdtner et al.
+Afer explaining and discussing the concept this section describe the implementation of the technical framework RMF by following the procedures of ISO 27004 \cite{ISO_27004_2009}. The technical RMF uses Python 3.7 \cite{10.5555/1593511} as the programming language and ART as the basis. Beside the attacks given by the ART, there is a function from the technical RMF to execute individual attacks. This technical RMF should be used a step ahead of using the framework of Schwerdtner et al. \cite{DBLP:journals/corr/abs-2011-04328}.
 
 \subsection{Structure of the RMF}
 
@@ -35,18 +35,39 @@ The RMF is structured as follows: \\
 The risk indicators are the main part for the risk measurement. Therefore the risk indicators are used through the complete risk measurement. Every risk indicator is implemented as an own
 function in the RMF. This makes it possible to measure the risk indicator values at every step during the ML model training. The goal is to use measure the risk indicator values with the
 original training data and the manipulated training data. The $accuracy=\frac{n(correctly\_predicted)}{n(all)}$ is implemented as Nguyen and Zeigermann \cite{9783960101925} describe it.
-The next risk indicator is the attack time which checks the time an attack needs to be executed and if the attack is executed during training or inference time. Attack
-specificity is an risk indicator that measures if the attack is targeted or untargeted. This is a risk indicator that measures where the backdoor trigger is implemented. The ART attacks
-have a parameter that takes a target optionally. If the target is random, there is no specific label. If it is targeted, there is a specific label where a certain number of images in percentage are poisoned or specific images of a targeted label. As next is the TP, TN, FP, FN. Keras show these values with a
+The next risk indicator is the attack time which checks the time an attack needs to be executed and if the attack is executed during training or inference time. Depending on the targeted phase, the function for this risk indicator checks the ML for vulnerabilites. Every Vulnerability increases a counter to check how much exploits are in the ML algorithm. Since in this thesis only backdoor attacks are performed, finding vulnerabilities refers to checking if backdoor triggers are in images \cite{DBLP:journals/corr/abs-1708-06733}, \cite{DBLP:journals/corr/abs-1907-07296}. This matching of patterns in images do the Fast Library for Approximate Nearest Neighbors (FLANN) \cite{DBLP:journals/corr/FuC16} in relation with the Scale Invariant Feature Transform (SIFT) algorithm \cite{Songtao2017AnIM}. The following Python algorithm shows how both work in combination: \\
+
+\begin{lstlisting}
+  img1 = cv.imread('box.png',cv.IMREAD_GRAYSCALE)          # queryImage
+  img2 = cv.imread('box_in_scene.png',cv.IMREAD_GRAYSCALE) # trainImage
+
+  # Initiate SIFT detector
+  sift = cv.SIFT_create()
+
+  # find the keypoints and descriptors with SIFT
+  kp1, des1 = sift.detectAndCompute(img1,None)
+  kp2, des2 = sift.detectAndCompute(img2,None)
+
+  # FLANN parameters
+  FLANN_INDEX_KDTREE = 1
+  index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
+  search_params = dict(checks=50)   # or pass empty dictionary
+  flann = cv.FlannBasedMatcher(index_params,search_params)
+  matches = flann.knnMatch(des1,des2,k=2)
+\end{lstlisting}
+
+\textit{img1} is the pattern that the algorithm should find in \textit{img2}. SIFT is feature extraction algorithm which detects points of an image's scale space. That detection comes from a variable-scale Gaussian convolution that takes an input image. The next part is the positioning of feature points, then the algorithm assigns the direction of these feature points with a pixel gradient histogram. The last part of the algorithm is a description of each feature point's uniqueness by a feature vector. After SIFT the FLANN algorithm searches based on Approximate Nearest Neighbor (ANN) search \cite{DBLP:journals/pami/MujaL14} with a KD-Tree \cite{DBLP:journals/cacm/Bentley75}. \\
+Attack specificity is an risk indicator that measures if the attack is targeted or untargeted. The ART attacks have a parameter that takes a target optionally. If the target is random, then there is no specific label. If it is targeted, there is a specific label where a certain number of images in percentage are poisoned or specific images of a targeted label. As next is the TP, TN, FP, FN. Keras show these values with a
 implemented function in this technical framework. The computational resources get the values from the operating system for the specific executed Python script. The attacker's knowledge is
 implemented based on the attack. For example, if the \textit{Pattern Backdoor Attack} is implemented in the ML model, then the function for the attacker's knowledge returns the steps to
 implement this specific attack \cite{bsi_2013}. Attacker's goal \cite{DBLP:journals/corr/abs-2012-04884} can be an inference failure, obtain secret information, or executing a denial-of-
-service. The goal of this risk indicator is to evaluate it based on monitored data of the attack. So the attack must have characteristics that represent the goal an attacker has. An
+service. The goal of this risk indicator is to evaluate it based on monitored data of the attack. The attack must have characteristics that represent the goal an attacker has. An
 inference failure happens during the testing phase. So when an attacker try to execute an inference failure he could use exploratory attacks \cite{tabassi2019taxonomy} or evasion attacks \cite{DBLP:conf/sp/Carlini017}. Obtain secret information can be for example stealing model attacks \cite{DBLP:journals/corr/abs-2105-00623}, \cite{DBLP:journals/wicomm/ZhangLGQTZ20}. Denial-of-service attacks have the goal to slow
-down the ML model or crash the ML model completly \cite{DBLP:journals/sensors/VaccariAC20}. If one of these goals is identified then this function returns pre-determined steps on how to achieve this goal. If an attacker tries to missclassify the ML model based on backdoor attacks, than the goal could be an inference failure because the image classification fails during inference time. To achieve this goal the attacker has develop a backdoor attack. The difference between achieving this goal and getting the knowledge of the attacker is about how he develop the backdoor attack to get what he wants and how much he knows to implement the attack into the ML model. The goal do not concentrate on specific attacks, only on what the attacker have to do in general. \\
-The next subsection explain how the attacks are implemented and what an attacker have to do to implement them into a ML model.
+down the ML model or crash the ML model completly \cite{DBLP:journals/sensors/VaccariAC20}. If one of these goals is identified then this function returns pre-determined steps on how to achieve this goal. If an attacker tries to missclassify the ML model based on backdoor attacks, then the goal could be an inference failure because the image classification fails during inference time. To achieve this goal the attacker has to develop a backdoor attack. The difference between achieving this goal and getting the knowledge of the attacker is about how they develop the backdoor attack to get what he wants and how much he knows to implement the attack into the ML model. The goal do not concentrate on specific attacks, only on what the attacker have to do in general. \\
+Subsection \ref{sec:impl_backdoor_attacks} explains how the attacks in the measurement methods are implemented and what an attacker have to do to implement them into a ML model. After that, subsection \ref{sec:impl_threat_model} explains how to get the risk indicator values if an attack is executed.
 
 \subsection{Implementing backdoor attacks from the ART}
+\label{sec:impl_backdoor_attacks}
 
 The following three attacks are all based on the ART \cite{art2018} and represent white-box and black-box attacks and both targeted and untargeted attacks. These attacks are the main factor to assign the values to the base measures. The attacks already differentiate between the original and poisoned dataset for evaluation. To implement the attacks and measure the attacker's goal to get an inference failure, the following steps has an attacker to do \cite{DBLP:journals/corr/abs-2003-03675}: \\
 
@@ -181,28 +202,21 @@ The steps to execute this attack are the following: \\
   \item Mix the poisoned with the original images
 \end{enumerate}
 
-\subsection{The logging function}
-
-To show all steps of the risk measurement the RMF has a function that documents them. Assigned values of the risk indicators, the pre-determined steps to measure the attacker's effort, and the calculations of the risk measurement are represented with an optimized logging function, based on the Python logging module. The function takes two arguments such as a message string and the wanted logging level (i.e. INFO or DEBUG). The following example shows an execution of the logging function:
-
-\begin{lstlisting}
-  log(f"{variable_name}", 'INFO')
-\end{lstlisting}
-
-This function should make it possible for human judgment to find the critical parts where the ML model is particularly vulnerable for backdoor attacks.
-
-\subsection{Using the threat model}
+\subsection{Implementing the threat model}
+\label{sec:impl_threat_model}
 
 The measurement methods are implemented based on the threat model of Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}. This thesis concentrates on specific risk indicators whereby the threat model functions do not expect risk indicators as arguments. The low- and high-level attributes do not need an own function because both can be saved into a list of values. So, there is only the mapping function which takes these values as arguments.
 
 \subsubsection*{Mapping between the attributes}
 
-The attack time and specificity are the only risk indicators which have to be mapped to the attacker's knowledge and goal. Based on the low-level attributes, the high-level attributes are additionally adjusted after the measurement. After the execution of the attacks, the values of the attack itself - specificlly the attack time - is used to measure the time an attacker needed to execute its attack \cite{DBLP:journals/corr/abs-2012-04884}. This measurement is based on the difference between training of the ML model without and with the attack. The attack time for measuring the extent of damage is used to see which vulnerabilities a ML model has during the training or test time \cite{DBLP:journals/csur/RosenbergSER21}.
+The attack time and specificity are the only risk indicators which have to be mapped to the attacker's knowledge and goal. Based on the low-level attributes, the high-level attributes are additionally adjusted after the measurement. After the execution of the attacks, the values of the attack itself - specificlly the attack time - is used to measure the time an attacker needed to execute its attack \cite{DBLP:journals/corr/abs-2012-04884}. This measurement is based on the difference between training of the ML model without and with the attack. The attack time for measuring the extent of damage is used to see which vulnerabilities a ML model has during the training or test time \cite{DBLP:journals/csur/RosenbergSER21}. Because values are measured that can be used to measure the effort of an attacker, this risk indicator must be mapped. \\
+For the attack specificity the RMF measures how much images are poisoned and what the attacker has to do to poison targeted images \cite{DBLP:conf/iccv/ZhuNXWW21} or how he poison random images \cite{DBLP:journals/corr/abs-1708-06733}. The amount the attack has to do to poison images is mapped into the attacker's goal and knowledge. \\
+The following subsection describe how the results from the measurement methods are evaluated in the measurement construct.
 
-\subsection{The implemented measurement construct of ISO 27004}
+\subsection{The implemented measurement construct}
 
 After assigning the risk indicators based on the threat model of Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}, this subsection explains the implemented measurement construct starting from the base measures up to the decision criteria. \\
-The measurement function is a single function which takes the base measures that has to be combined to the derived measures. To access these base measures, they must first be separated from the base measures that are given directly to the analytical model function. Figure \ref{fig:impl_meas_func} visualizes the procedure of the measurement function. The first measurement function calculates the derived measures of the TP, TN, FP, FN into the ML metrics such as F1-Score, precision-recall, and confusion matrix with the mathematical functions from Nguyen and Zeigermann \cite{9783960101925}. In order not to depend on the different ML libraries the RMF gets its own functions of the different ML metrics. That increases the support of different Python libraries for ML risk measurement. The next function combines the attack steps. Due to the backdoor attacks only the training time is considered here because the risk indicator only returns this attack time. The attack time at the attacker refers to the time needed to perform the corresponding attack for the training.
+The measurement function is a single function which takes the base measures that has to be combined to the derived measures. To access these base measures, they must first be separated from the base measures that are given directly to the analytical model function. Figure \ref{fig:impl_meas_func} visualizes the procedure of the measurement function. The first measurement function calculates the derived measures of the TP, TN, FP, FN into the ML metrics such as F1-Score, precision-recall, and confusion matrix with the mathematical functions from Nguyen and Zeigermann \cite{9783960101925}. In order not to depend on the different ML libraries the RMF gets its own functions of the different ML metrics. That increases the support of different Python libraries for ML risk measurement. The next function in Figure \ref{fig:impl_meas_func} combines the attack steps by adding all steps together.
 
 \begin{figure}[ht!]
   \centering
@@ -220,7 +234,7 @@ Figure \ref{fig:impl_ana_mod} shows the procedure of the analytical model. The a
   \label{fig:impl_ana_mod}
 \end{figure}
 
-The last step to get the measurement results shows Figure \ref{fig:impl_dec_criteria} where is input for the decision criteria are the two possible indicators from Figure \ref{fig:impl_ana_mod}. The attacker's effort have to be in an interval which have to be specified as an information need. The extent of damage must also be checked based on an information need \cite{ISO_27004_2009}.
+The last step to get the measurement results shows Figure \ref{fig:impl_dec_criteria} which input for the decision criteria are the two possible indicators from Figure \ref{fig:impl_ana_mod}. The attacker's effort have to be in an interval which have to be specified as an information need. The extent of damage must also be checked based on an information need \cite{ISO_27004_2009}. For this thesis there is no interval because the information need is not considered further. If the criteria is fulfilled the indicatos are able to be calculated and then the result can be depicted. This procedure describe subsection \ref{sec:impl_meas_res}.
 
 \begin{figure}[ht!]
   \centering
@@ -230,5 +244,16 @@ The last step to get the measurement results shows Figure \ref{fig:impl_dec_crit
 \end{figure}
 
 \subsection{Show the measurement results}
+\label{sec:impl_meas_res}
 
-The measurement results show the monitored data based on the measurement process of ISO 27004 \cite{ISO_27004_2009}. This contains all logged risk indicator values and ML metrics. A second part shows the risk for the ML model with an attack. The risk is calculated by $Risk = $ \textit{Extent of damage} $*$ \textit{Probability of occurence}. The following section evaluates the RMF risk measurement based on a case study which contains the street sign classification on autonomous driving which is attacked by different backdoor attacks separately.
+The measurement results show the monitored data based on the measurement process of ISO 27004 \cite{ISO_27004_2009}. This contains all logged risk indicator values and visualized ML metrics. A second part shows the risk for the ML model with an attack. The risk is calculated by $Risk = $ \textit{Extent of damage} $*$ \textit{Probability of occurence} \cite{DBLP:journals/access/JianxingHSH21}. This risk value is depicted in a risk matrix which shows how high the risk is with the executed attack. Based on the measurement result should it be possible to interpret the attack but the RMF shows no defense methods. The RMF concentrates only on the attack and the associated risk measurement. What happens with these results and what they are used for remains open. The following section evaluates the RMF risk measurement based on a case study which contains the street sign classification on autonomous driving which is attacked by different backdoor attacks separately.
+
+\subsection{The logging function}
+
+To show all steps of the risk measurement the RMF has a function that documents them. Assigned values of the risk indicators, the pre-determined steps to measure the attacker's effort, and the calculations of the risk measurement are represented with an optimized logging function, based on the Python logging module. The function takes two arguments such as a message string and the wanted logging level (i.e. INFO or DEBUG). The following example shows an execution of the logging function:
+
+\begin{lstlisting}
+  log(f"{variable_name}", 'INFO')
+\end{lstlisting}
+
+This function should make it possible for human judgment to find the critical parts where the ML model is particularly vulnerable for backdoor attacks. The next section evaluates the implemented concept from this section and present the results of a case study which uses the RMF to measure risks of a ML model backdoor attack.

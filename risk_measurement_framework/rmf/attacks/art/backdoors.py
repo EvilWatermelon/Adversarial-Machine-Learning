@@ -24,15 +24,15 @@ def mod(x):
     return x.astype(original_dtype)
 
 # Executing the PoisoningAttackCleanLabelBackdoor attack (black-box)
-def clean_label(x, y, clf, target_label):
+def clean_label(x, y, clf, target_label, poison_number):
     """
     https://people.csail.mit.edu/madry/lab/cleanlabel.pdf
     """
 
     print("Execute clean label backdoor attack...")
-    backdoor = PoisoningAttackBackdoor(add_pattern_bd)
+    backdoor = PoisoningAttackBackdoor(mod)
     attack = PoisoningAttackCleanLabelBackdoor(backdoor=backdoor, proxy_classifier=clf,
-                                               target=target_label, pp_poison=.33, norm=2, eps=5,
+                                               target=target_label, pp_poison=poison_number, norm=2, eps=5,
                                                eps_step=0.1, max_iter=200)
 
     poison_data, poison_labels = attack.poison(x, y)

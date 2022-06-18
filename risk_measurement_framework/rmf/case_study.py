@@ -44,8 +44,8 @@ print("Declare variables...")
 monitoring_attacker = Attacker()
 monitoring_attack = Attack()
 
-low_l = list()
-high_l = list()
+low_l = {}
+high_l = {}
 
 monitoring_attacker.start_ram_monitoring()
 
@@ -185,11 +185,21 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     image_data = image_data[shuffle_indexes]
     image_labels = image_labels[shuffle_indexes]
 
+    """
+    # For test purpose
+    n_train = np.shape(image_labels)[0]
+    num_selection = 1000
+    random_selection_indices = np.random.choice(n_train, num_selection)
+    image_data = image_data[random_selection_indices]
+    image_labels = image_labels[random_selection_indices]
+    """
     X_train, y_train = preprocess(image_data, image_labels, nb_classes=43)
     #X_train = np.expand_dims(X_train, axis=3)
+    # Random Selection:
 
     # Shuffle training data
     n_train = np.shape(y_train)[0]
+
     shuffled_indices = np.arange(n_train)
     np.random.shuffle(shuffled_indices)
     X_train = X_train[shuffled_indices]
@@ -203,28 +213,41 @@ def model_training(train_path, data_dir, image_data, image_labels):
 
     print("Start training...")
 
-    sta_tim = attack.start_time()
-    # Train the model
+    sta_tim = monitoring_attack.start_time()
 
+    # Train the model
     model = KerasClassifier(create_model(X_train))
     proxy = AdversarialTrainerMadryPGD(KerasClassifier(create_model(X_train)), nb_epochs=10, eps=0.15, eps_step=0.001)
     proxy.fit(X_train, y_train)
 
     targets = to_categorical([10], 43)[0]
-
-    poison_data, poison_label, backdoor = clean_label(X_train, y_train, proxy.get_classifier(), targets)
+    poison_number = .50
+    poison_data, poison_label, backdoor = clean_label(X_train, y_train, proxy.get_classifier(), targets, poison_number)
 
     print("Start poison training...")
     model.fit(poison_data, poison_label, nb_epochs=10)
 
-    end_tim = attack.end_time()
+    end_tim = monitoring_attack.end_time()
     cpu = monitoring_attacker.cpu_resources()
+    high_l[cpu] = "CPU"
+
     min_percent, min_memory = monitoring_attacker.gpu_resources()
+    high_l[min_percent] = "GPU"
     print("Finished training!")
 
-    attack_time = monitoring_attack.attack_time(sta_tim, end_tim, "clean_label")
-    attackers_goal = monitoring_attacker.attackers_goal("clean_label")
+    attack_time, found_pattern = monitoring_attack.attack_time(sta_tim, end_tim, "clean_label", '../rmf/backdoors/htbd.png', poison_data)
+    low_l[attack_time] = "Execution time"
+    low_l[found_pattern] = "Found pattern"
+
+    counter, poisoned_images = monitoring_attack.attack_specificty(True, poison_number, X_train.shape[0])
+    low_l[counter] = "Attack specificity"
+    low_l[poisoned_images] = "Number of poisoned images"
+
+    attackers_goal = monitoring_attacker.attackers_goal()
+    high_l[attackers_goal] = "Attacker's goal"
+
     attackers_knowledge = monitoring_attacker.attackers_knowledge("clean_label")
+    high_l[attackers_knowledge] = "Attacker's knowledge"
 
     return model, backdoor, targets
 
@@ -269,6 +292,8 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
     c_idx = np.where(np.argmax(y_test, 1) == c)[0][i] # index of the image in clean arrays
 
     plt.imshow(X_test[c_idx])
+    plt.grid(None)
+    plt.axis('off')
     plt.show()
     print("Prediction: " + str(clean_preds[c_idx]))
 
@@ -283,8 +308,16 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 
     c = 16 # index to display
     plt.imshow(px_test[c].squeeze())
+    plt.grid(None)
+    plt.axis('off')
     plt.show()
     print("Prediction: " + str(poison_preds[c]))
+
+    tp, tn, fp, fn = monitoring_attack.positive_negative_label(model.predict(px_test))
+    low_l[tp] = "TP"
+    low_l[tn] = "TN"
+    low_l[fp] = "FP"
+    low_l[fn] = "FN"
 
     return labels
 
@@ -292,5 +325,9 @@ labels = read_test_data(train_path, data_dir, image_data, image_labels)
 
 #print(classification_report(labels, pred))
 current, peak = monitoring_attacker.ram_resources()
+high_l[current] = "RAM"
+
+print(low_l)
+print(high_l)
 
 mapping(low_l, high_l)
