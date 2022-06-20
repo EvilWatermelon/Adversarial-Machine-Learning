@@ -143,19 +143,15 @@ class Attacker:
 
 class Attack:
 
-    def positive_negative_label(self, thresholds=None, name=None, dtype=None, y_true, y_pred):
-        tp = tf.keras.metrics.TruePositives(thresholds, name, dtype)
-        tp.update_state(y_true, y_pred)
-        tp.result().numpy()
-        tf.keras.metrics.TrueNegatives(thresholds, name, dtype)
-        tf.update_state(y_true, y_pred)
-        tf.result().numpy()
-        fp = tf.keras.metrics.FalsePositives(thresholds, name, dtype)
-        fp.update_state(y_true, y_pred)
-        fp.result().numpy()
-        fn = tf.keras.metrics.FalseNegatives(thresholds, name, dtype)
-        fn.update_state(y_true, y_pred)
-        fn.result().numpy()
+    def positive_negative_label(self, y_true, y_pred, thresholds=None, name=None, dtype=None):
+        y_pred_pos = K.round(K.clip(y_pred, 0, 1))
+        y_pred_neg = 1 - y_pred_pos
+        y_pos = K.round(K.clip(y_true, 0, 1))
+        y_neg = 1 - y_pos
+        tp = K.sum(y_pos * y_pred_pos) / K.sum(y_pos)
+        tn = K.sum(y_neg * y_pred_neg) / K.sum(y_neg)
+        fp = tf.keras.metrics.FalsePositives(thresholds, name, dtype).result()
+        fn = tf.keras.metrics.FalseNegatives(thresholds, name, dtype).result()
 
         return tp, tn, fp, fn
 

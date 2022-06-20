@@ -10,13 +10,11 @@ def mapping(low_l: list(), high_l: list()) -> list:
     base_mea_raw = list()
     base_measures = list()
 
-    for low_item in low_l:
-        base_mea_raw.append(low_item)
-        base_measures.append(low_item)
-
-    for high_item in high_l:
-        base_mea_raw.append(low_item)
-        base_measures.append(low_item)
+    for i, j in low_l.items():
+        if j is "Raw":
+            base_mea_raw.append(low_item)
+        elif j is "Mapping":
+            base_measures.append(low_item)
 
     return base_mea_raw, base_measures
 
