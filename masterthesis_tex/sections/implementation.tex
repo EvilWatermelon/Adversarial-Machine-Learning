@@ -56,7 +56,7 @@ The next risk indicator is the attack time which checks the time an attack needs
   matches = flann.knnMatch(des1,des2,k=2)
 \end{lstlisting}
 
-\textit{img1} is the pattern that the algorithm should find in \textit{img2}. SIFT is feature extraction algorithm which detects points of an image's scale space. That detection comes from a variable-scale Gaussian convolution that takes an input image. The next part is the positioning of feature points, then the algorithm assigns the direction of these feature points with a pixel gradient histogram. The last part of the algorithm is a description of each feature point's uniqueness by a feature vector. After SIFT the FLANN algorithm searches based on Approximate Nearest Neighbor (ANN) search \cite{DBLP:journals/pami/MujaL14} with a KD-Tree \cite{DBLP:journals/cacm/Bentley75}. \\
+\textit{img1} is the pattern that the algorithm should find in \textit{img2}. SIFT is feature extraction algorithm which detects points of an image's scale space. That detection comes from a variable-scale Gaussian convolution that takes an input image. The next part is the positioning of feature points, then the algorithm assigns the direction of these feature points with a pixel gradient histogram. The last part of the algorithm is a description of each feature point's uniqueness by a feature vector. After SIFT the FLANN algorithm searches based on Approximate Nearest Neighbor (ANN) search \cite{DBLP:journals/pami/MujaL14} with a KD-Tree \cite{DBLP:journals/cacm/Bentley75}. After each match the RMF uses the prediction function of Keras to check if the poisoned image predicts the correct target label and then saves the correct label and expected target label as a key-value pair to count how many images are missclassified correctly. This label relation should evaluate in more detail the extent of the attack on the ML model. \\
 Attack specificity is an risk indicator that measures if the attack is targeted or untargeted. The ART attacks have a parameter that takes a target optionally. If the target is random, then there is no specific label. If it is targeted, there is a specific label where a certain number of images in percentage are poisoned or specific images of a targeted label. As next is the TP, TN, FP, FN. Keras show these values with a
 implemented function in this technical framework. The computational resources get the values from the operating system for the specific executed Python script. The attacker's knowledge is
 implemented based on the attack. For example, if the \textit{Pattern Backdoor Attack} is implemented in the ML model, then the function for the attacker's knowledge returns the steps to
@@ -216,7 +216,10 @@ The following subsection describe how the results from the measurement methods a
 \subsection{The implemented measurement construct}
 
 After assigning the risk indicators based on the threat model of Doynikova et al. \cite{DBLP:conf/crisis/DoynikovaNGK20}, this subsection explains the implemented measurement construct starting from the base measures up to the decision criteria. \\
-The measurement function is a single function which takes the base measures that has to be combined to the derived measures. To access these base measures, they must first be separated from the base measures that are given directly to the analytical model function. Figure \ref{fig:impl_meas_func} visualizes the procedure of the measurement function. The first measurement function calculates the derived measures of the TP, TN, FP, FN into the ML metrics such as F1-Score, precision-recall, and confusion matrix with the mathematical functions from Nguyen and Zeigermann \cite{9783960101925}. In order not to depend on the different ML libraries the RMF gets its own functions of the different ML metrics. That increases the support of different Python libraries for ML risk measurement. The next function in Figure \ref{fig:impl_meas_func} combines the attack steps by adding all steps together.
+The measurement function is a single function which takes the base measures that has to be combined to the derived measures. To access these base measures, they must first be separated from the base measures that are given directly to the analytical model function. Figure \ref{fig:impl_meas_func} visualizes the procedure of the measurement function. The first measurement function calculates the derived measures of the TP, TN, FP, FN into the ML metrics such as F1-Score, precision-recall, and confusion matrix with the mathematical functions from Nguyen and Zeigermann \cite{9783960101925}.
+Since the value of the $Risk$ should represent a higher risk at a high value than at a low value, the base measures as well as derived measures must output corresponding results. In order to ensure this representation, it is important for the accuracy, F1-Score, precision-recall, and confusion matrix that their reduced values due to the attack are used as a high value for the risk. Since the accuracy and the other ML metrics are represented as percentages and thus lie between $0$ and $100\%$ or $0$ and $1$, the RMF reverses these values. If the accuracy
+is for example $0.06$ or $6\%$, the RMF converts this value to $9.94$ out of $10$. This allows the value to appropriately reflect how much the accuracy increases the overall $Risk$.
+In order not to depend on the different ML libraries the RMF gets its own functions of the different ML metrics. That increases the support of different Python libraries for ML risk measurement. The next function in Figure \ref{fig:impl_meas_func} combines the attack steps by adding all steps together.
 
 \begin{figure}[ht!]
   \centering
@@ -242,6 +245,27 @@ The last step to get the measurement results shows Figure \ref{fig:impl_dec_crit
   \caption{The analytical model takes the separated base measures and derived measures. Then it distribute them to the inner analytical models.}
   \label{fig:impl_dec_criteria}
 \end{figure}
+
+\subsection{Evaluation Method}
+
+The following steps describe the complete process on how the $Risk$ can be depicted in the risk matrix (the flow graph depict in Figure \ref{fig:flow_graph} the process of this evaluation) \cite{DBLP:journals/corr/abs-2012-04884}:
+
+\begin{enumerate}
+  \item All weights are chosen based on result's impact of each risk indicator on a ML model.
+  \item Each value of a risk indicator is assigned to a weight which represent the impact on the extent of damage or probability of occurrence.
+  \item The value of a risk indicator is mapped with the identified weights.
+  \item The weights depict the structure of the risk matrix.
+  \item Then the calculated $Risk$ is depict in the risk matrix.
+\end{enumerate}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=10cm]{pictures/flow_graph.png}
+  \caption{The process to depict the $Risk$ on the risk matrix.}
+  \label{fig:flow_graph}
+\end{figure}
+
+The goal of this flow graph is to weight the $Risk$ based on the original ML model. For example, if the accuracy is $90\%$ then this value represents the best approximation for the $Risk$ value in the risk matrix. The same weighting applies for the other risk indicators which are able to differentiate between the original and attacked ML model. This weighting could make it possible for an organization to decide the lowest and highest $Risk$ based on the output data and to create the decision criteria.
 
 \subsection{Show the measurement results}
 \label{sec:impl_meas_res}

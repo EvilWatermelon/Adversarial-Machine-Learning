@@ -33,13 +33,13 @@ from measurement.measurement import *
 
 from art.estimators.classification import KerasClassifier, SklearnClassifier
 from art.defences.trainer import AdversarialTrainerMadryPGD
-from art.utils import load_mnist, preprocess, to_categorical
+from art.utils import preprocess, to_categorical
 
 from keras.models import Sequential
 from keras.layers import Dense, Flatten, Conv2D, MaxPooling2D, Activation, Dropout
 
 from tensorflow import keras
-from sklearn.metrics import confusion_matrix
+import keras.backend as K
 
 print("Declare variables...")
 
@@ -126,10 +126,7 @@ def create_model(X_train):
     model.add(Dropout(0.5))
     model.add(Dense(43, activation='softmax'))
 
-    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=[tf.keras.metrics.TruePositives(),
-    tf.keras.metrics.TrueNegatives(),
-    tf.keras.metrics.FalsePositives(),
-    tf.keras.metrics.FalseNegatives()])
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     #tf.keras.utils.plot_model(model, to_file='nn.png', show_shapes=False)
 
     return model
@@ -186,22 +183,15 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     image_data = np.array(image_data)
     image_labels = np.array(image_labels)
 
-    # Shuffling the training data
-    shuffle_indexes = np.arange(image_data.shape[0])
-    np.random.shuffle(shuffle_indexes)
-    image_data = image_data[shuffle_indexes]
-    image_labels = image_labels[shuffle_indexes]
-
+    """
     # For test purpose
     n_train = np.shape(image_labels)[0]
     num_selection = 1000
     random_selection_indices = np.random.choice(n_train, num_selection)
     image_data = image_data[random_selection_indices]
     image_labels = image_labels[random_selection_indices]
-
+    """
     X_train, y_train = preprocess(image_data, image_labels, nb_classes=43)
-    #X_train = np.expand_dims(X_train, axis=3)
-    # Random Selection:
 
     # Shuffle training data
     n_train = np.shape(y_train)[0]
@@ -221,11 +211,10 @@ def model_training(train_path, data_dir, image_data, image_labels):
 
     sta_tim = monitoring_attack.start_time()
 
-    keras_model = create_model(X_train)
+    model = create_model(X_train)
 
     # Train the model
-    model = KerasClassifier(keras_model)
-    proxy = AdversarialTrainerMadryPGD(KerasClassifier(keras_model), nb_epochs=10, eps=0.15, eps_step=0.001)
+    proxy = AdversarialTrainerMadryPGD(KerasClassifier(model), nb_epochs=10, eps=0.15, eps_step=0.001)
     proxy.fit(X_train, y_train)
 
     targets = to_categorical([10], 43)[0]
@@ -233,29 +222,35 @@ def model_training(train_path, data_dir, image_data, image_labels):
     poison_data, poison_label, backdoor = clean_label(X_train, y_train, proxy.get_classifier(), targets, poison_number)
 
     print("Start poison training...")
-    model.fit(poison_data, poison_label, nb_epochs=10)
+    model.fit(poison_data, poison_label,
+              batch_size=512,
+              epochs=10)
+    history = model
 
     end_tim = monitoring_attack.end_time()
     cpu = monitoring_attacker.cpu_resources()
-    high_l[cpu] = "Raw"
+    high_l[cpu] = "cpu"
 
-    min_percent, min_memory = monitoring_attacker.gpu_resources()
-    high_l[min_percent] = "Raw"
+    current, peak = monitoring_attacker.ram_resources()
+    high_l[current] = "ram"
+
+    gpu = monitoring_attacker.gpu_resources()
+    high_l[gpu] = "gpu"
     print("Finished training!")
 
     attack_time, found_pattern = monitoring_attack.attack_time(sta_tim, end_tim, "clean_label", '../rmf/backdoors/htbd.png', poison_data)
-    low_l[attack_time] = "Mapping"
-    low_l[found_pattern] = "Mapping"
+    low_l[attack_time] = "attack_time"
+    low_l[found_pattern] = "found_pattern"
 
     counter, poisoned_images = monitoring_attack.attack_specificty(True, poison_number, X_train.shape[0])
-    low_l[counter] = "Mapping"
-    low_l[poisoned_images] = "Mapping"
+    low_l[counter] = "counter"
+    low_l[poisoned_images] = "poisoned_images"
 
     attackers_goal = monitoring_attacker.attackers_goal()
-    high_l[attackers_goal] = "Mapping"
+    high_l[attackers_goal] = "attackers_goal"
 
     attackers_knowledge = monitoring_attacker.attackers_knowledge("clean_label")
-    high_l[attackers_knowledge] = "Mapping"
+    high_l[attackers_knowledge] = "attackers_knowledge"
 
     return model, backdoor, targets
 
@@ -283,61 +278,63 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 
     test_images = np.array(data)
     X_test, y_test = preprocess(test_images, labels, nb_classes=43)
-    #X_test = np.expand_dims(X_test, axis=3)
 
     clean_preds = np.argmax(model.predict(X_test), axis=1)
     clean_correct = np.sum(clean_preds == np.argmax(y_test, axis=1))
     clean_total = y_test.shape[0]
-
     clean_acc = clean_correct / clean_total
-    print("\nClean test set accuracy: %.2f%%" % (clean_acc * 100))
+    print(f"\nClean test set accuracy: {clean_acc * 100:.2f}%")
+
+    y_true = np.argmax(y_test, axis=1)
+    acc = monitoring_attack.accuracy_log(y_true, clean_preds)
+    low_l['%.2f' % (acc * 100)] = "Accuracy"
 
     # Display image, label, and prediction for a clean sample to show how the poisoned model classifies a clean sample
-
     c = 16 # class to display
     i = 10 # image of the class to display
 
     c_idx = np.where(np.argmax(y_test, 1) == c)[0][i] # index of the image in clean arrays
 
-    plt.imshow(X_test[c_idx])
-    plt.grid(None)
-    plt.axis('off')
-    plt.show()
-    print("Prediction: " + str(clean_preds[c_idx]))
+    #plt.imshow(X_test[c_idx])
+    #plt.grid(None)
+    #plt.axis('off')
+    #plt.show()
+    #print("Prediction: " + str(clean_preds[c_idx]))
 
     not_target = np.logical_not(np.all(y_test == targets, axis=1))
     px_test, py_test = backdoor.poison(X_test[not_target], y_test[not_target])
     poison_preds = np.argmax(model.predict(px_test), axis=1)
-    clean_correct = np.sum(poison_preds == np.argmax(y_test[not_target], axis=1))
-    clean_total = y_test.shape[0]
+    posion_correct = np.sum(poison_preds == np.argmax(y_test[not_target], axis=1))
+    poison_total = y_test.shape[0]
 
-    clean_acc = clean_correct / clean_total
-    print("\nPoison test set accuracy: %.2f%%" % (clean_acc * 100))
+    poison_acc = posion_correct / poison_total
+    print("\nPoison test set accuracy: %.2f%%" % (poison_acc * 100))
+
+    diff = dict(zip(clean_preds[:11970], poison_preds))
+
+    tp, tn, fp, fn, cm = monitoring_attack.positive_negative_label(model, labels=labels[:11970], predictions=poison_preds)
+    for t_p in tp:
+        low_l[t_p] = "tp"
+    for t_n in tn:
+        low_l[t_n] = "tn"
+    for f_p in fp:
+        low_l[f_p] = "fp"
+    for f_n in fn:
+        low_l[f_n] = "fn"
+
+    base_mea_raw, base_measures = separating_measures(low_l, high_l)
+
+    print(y_test.shape)
+    pred = model.predict(X_test)
+    print(pred.shape)
+
+    measurement_functions(base_measures, y_test, pred, 42, cm)
 
     c = 16 # index to display
-    plt.imshow(px_test[c].squeeze())
-    plt.grid(None)
-    plt.axis('off')
-    plt.show()
-    print("Prediction: " + str(poison_preds[c]))
-
-    print(confusion_matrix(py_test.argmax(axis=1), model.predict(px_test).argmax(axis=1)))
-
-    tp, tn, fp, fn = monitoring_attack.positive_negative_label(y_true=py_test, y_pred=model.predict(px_test))
-    low_l[tp] = "metrics"
-    low_l[tn] = "metrics"
-    low_l[fp] = "metrics"
-    low_l[fn] = "metrics"
-
-    return labels
+    #plt.imshow(px_test[c].squeeze())
+    #plt.grid(None)
+    #plt.axis('off')
+    #plt.show()
+    #print("Prediction: " + str(poison_preds[c]))
 
 labels = read_test_data(train_path, data_dir, image_data, image_labels)
-
-#print(classification_report(labels, pred))
-current, peak = monitoring_attacker.ram_resources()
-high_l[current] = "Raw"
-
-print(low_l)
-print(high_l)
-
-mapping(low_l, high_l)

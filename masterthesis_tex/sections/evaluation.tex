@@ -21,23 +21,23 @@ The original dataset from Stallkamp et al. \cite{DBLP:conf/ijcnn/StallkampSSI11}
 \begin{figure}[h!]
   \centering
   \includegraphics[width=12cm]{pictures/traffic_signs.jpg}
-  \caption{Labeled traffic signs adapted from \cite{DBLP:conf/ijcnn/StallkampSSI11}}
+  \caption{Labeled traffic signs adapted from \cite{DBLP:conf/ijcnn/StallkampSSI11}.}
   \label{fig:traffic_signs}
 \end{figure}
 
 \begin{figure}[h!]
   \centering
   \includegraphics[width=15cm]{pictures/num_of_images.png}
-  \caption{Number of images per labels}
+  \caption{Number of images per labels.}
   \label{fig:num_of_images}
 \end{figure}
 
-All signs are resized to 50x50 pixel to optimize the performance of the NN. The training sets are also scaled with Keras and TensorFlow to execute the attacks successfully. The training data and test data load from two different folders. All functions, the arguments and a description of them can be found in appendix \ref{sec:case_study_functions}. Figure \ref{fig:nn} shows the NN architecture.
+All signs are resized to 50x50 pixel to optimize the performance of the NN. The training sets are also scaled with Keras and TensorFlow to execute the attacks successfully. The training data and test data load from two different folders and are trained during ten epochs. All functions, the arguments and a description of them can be found in appendix \ref{sec:case_study_functions}. Figure \ref{fig:nn} shows the NN architecture.
 
 \begin{figure}[h!]
   \centering
   \includegraphics[width=5cm]{pictures/nn.png}
-  \caption{Generated NN architecture image from Keras}
+  \caption{Generated NN architecture image from Keras.}
   \label{fig:nn}
 \end{figure}
 
@@ -56,12 +56,14 @@ The Python plots from the case study show in this subsection examples images to 
 
 \subsection{Results from the measurement methods}
 
-For this case study, the ML model is attacked by a \textit{Clean Label Backdoor Attack} with a backdoor trigger that Figure \ref{fig:poisoned_hidden_trigger} shows.
+For this case study, the ML model is attacked by a \textit{Clean Label Backdoor Attack} with a backdoor trigger that Figure \ref{fig:poisoned_hidden_trigger} shows. $50\%$ of the images are poisoned during the attack to missclassify to the label \textit{10: No passing veh over 3.5 tons}.
 
 \subsubsection*{Risk indicators to measure the attacker's effort}
-\textbf{Attacker's goal} \\
-\textbf{Attacker's knowledge} \\
-\textbf{Computational resources} The computational resources that are measured are the CPU, GPU, and RAM. The RAM measurement starts at the beginning of the implemented ML model and shows after finishing the training and testing time of the ML model how much RAM resources the ML model used. When the ML model has no attacks implemented, the ML model needs \%
+\textbf{Attacker's goal} As the attack is a backdoor attack, the RMF returns for the attacker's goal an inference failure. It takes six steps to develop a backdoor attack. These development steps are generalized and base not on a specific attack. The RMF returned these six steps as a natural number which shows, that the RMF measured the correct goal. \\
+
+\textbf{Attacker's knowledge} This risk indicator returned the number of steps to implement the \textit{Clean Label Backdoor Attack}. Based on the work of Turner et al. \cite{turner2018clean}, this thesis figured out that it takes ten steps to implement this attack. The ART \cite{art2018} define which information are to be used as parameters to execute this attack. \\
+
+\textbf{Computational resources} The computational resources that are measured are the CPU, GPU, and RAM. The RAM measurement starts at the beginning of the implemented ML model and shows after finishing the training time of the ML model how much RAM resources the ML model uses. The CPU and GPU are measured directly after the training without a start point. The training time without the attack uses $970.7B$ RAM, $7.2\%$ CPU, and $8094.27MB$ of the GPU.\\ The training time with the implemented attack uses $1825.73MB$ RAM, $9\%$ CPU, and $8137.81MB$ of the GPU.
 
 \subsubsection*{Risk indicators to measure the extent of damage}
 
@@ -74,9 +76,77 @@ For this case study, the ML model is attacked by a \textit{Clean Label Backdoor 
 
 \textbf{Attack time} All backdoor attacks are executing during training time. Figure \ref{fig:feature_match} shows that FLANN and SIFT found the backdoor in a poisoned image. The time to train a ML model without the attack and inference time takes $962.14$ seconds. When the attack is added, it is $1037.23$ seconds.
 
-\textbf{Positiv and negative label} \\
-\textbf{Accuracy} The accuracy is a risk indicator should be decreased as much as possible if an ML model is attacked with a backdoor attack. The original ML model has an accuracy of $94.61\%$ \\
-\textbf{Attack specificity} The \textit{PoisoningAttackBackdoor} is a untargeted attack, \textit{PoisoningAttackCleanLabelBackdoor} is a targeted attack, and the \textit{HiddenTriggerBackdoor} is a targeted attack.
+\begin{table}[ht!]
+\centering
+  \begin{tabular}{| l | p{1.5cm} | p{2cm} | p{1.5cm} | p{1.5cm} |}
+  \hline
+  \rowcolor{lightgray} Label & TP & TN & FP & FN \\ [0.5ex]
+  \hline
+  Speed limit (20km/h) & 59 & 12570 & 0 & 1 \\
+  Speed limit (30km/h) & 707 & 11898 & 12 & 13 \\
+  Speed limit (50km/h) & 743 & 11873 & 7 & 7 \\
+  Speed limit (60km/h) & 430 & 12169 & 11 & 20 \\
+  Speed limit (70km/h) & 655 & 11959 & 11 & 5 \\
+  Speed limit (80km/h) & 620 & 11953 & 47 & 10 \\
+  End of speed limit (80km/h) & 132 & 12480 & 0 & 18 \\
+  Speed limit (100km/h) & 428 & 12175 & 5 & 22 \\
+  Speed limit (120km/h) & 431 & 12173 & 7 & 19 \\
+  No passing & 479 & 12132 & 18 & 1 \\
+  No passing veh over 3.5 tons & 656 & 11968 & 2 & 4 \\
+  Right-of-way at intersection & 416 & 12204 & 6 & 4 \\
+  Priority road & 682 & 11937 & 3 & 8 \\
+  Yield & 718 & 11907 & 3 & 2 \\
+  Stop & 269 & 12360 & 0 & 1 \\
+  No vehicles & 210 & 12413 & 7 & 0 \\
+  Veh > 3.5 tons prohibited & 149 & 12478 & 2 & 1 \\
+  No entry & 351 & 12269 & 1 & 9 \\
+  General caution & 383 & 12229 & 11 & 7 \\
+  Dangerous curve left & 60 & 12562 & 8 & 0 \\
+  Dangerous curve right & 89 & 12522 & 18 & 1 \\
+  Double curve & 84 & 12538 & 2 & 6 \\
+  Bumpy road & 109 & 12509 & 1 & 11 \\
+  Slippery road & 144 & 12477 & 3 & 6 \\
+  Road narrows on the right & 89 & 12538 & 2 & 1 \\
+  Road work & 476 & 12128 & 22 & 4 \\
+  Traffic signals & 170 & 12445 & 5 & 10 \\
+  Pedestrians & 60 & 12568 & 2 & 0 \\
+  Children crossing & 147 & 12478 & 2 & 3 \\
+  Bicycles crossing & 87 & 12540 & 0 & 3 \\
+  Beware of ice/snow & 133 & 12480 & 0 & 17 \\
+  Wild animals crossing & 266 & 12353 & 7 & 4 \\
+  End speed + passing limits & 60 & 12568 & 2 & 0\\
+  Turn right ahead & 209 & 12417 & 3 & 1 \\
+  Turn left ahead & 119 & 12508 & 2 & 1 \\
+  Ahead only & 389 & 12236 & 4 & 1 \\
+  Go straight or right & 115 & 12508 & 2 & 5 \\
+  Go straight or left & 58 & 12569 & 1 & 2 \\
+  Keep right & 684 & 11934 & 6 & 6 \\
+  Keep left & 88 & 12540 & 0 & 2 \\
+  Roundabout mandatory & 87 & 12535 & 5 & 3 \\
+  End of no passing & 45 & 12561 & 9 & 15 \\
+  End no passing veh > 3.5 tons & 79 & 12534 & 6 & 11 \\
+  \hline
+  \end{tabular}
+  \caption{True and False values (left) before the attack, (right) after the attack.}
+  \label{tab:pos_neg}
+\end{table}
+
+\textbf{TP, TN, FP, FN} Table \ref{tab:pos_neg} shows the TP, TN, FP, and FN from the last epoch before and after the attack.
+
+\textbf{Accuracy} The accuracy is a risk indicator should be decreased as much as possible if an ML model is attacked with a backdoor attack. The original ML model has an accuracy of $94.61\%$ and the accuracy with the poisoned dataset $6.49\%$. \\
+
+\textbf{Attack specificity} The \textit{PoisoningAttackCleanLabelBackdoor} is a targeted attack which means for the attacker it takes four steps to choose a specific label. If there are more than one source and target label then the number of steps would be increased. The following steps must be performed:
+
+\begin{enumerate}
+  \item Identify the labels
+  \item Choose a source label
+  \item Choose a number of images from the source label to poison on the sourced label
+  \item Choose a target label
+\end{enumerate}
+
+\subsection{Evaluation of the measurement construct}
+
+After splitting the base measures, the measurement functions map the splitted base measures together into derived measures.
 
 \subsection{Poisoning and backdoor attacks in real applications}
 

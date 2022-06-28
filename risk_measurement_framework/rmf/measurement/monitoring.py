@@ -1,7 +1,8 @@
 import tracemalloc
 import psutil
+import os
 
-from gpuinfo import GPUInfo
+import nvidia_smi
 from PIL import Image
 from measurement.log import *
 
@@ -12,7 +13,7 @@ import time
 import tensorflow as tf
 from tensorflow import keras
 
-from art.attacks.poisoning.perturbations import insert_image, add_pattern_bd
+from sklearn.metrics import accuracy_score, confusion_matrix
 
 class Attacker:
 
@@ -27,7 +28,8 @@ class Attacker:
         The output is passed to the log function.
         """
         current, peak = tracemalloc.get_traced_memory()
-        log(f"Current memory usage: {current / 10**6}MB; Peak memory usage: {peak / 10**6}MB")
+        current = current / 10**6
+        log(f"Current memory usage: {current}MB; Peak memory usage: {peak / 10**6}MB")
         tracemalloc.stop()
 
         return current, peak
@@ -38,9 +40,8 @@ class Attacker:
         The output is passed to the log function.
         Using psutil for Windows and psutill for Linux.
         """
-        ml_process = psutil.Process()
-
-        cpu = ml_process.cpu_percent(interval=1.0)
+        l1, l2, l3 = psutil.getloadavg()
+        cpu = (l3/os.cpu_count()) * 100
 
         log(f"Current CPU usage: {cpu}%")
 
@@ -53,15 +54,22 @@ class Attacker:
         This function works with Linux and Windows. Mac is not tested.
         """
 
-        available_device = GPUInfo.check_empty()
-        percent, memory = GPUInfo.gpu_usage()
+        nvidia_smi.nvmlInit()
+        used_gpu = list()
 
-        min_percent = percent.index(min([percent[i] for i in available_device]))
-        min_memory = memory.index(min([memory[i] for i in available_device]))
+        deviceCount = nvidia_smi.nvmlDeviceGetCount()
+        for i in range(deviceCount):
+            handle = nvidia_smi.nvmlDeviceGetHandleByIndex(i)
+            info = nvidia_smi.nvmlDeviceGetMemoryInfo(handle)
 
-        log(f"Percent: {min_percent}%, GPU memory: {min_memory}")
+            log(f"Device {i}: {nvidia_smi.nvmlDeviceGetName(handle)}, Memory : ({100 * info.free/info.total:.2f}% free): {info.total / 10**6}(total), {info.free} (free), {info.used / 10**6} (used)")
 
-        return min_percent, min_memory
+            used_gpu.append(info.used / 10**6)
+
+        nvidia_smi.nvmlShutdown()
+        gpu = used_gpu[0]
+
+        return gpu
 
     def clean_label(self):
         counter = 0
@@ -143,17 +151,20 @@ class Attacker:
 
 class Attack:
 
-    def positive_negative_label(self, y_true, y_pred, thresholds=None, name=None, dtype=None):
-        y_pred_pos = K.round(K.clip(y_pred, 0, 1))
-        y_pred_neg = 1 - y_pred_pos
-        y_pos = K.round(K.clip(y_true, 0, 1))
-        y_neg = 1 - y_pos
-        tp = K.sum(y_pos * y_pred_pos) / K.sum(y_pos)
-        tn = K.sum(y_neg * y_pred_neg) / K.sum(y_neg)
-        fp = tf.keras.metrics.FalsePositives(thresholds, name, dtype).result()
-        fn = tf.keras.metrics.FalseNegatives(thresholds, name, dtype).result()
+    def positive_negative_label(self, model, labels, predictions):
 
-        return tp, tn, fp, fn
+        cm = confusion_matrix(labels, predictions)
+        fp = cm.sum(axis=0) - np.diag(cm)
+        fn = cm.sum(axis=1) - np.diag(cm)
+        tp = np.diag(cm)
+        tn = cm.sum() - (fp + fn + tp)
+
+        log(f"TP {tp}")
+        log(f"TN {tn}")
+        log(f"FP {fp}")
+        log(f"FN {fn}")
+
+        return tp, tn, fp, fn, cm
 
     def start_time(self):
         start = time.monotonic()
@@ -225,6 +236,8 @@ class Attack:
             # plt.axis('off')
             # plt.show()
 
+        #TODO: check if matcher found a backdoor, when yes, what is the clean and posioned prediction. If poisoned is correct, count up. Then check with possible poisoned pictures from specificity
+
         if len(images) >= 0:
             found_pattern = 1
             log("Found a backdoor trigger")
@@ -234,17 +247,12 @@ class Attack:
 
         return attack_time, found_pattern
 
-    def accuracy_log(self, true_values, predictions, normalize=False):
+    def accuracy_log(self, true_values, predictions):
 
-        accuracy = np.sum(np.equal(true_values, predictions)) / len(true_values)
-        normalization = np.mean(accuracy)
+        accuracy = accuracy_score(true_values, predictions)
 
-        if normalize:
-            log(f"Accurary: {accuracy}")
-            return accuracy
-        else:
-            log(f"Normalized accurary: {normalization}")
-            return normalization
+        log(f"Accurary: {accuracy}")
+        return accuracy
 
     def attack_specificty(self, target: bool, poison_number: float, training_images: int):
 
