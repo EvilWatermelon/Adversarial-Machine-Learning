@@ -254,7 +254,7 @@ class Attack:
         log(f"Accurary: {accuracy}")
         return accuracy
 
-    def attack_specificty(self, target: bool, poison_number: float, training_images: int):
+    def attack_specificty(self, target, poison_number: float, training_images: int):
 
         counter = 0
         poisoned_images = training_images * poison_number
@@ -269,13 +269,16 @@ class Attack:
             counter += 1
             return counter, poisoned_images
         else:
-            log("Targeted attack")
-            log("Step 1: Identify the labels")
-            counter += 1
-            log("Step 2: Choose a source label")
-            counter += 1
-            log("Step 3: Choose a number of images to poison on the sourced label")
-            counter += 1
-            log("Step 4: Choose a target label")
-            counter += 1
+            if target is 10:
+                log(f"Targeted attack on {target}")
+                log(f"Step 1: Choose the label {target}")
+                counter += 1
+                log("Step 2: Choose a number of images to poison")
+                counter += 1
+                log("Step 3: Choose the possible labels to poison (all labels)")
+                counter += 1
+                log("Step 4: Selecting the target images randomly to poison")
+                counter += 1
+                log("Step 5: Transmit the selected images to the PGD")
+                counter += 1
             return counter, poisoned_images

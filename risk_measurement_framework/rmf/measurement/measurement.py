@@ -2,6 +2,7 @@ from keras import backend as K
 from sklearn.metrics import precision_score, recall_score
 from sklearn.metrics import precision_recall_curve, f1_score
 import seaborn as sns
+import pandas as pd
 import matplotlib.pyplot as plt
 #%matplotlib inline
 plt.rcParams.update({'font.size': 10})
@@ -51,7 +52,7 @@ def separating_measures(low_l, high_l) -> list:
 
     return base_mea_raw, base_measures
 
-def measurement_functions(base_measures, y_test, y_score, n_classes, cm) -> list:
+def measurement_functions(base_measures, y_test, y_score, n_classes, cm, classes) -> list:
 
     def __ml_metrics(y_test, y_score):
 
@@ -66,6 +67,7 @@ def measurement_functions(base_measures, y_test, y_score, n_classes, cm) -> list
         plt.ylabel("precision")
         plt.title("precision vs. recall curve")
         plt.figure(figsize = (20,20))
+
         plt.show()
 
         df_cm = pd.DataFrame(cm, index = classes,  columns = classes)
@@ -74,7 +76,7 @@ def measurement_functions(base_measures, y_test, y_score, n_classes, cm) -> list
 
         plt.show()
 
-        f1 = f1_score(y_test, y_score, average=None)
+        f1 = f1_score(y_test, y_score, average="weighted")
 
         return precision, recall, f1
 
@@ -87,19 +89,27 @@ def measurement_functions(base_measures, y_test, y_score, n_classes, cm) -> list
                              "counter",
                              "attack_time")
 
+        for key, value in base_measures:
+            for indicator in damage_indicators:
+                if value is indicator:
+                    steps += key
+
         return steps
 
     def __extent_of_damage(base_measures):
 
         dmg = 0.0
 
-        damage_indicators = ("found_pattern",
+        damage_indicators = ("actual_poisoned",
                              "poisoned_images",
                              "tp",
                              "tn",
                              "fp",
                              "fn")
-
+        for key, value in base_measures:
+            for indicator in damage_indicators:
+                if value is indicator:
+                    dmg += key
 
         return dmg
 
@@ -117,12 +127,14 @@ def analytical_model(base_mea_raw: list(), derived_measures: list()):
 
     def __calc_eff():
 
-        list_base_measure = [list_base_measure.append(based_measure)
-                             for base_measure in base_mea_raw
-                             if base_measure is "yes"]
-        list_derived_measures = [list_derived_measures.append(derived_measure)
-                                 for derived_measure in derived_measures
-                                 if derived_measure is "no"]
+        for base_measure in base_mea_raw:
+            list_base_measure.append(based_measure)
+
+
+        for derived_measure in derived_measures:
+            list_derived_measures.append(derived_measure)
+
+
 
         sum_base = sum(list_base_measure)
         sum_derived = sum(list_derived_measures)

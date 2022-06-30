@@ -324,11 +324,10 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 
     base_mea_raw, base_measures = separating_measures(low_l, high_l)
 
-    print(y_test.shape)
     pred = model.predict(X_test)
-    print(pred.shape)
+    poison_pred = model.predict(px_test)
 
-    measurement_functions(base_measures, y_test, pred, 42, cm)
+    measurement_functions(base_measures, py_test, poison_pred, 42, cm, CLASSES)
 
     c = 16 # index to display
     #plt.imshow(px_test[c].squeeze())

@@ -138,15 +138,40 @@ For this case study, the ML model is attacked by a \textit{Clean Label Backdoor 
 \textbf{Attack specificity} The \textit{PoisoningAttackCleanLabelBackdoor} is a targeted attack which means for the attacker it takes four steps to choose a specific label. If there are more than one source and target label then the number of steps would be increased. The following steps must be performed:
 
 \begin{enumerate}
-  \item Identify the labels
-  \item Choose a source label
-  \item Choose a number of images from the source label to poison on the sourced label
-  \item Choose a target label
+  \item Choosing the label \textit{10: No passing veh over 3.5 tons}
+  \item Choose a number of images to poison
+  \item Choose the possible labels to poison (all labels)
+  \item Selecting the target images randomly to poison
+  \item Transmit the selected images to the PGD
 \end{enumerate}
 
 \subsection{Evaluation of the measurement construct}
 
 After splitting the base measures, the measurement functions map the splitted base measures together into derived measures.
+
+\subsubsection*{Derived measures}
+
+\textbf{ML metrics} The following Figures show the ML metrics with the original predicitions and the poisoned predicitions during inference time.
+
+
+\begin{figure}[!tbp]
+  \centering
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=8cm]{pictures/precision_recall_curve.png}
+    \caption{The precision-recall curve of the original test dataset. Each color represents a class of the ML model.}
+    \label{fig:precision_recall_curve}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=8cm]{pictures/poisoned_precision_recall.png}
+    \caption{The precision-recall curve of the poisoned test dataset. Each color represents a class of the ML model.}
+    \label{fig:poisoned_precision_recall}
+  \end{minipage}
+\end{figure}
+
+\textbf{Derived attack steps}
+
+\textbf{Derived damage values}
 
 \subsection{Poisoning and backdoor attacks in real applications}
 
