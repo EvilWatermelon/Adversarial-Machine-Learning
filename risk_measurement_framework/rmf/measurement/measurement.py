@@ -72,6 +72,7 @@ def measurement_functions(base_measures, y_test, y_score, n_classes, cm, classes
 
         df_cm = pd.DataFrame(cm, index = classes,  columns = classes)
         plt.figure(figsize = (20,20))
+        plt.yticks([0,20,42])
         sns.heatmap(df_cm, annot=True)
 
         plt.show()
