@@ -183,14 +183,14 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     image_data = np.array(image_data)
     image_labels = np.array(image_labels)
 
-    """
+
     # For test purpose
     n_train = np.shape(image_labels)[0]
     num_selection = 1000
     random_selection_indices = np.random.choice(n_train, num_selection)
     image_data = image_data[random_selection_indices]
     image_labels = image_labels[random_selection_indices]
-    """
+
     X_train, y_train = preprocess(image_data, image_labels, nb_classes=43)
 
     # Shuffle training data
@@ -238,7 +238,7 @@ def model_training(train_path, data_dir, image_data, image_labels):
     high_l[gpu] = "gpu"
     print("Finished training!")
 
-    attack_time, found_pattern = monitoring_attack.attack_time(sta_tim, end_tim, "clean_label", '../rmf/backdoors/htbd.png', poison_data)
+    attack_time, found_pattern = monitoring_attack.attack_time(sta_tim, end_tim, '../rmf/backdoors/htbd.png', poison_data)
     low_l[attack_time] = "attack_time"
     low_l[found_pattern] = "found_pattern"
 
@@ -324,10 +324,8 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 
     base_mea_raw, base_measures = separating_measures(low_l, high_l)
 
-    pred = model.predict(X_test)
     poison_pred = model.predict(px_test)
-
-    measurement_functions(base_measures, py_test, poison_pred, 42, cm, CLASSES)
+    measurement_functions(base_measures, py_test, poison_pred, 42, cm, CLASSES, tp, tn, fp, fn, diff, 10)
 
     c = 16 # index to display
     #plt.imshow(px_test[c].squeeze())

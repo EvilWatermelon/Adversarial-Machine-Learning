@@ -174,7 +174,7 @@ class Attack:
         end = time.monotonic()
         return end
 
-    def attack_time(self, start_time, end_time, attack, backdoor, image_set):
+    def attack_time(self, start_time, end_time, backdoor, image_set):
         """
         0: training time
         1: test time
@@ -189,8 +189,6 @@ class Attack:
             "pattern_backdoor": 0
         }
 
-        attack_phase = attacks.get(attack)
-        log(f"Attack time: {attack_phase}, Training: 0, Testing: 1")
         log("Searching for vulnerabilites...")
         images = list()
 
@@ -235,8 +233,6 @@ class Attack:
             # plt.grid(None)
             # plt.axis('off')
             # plt.show()
-
-        #TODO: check if matcher found a backdoor, when yes, what is the clean and posioned prediction. If poisoned is correct, count up. Then check with possible poisoned pictures from specificity
 
         if len(images) >= 0:
             found_pattern = 1
