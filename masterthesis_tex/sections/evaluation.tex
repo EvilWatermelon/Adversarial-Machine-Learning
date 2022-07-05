@@ -147,7 +147,8 @@ For this case study, the ML model is attacked by a \textit{Clean Label Backdoor 
 
 \subsection{Evaluation of the measurement construct}
 
-After splitting the base measures, the measurement functions map the splitted base measures together into derived measures.
+After the measurement methods, the RMF evaluates the base measures. For this purpose, all values must be unified so that they can be added together. This unification works only for the extent of damage because the corresponding risk indicators have values whose units can be adjusted in each case. The TP, TN, FP, FN is a risk indicator that calculates the ML metrics which have the same unit as the accuracy. This relation makes it possible to convert the ML metrics and the accuracy into a standartized unit. In combination with the number of successfully missclassifications is it possible to calculate all values with the sum formula to the extent of damage as a total value. \\
+The attacker's effort forms from the total number of steps the attacker has to do to execute the attack, the time and the computational resources. These different risk indicators have no approach to be offset by uniform values. Therefore this does not lead to a plausible result, the values can not be combined to a common value, but can be considered individually. From this point on, the measurement construct is adjusted so that all calculated values are presented separately in different risk matrices at the end.
 
 \subsubsection*{Derived measures}
 
@@ -168,6 +169,8 @@ After splitting the base measures, the measurement functions map the splitted ba
     \label{fig:poisoned_precision_recall}
   \end{minipage}
 \end{figure}
+
+Figure \ref{fig:precision_recall_curve} and \ref{fig:poisoned_precision_recall} show the different precision-recall curves with the original test dataset and the poisoned dataset. Each colored function represents the progression of a label. Figure \ref{fig:precision_recall_curve} curve show a clear tendency of the precision-recall curve where the recall values increase steadily while the precision values decrease constantly. As a result, the predictions become closer to the actual results, which causes the threshold to further separate the TP and FN values from the FP and TN. 
 
 \textbf{Derived attack steps}
 
