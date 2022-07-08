@@ -154,7 +154,6 @@ The attacker's effort forms from the total number of steps the attacker has to d
 
 \textbf{ML metrics} The following Figures show the ML metrics with the original predicitions and the poisoned predicitions during inference time.
 
-
 \begin{figure}[!tbp]
   \centering
   \begin{minipage}[b]{0.4\textwidth}
@@ -171,6 +170,20 @@ The attacker's effort forms from the total number of steps the attacker has to d
 \end{figure}
 
 Figure \ref{fig:precision_recall_curve} and \ref{fig:poisoned_precision_recall} show the different precision-recall curves with the original test dataset and the poisoned dataset. Each colored function represents the progression of a label. Figure \ref{fig:precision_recall_curve} curve show a clear tendency of the precision-recall curve where the recall values increase steadily while the precision values decrease constantly. As a result, the predictions become closer to the actual results, which causes the threshold to further separate the TP and FN values from the FP and TN.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=11cm]{pictures/cm_original_testdata.png}
+  \caption{The confusion matrix of the original test dataset.}
+  \label{fig:cm_original_testdata}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=11cm]{pictures/cm_poisoned_testdata.png}
+  \caption{The confusion matrix of the poisoned test dataset.}
+  \label{fig:cm_poisoned_testdata}
+\end{figure}
 
 \textbf{Derived attack steps}
 

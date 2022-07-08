@@ -60,6 +60,7 @@ def measurement_functions(base_measures, y_true, y_score, n_classes, cm, classes
         recall = dict()
         f1_score = list()
         avg_recall = list()
+        avg_precision = list()
 
         for i in range(n_classes):
             precision[i], recall[i], _ = precision_recall_curve(y_true[:, i],
@@ -78,28 +79,31 @@ def measurement_functions(base_measures, y_true, y_score, n_classes, cm, classes
                 rec = 1
 
             avg = 2 * prec * rec / (prec + rec)
+            if np.isnan(avg):
+                avg = 0
             avg_recall.append(rec)
+            avg_precision.append(prec)
             f1_score.append(avg)
 
             plt.plot(recall[i], precision[i], lw=2, label='class {}'.format(i))
 
 
-        apr = average_precision_score(y_true, y_score)
+        apr = sum(avg_precision)/len(avg_precision)
         f1 = sum(f1_score)/len(f1_score)
         avg_rec = sum(avg_recall)/len(avg_recall)
 
-        log(f"F1-Score array: {f1}, Average precision score: {apr}")
+        log(f"F1-Score array: {f1}, Average precision score: {apr}, Average recall score: {avg_rec}")
 
         plt.xlabel("recall")
         plt.ylabel("precision")
         plt.title("precision vs. recall curve")
-        plt.figure(figsize=(20, 20))
 
-        #plt.show()
+        plt.show()
 
         df_cm = pd.DataFrame(cm, index = classes,  columns = classes)
-        sns.heatmap(df_cm, annot=True)
         plt.figure(figsize=(20, 20))
+        sns.heatmap(df_cm, annot=True)
+        #plt.show()
         plt.savefig('cm.png')
 
         ml_metrics = {apr: "apr", avg_rec: "average recall", f1: "f1"}
@@ -144,71 +148,66 @@ def measurement_functions(base_measures, y_true, y_score, n_classes, cm, classes
                             counter += 1
                     actual_poisoned = counter / possible_poisoned
 
-
+        log(f"Actual poisoned: {actual_poisoned}")
         dmg += sum(list(ml_metrics.keys()))
-        dmg += actual_poisoned
+        dmg += actual_poisoned * 10
 
         log(f"Derived measure (damage): {dmg}")
         return dmg
 
-    attack_steps = __attack_steps(base_measures)
+    attack_steps, time = __attack_steps(base_measures)
     dmg = __extent_of_damage(base_measures, diff, target_label)
 
-    derived_measures = [attack_steps, dmg]
+    derived_measures = (attack_steps, time, dmg)
     return derived_measures
 
-def analytical_model(base_mea_raw: list(), derived_measures: list()):
+def analytical_model(base_mea_raw, derived_measures):
 
-    list_base_measure = list()
-    list_derived_measures = list()
+    raw_names = ("cpu",
+                 "ram",
+                 "gpu")
 
     def __calc_eff(base_mea_raw, derived_measures):
 
-        for base_measure in base_mea_raw:
-            list_base_measure.append(based_measure)
+        effort_values = list()
 
-        sum_base = sum(list_base_measure)
+        effort_values.append(derived_measures[0])
+        effort_values.append(derived_measures[1])
 
-        attackers_effort = sum_base + derived_measure[0]
+        for key, value in base_mea_raw.items():
+            for item in raw_names:
+                if value is item:
+                    effort_values.append(key)
 
-        return attackers_effort
+        return effort_values
 
     def __calc_extent(base_mea_raw, derived_measures):
 
         rev_acc = 0.00
 
-        for key, value in base_mea_raw:
+        for key, value in base_mea_raw.items():
             if value is "Accuracy":
-                rev_acc = 10 - value
+                rev_acc = 10 - float(key)
                 log(f"Reversed accuracy: {rev_acc}")
 
-        list_base_measure = [list_base_measure.append(based_measure)
-                             for base_measure in base_mea_raw
-                             if base_measure is "yes"]
-        list_derived_measures = [list_derived_measures.append(derived_measure)
-                                 for derived_measure in derived_measures
-                                 if derived_measure is "no"]
-
-        sum_base = sum(list_base_measure)
-        sum_derived = sum(list_derived_measures)
-
-        extent_of_damage = sum_base + derived_measures[1]
+        extent_of_damage = rev_acc + derived_measures[2]
+        log(f"Extent of damage: {extent_of_damage}")
 
         return extent_of_damage
 
     attackers_effort = __calc_eff(base_mea_raw, derived_measures)
     extent = __calc_extent(base_mea_raw, derived_measures)
 
-    return effort, extent
+    return attackers_effort, extent
 
-def decision_criteria(*indicator, interval_ext, interval_eff) -> float:
+def decision_criteria(interval_ext, interval_eff, *indicator) -> float:
 
-    if indicator[0] > 0 and indicator[0] < interval_ext:
+    if indicator[0] > 0.000 and indicator[0] < interval_ext:
         return indicator[0]
     else:
         raise ValueError(f'Indicator must be between 0 and {intervall_ext}')
 
-    if indicator[1] > 0 and indicator[1] < intervall_eff:
+    if indicator[1] > 0.000 and indicator[1] < intervall_eff:
         return indicator[1]
     else:
         raise ValueError(f'Indicator must be between 0 and {intervall_eff}')

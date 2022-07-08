@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 print("Import modules...")
 import numpy as np
 import pandas as pd
+import seaborn as sns
 import os, sys
 
 from os.path import abspath
@@ -183,13 +184,14 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     image_data = np.array(image_data)
     image_labels = np.array(image_labels)
 
-
+    """
     # For test purpose
     n_train = np.shape(image_labels)[0]
     num_selection = 1000
     random_selection_indices = np.random.choice(n_train, num_selection)
     image_data = image_data[random_selection_indices]
     image_labels = image_labels[random_selection_indices]
+    """
 
     X_train, y_train = preprocess(image_data, image_labels, nb_classes=43)
 
@@ -222,7 +224,7 @@ def model_training(train_path, data_dir, image_data, image_labels):
     poison_data, poison_label, backdoor = clean_label(X_train, y_train, proxy.get_classifier(), targets, poison_number)
 
     print("Start poison training...")
-    model.fit(poison_data, poison_label,
+    model.fit(X_train, y_train,
               batch_size=512,
               epochs=10)
     history = model
@@ -312,7 +314,7 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 
     diff = dict(zip(clean_preds[:11970], poison_preds))
 
-    tp, tn, fp, fn, cm = monitoring_attack.positive_negative_label(model, labels=labels[:11970], predictions=poison_preds)
+    tp, tn, fp, fn, cm = monitoring_attack.positive_negative_label(model, labels=labels, predictions=clean_preds)
     for t_p in tp:
         low_l[t_p] = "tp"
     for t_n in tn:
@@ -325,7 +327,11 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
     base_mea_raw, base_measures = separating_measures(low_l, high_l)
 
     poison_pred = model.predict(px_test)
-    measurement_functions(base_measures, py_test, poison_pred, 42, cm, CLASSES, tp, tn, fp, fn, diff, 10)
+    clean_pred = model.predict(X_test)
+    derived_measures = measurement_functions(base_measures, y_test, clean_pred, 42, cm, CLASSES, tp, tn, fp, fn, diff, 10)
+
+    effort, extent = analytical_model(base_mea_raw, derived_measures)
+    decision_criteria(100000, 10000000, effort, extent)
 
     c = 16 # index to display
     #plt.imshow(px_test[c].squeeze())
