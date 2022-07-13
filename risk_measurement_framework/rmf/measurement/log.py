@@ -16,5 +16,6 @@ def log(message, logging_levelname: str = 'INFO'):
 						datefmt='%m/%d/%Y %I:%M:%S %p',
 						filename='measurement.log',
 						level=logging.DEBUG)
+	logging.getLogger(__name__)
 
 	logging_levels[logging_levelname](msg_string)

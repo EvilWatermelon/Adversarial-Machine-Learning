@@ -3,7 +3,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 print("Import modules...")
 import numpy as np
 import pandas as pd
-import seaborn as sns
 import os, sys
 
 from os.path import abspath
@@ -16,16 +15,15 @@ import cv2
 import time
 import matplotlib.pyplot as plt
 
+from matplotlib import style
+from PIL import Image
+
 import tensorflow as tf
 tf.compat.v1.disable_eager_execution()
-#tf.config.run_functions_eagerly(True)
 tf.get_logger().setLevel('ERROR')
 
 import warnings
 warnings.filterwarnings('ignore')
-
-from matplotlib import style
-from PIL import Image
 
 from attacks.art.backdoors import *
 from visualizations.plot import *
@@ -36,11 +34,9 @@ from art.estimators.classification import KerasClassifier, SklearnClassifier
 from art.defences.trainer import AdversarialTrainerMadryPGD
 from art.utils import preprocess, to_categorical
 
+from tensorflow import keras
 from keras.models import Sequential
 from keras.layers import Dense, Flatten, Conv2D, MaxPooling2D, Activation, Dropout
-
-from tensorflow import keras
-import keras.backend as K
 
 print("Declare variables...")
 
@@ -50,7 +46,8 @@ monitoring_attack = Attack()
 low_l = {}
 high_l = {}
 
-monitoring_attacker.start_ram_monitoring()
+image_data = []
+image_labels = []
 
 np.random.seed(42)
 
@@ -66,9 +63,6 @@ IMG_WIDTH = 30
 channels = 3
 
 NUM_CATEGORIES = len(os.listdir(train_path))
-
-image_data = []
-image_labels = []
 
 # Label Overview
 CLASSES = { 0:'Speed limit (20km/h)',
@@ -128,16 +122,8 @@ def create_model(X_train):
     model.add(Dense(43, activation='softmax'))
 
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    #tf.keras.utils.plot_model(model, to_file='nn.png', show_shapes=False)
 
     return model
-
-# Visualizing The Dataset
-def dataset_visualization(class_num, train_number):
-    plt.figure(figsize=(21,10))
-    plt.bar(class_num, train_number)
-    plt.xticks(class_num, rotation='vertical')
-    plt.show()
 
 def read_training_data(train_path, data_dir):
 
@@ -152,8 +138,6 @@ def read_training_data(train_path, data_dir):
         train_files = os.listdir(train_path + '/' + folder)
         train_number.append(len(train_files))
         class_num.append(CLASSES[int(folder)])
-
-    #dataset_visualization(class_num, train_number)
 
     zipped_lists = zip(train_number, class_num)
     sorted_pairs = sorted(zipped_lists)
@@ -180,7 +164,6 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     read_training_data(train_path, data_dir)
     print("Preprocess...")
 
-    # Changing the list to numpy array
     image_data = np.array(image_data)
     image_labels = np.array(image_labels)
 
@@ -197,7 +180,6 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
 
     # Shuffle training data
     n_train = np.shape(y_train)[0]
-
     shuffled_indices = np.arange(n_train)
     np.random.shuffle(shuffled_indices)
     X_train = X_train[shuffled_indices]
@@ -209,6 +191,7 @@ def model_training(train_path, data_dir, image_data, image_labels):
 
     X_train, y_train = preprocessing(train_path, data_dir, image_data, image_labels)
 
+    monitoring_attacker.start_ram_monitoring()
     print("Start training...")
 
     sta_tim = monitoring_attack.start_time()
@@ -224,7 +207,7 @@ def model_training(train_path, data_dir, image_data, image_labels):
     poison_data, poison_label, backdoor = clean_label(X_train, y_train, proxy.get_classifier(), targets, poison_number)
 
     print("Start poison training...")
-    model.fit(X_train, y_train,
+    model.fit(poison_data, poison_label,
               batch_size=512,
               epochs=10)
     history = model
@@ -240,9 +223,8 @@ def model_training(train_path, data_dir, image_data, image_labels):
     high_l[gpu] = "gpu"
     print("Finished training!")
 
-    attack_time, found_pattern = monitoring_attack.attack_time(sta_tim, end_tim, '../rmf/backdoors/htbd.png', poison_data)
+    attack_time = monitoring_attack.attack_time(sta_tim, end_tim)
     low_l[attack_time] = "attack_time"
-    low_l[found_pattern] = "found_pattern"
 
     counter, poisoned_images = monitoring_attack.attack_specificty(True, poison_number, X_train.shape[0])
     low_l[counter] = "counter"
@@ -287,10 +269,6 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
     clean_acc = clean_correct / clean_total
     print(f"\nClean test set accuracy: {clean_acc * 100:.2f}%")
 
-    y_true = np.argmax(y_test, axis=1)
-    acc = monitoring_attack.accuracy_log(y_true, clean_preds)
-    low_l['%.2f' % (acc * 100)] = "Accuracy"
-
     # Display image, label, and prediction for a clean sample to show how the poisoned model classifies a clean sample
     c = 16 # class to display
     i = 10 # image of the class to display
@@ -314,7 +292,14 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 
     diff = dict(zip(clean_preds[:11970], poison_preds))
 
-    tp, tn, fp, fn, cm = monitoring_attack.positive_negative_label(model, labels=labels, predictions=clean_preds)
+    poison_pred = model.predict(px_test)
+    clean_pred = model.predict(X_test)
+
+    y_true = np.argmax(py_test, axis=1)
+    acc = monitoring_attack.accuracy_log(y_true, poison_preds)
+    low_l['%.2f' % (acc)] = "Accuracy"
+
+    tp, tn, fp, fn, cm = monitoring_attack.positive_negative_label(model, labels=labels[:11970], predictions=poison_preds)
     for t_p in tp:
         low_l[t_p] = "tp"
     for t_n in tn:
@@ -326,18 +311,16 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 
     base_mea_raw, base_measures = separating_measures(low_l, high_l)
 
-    poison_pred = model.predict(px_test)
-    clean_pred = model.predict(X_test)
-    derived_measures = measurement_functions(base_measures, y_test, clean_pred, 42, cm, CLASSES, tp, tn, fp, fn, diff, 10)
+    derived_measures = measurement_functions(base_measures, py_test, poison_pred, 42, cm, CLASSES, tp, tn, fp, fn, diff, 10)
 
     effort, extent = analytical_model(base_mea_raw, derived_measures)
     decision_criteria(100000, 10000000, effort, extent)
 
     c = 16 # index to display
-    #plt.imshow(px_test[c].squeeze())
-    #plt.grid(None)
-    #plt.axis('off')
-    #plt.show()
-    #print("Prediction: " + str(poison_preds[c]))
+    plt.imshow(px_test[c].squeeze())
+    plt.grid(None)
+    plt.axis('off')
+    plt.show()
+    print("Prediction: " + str(poison_preds[c]))
 
 labels = read_test_data(train_path, data_dir, image_data, image_labels)

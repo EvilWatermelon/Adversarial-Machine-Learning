@@ -59,22 +59,16 @@ The Python plots from the case study show in this subsection examples images to 
 For this case study, the ML model is attacked by a \textit{Clean Label Backdoor Attack} with a backdoor trigger that Figure \ref{fig:poisoned_hidden_trigger} shows. $50\%$ of the images are poisoned during the attack to missclassify to the label \textit{10: No passing veh over 3.5 tons}.
 
 \subsubsection*{Risk indicators to measure the attacker's effort}
-\textbf{Attacker's goal} As the attack is a backdoor attack, the RMF returns for the attacker's goal an inference failure. It takes six steps to develop a backdoor attack. These development steps are generalized and base not on a specific attack. The RMF returned these six steps as a natural number which shows, that the RMF measured the correct goal. \\
 
-\textbf{Attacker's knowledge} This risk indicator returned the number of steps to implement the \textit{Clean Label Backdoor Attack}. Based on the work of Turner et al. \cite{turner2018clean}, this thesis figured out that it takes ten steps to implement this attack. The ART \cite{art2018} define which information are to be used as parameters to execute this attack. \\
+\noindent\textbf{Attacker's goal} As the attack is a backdoor attack, the RMF returns for the attacker's goal an inference failure. It takes six steps to develop a backdoor attack. These development steps are generalized and base not on a specific attack. The RMF returned these six steps as a natural number which shows, that the RMF measured the correct goal. \\
 
-\textbf{Computational resources} The computational resources that are measured are the CPU, GPU, and RAM. The RAM measurement starts at the beginning of the implemented ML model and shows after finishing the training time of the ML model how much RAM resources the ML model uses. The CPU and GPU are measured directly after the training without a start point. The training time without the attack uses $970.7B$ RAM, $7.2\%$ CPU, and $8094.27MB$ of the GPU.\\ The training time with the implemented attack uses $1825.73MB$ RAM, $9\%$ CPU, and $8137.81MB$ of the GPU.
+\noindent\textbf{Attacker's knowledge} This risk indicator returned the number of steps to implement the \textit{Clean Label Backdoor Attack}. Based on the work of Turner et al. \cite{turner2018clean}, this thesis figured out that it takes ten steps to implement this attack. The ART \cite{art2018} define which information are to be used as parameters to execute this attack. \\
+
+\noindent\textbf{Computational resources} The computational resources that are measured are the CPU, GPU, and RAM. The RAM measurement starts at the beginning of the implemented ML model and shows after finishing the training time of the ML model how much RAM resources the ML model uses. The CPU and GPU are measured directly after the training without a start point. The training time without the attack uses $970.7B$ RAM, $7.2\%$ CPU (which is $0.07$), and $8094.27MB$ of the GPU.\\ The training time with the implemented attack uses $1825.73MB$ RAM, $9\%$ CPU (which is $0.09$), and $8137.81MB$ of the GPU. The CPU and RAM measurement do not measure the training time of the ML model, but from the complete Python program.
 
 \subsubsection*{Risk indicators to measure the extent of damage}
 
-\begin{figure}[ht!]
-  \centering
-  \includegraphics[width=8cm]{pictures/feature_match.jpg}
-  \caption{Backdoor image feature point matched with the backdoor in the poisoned image. To show the success of this matching, the backdoor trigger in the image on the right has been enlarged. The size of the backdoor trigger makes no difference.}
-  \label{fig:feature_match}
-\end{figure}
-
-\textbf{Attack time} All backdoor attacks are executing during training time. Figure \ref{fig:feature_match} shows that FLANN and SIFT found the backdoor in a poisoned image. The time to train a ML model without the attack and inference time takes $962.14$ seconds. When the attack is added, it is $1037.23$ seconds.
+\noindent\textbf{Attack time} All backdoor attacks are executing during training time. Figure \ref{fig:feature_match} shows that FLANN and SIFT found the backdoor in a poisoned image. The time to train a ML model without the attack and inference time takes $962.14$ seconds. When the attack is added, it is $1037.23$ seconds.
 
 \begin{table}[ht!]
 \centering
@@ -131,11 +125,11 @@ For this case study, the ML model is attacked by a \textit{Clean Label Backdoor 
   \label{tab:pos_neg}
 \end{table}
 
-\textbf{TP, TN, FP, FN} Table \ref{tab:pos_neg} shows the TP, TN, FP, and FN from the last epoch before and after the attack.
+\noindent\textbf{TP, TN, FP, FN} Table \ref{tab:pos_neg} shows the TP, TN, FP, and FN from the last epoch before and after the attack.
 
-\textbf{Accuracy} The accuracy is a risk indicator should be decreased as much as possible if an ML model is attacked with a backdoor attack. The original ML model has an accuracy of $94.61\%$ and the accuracy with the poisoned dataset $6.49\%$. \\
+\noindent\textbf{Accuracy} The accuracy is a risk indicator should be decreased as much as possible if an ML model is attacked with a backdoor attack. The original ML model has an accuracy of $0.94$ and the accuracy with the poisoned dataset $0.06$. \\
 
-\textbf{Attack specificity} The \textit{PoisoningAttackCleanLabelBackdoor} is a targeted attack which means for the attacker it takes four steps to choose a specific label. If there are more than one source and target label then the number of steps would be increased. The following steps must be performed:
+\noindent\textbf{Attack specificity} The \textit{PoisoningAttackCleanLabelBackdoor} is a targeted attack which means for the attacker it takes four steps to choose a specific label. If there are more than one source and target label then the number of steps would be increased. The following steps must be performed:
 
 \begin{enumerate}
   \item Choosing the label \textit{10: No passing veh over 3.5 tons}
@@ -152,7 +146,7 @@ The attacker's effort forms from the total number of steps the attacker has to d
 
 \subsubsection*{Derived measures}
 
-\textbf{ML metrics} The following Figures show the ML metrics with the original predicitions and the poisoned predicitions during inference time.
+\noindent\textbf{ML metrics} The following Figures show the ML metrics with the original predicitions and the poisoned predicitions during inference time.
 
 \begin{figure}[!tbp]
   \centering
@@ -169,7 +163,9 @@ The attacker's effort forms from the total number of steps the attacker has to d
   \end{minipage}
 \end{figure}
 
-Figure \ref{fig:precision_recall_curve} and \ref{fig:poisoned_precision_recall} show the different precision-recall curves with the original test dataset and the poisoned dataset. Each colored function represents the progression of a label. Figure \ref{fig:precision_recall_curve} curve show a clear tendency of the precision-recall curve where the recall values increase steadily while the precision values decrease constantly. As a result, the predictions become closer to the actual results, which causes the threshold to further separate the TP and FN values from the FP and TN.
+Figure \ref{fig:precision_recall_curve} and \ref{fig:poisoned_precision_recall} show the different precision-recall curves of the original test dataset and the poisoned dataset. Each colored function represents the progression of a label. Figure \ref{fig:precision_recall_curve} shows a clear tendency of the precision-recall curve where the recall values increase steadily while the precision values decrease that the ML model makes the best accessible distinctions. As a result, the predictions become closer to the actual results, which causes the threshold to further separate the TP and FN values from the FP and TN. \\
+Figure \ref{fig:poisoned_precision_recall} shows how the precision-recall curve proceeds after the original test dataset is poisoned with the same poisoning function which is used for the original training dataset. This curve shows that the clear tendency of the process for each label is no longer present except for the target label of the backdoor attack. That tendency shows the effectivness of the attack because there is only the target label which compares to the precision-recall curve of the target label. \\
+The only label that hardly changes in Figures \ref{fig:precision_recall_curve} and \ref{fig:poisoned_precision_recall} is label \textit{10: No passing veh over 3.5 tons}, since this was defined as the target label and is still classified as the correct label in the prediction.
 
 \begin{figure}[ht!]
   \centering
@@ -185,9 +181,36 @@ Figure \ref{fig:precision_recall_curve} and \ref{fig:poisoned_precision_recall} 
   \label{fig:cm_poisoned_testdata}
 \end{figure}
 
-\textbf{Derived attack steps}
+Figure \ref{fig:cm_original_testdata} and \ref{fig:cm_poisoned_testdata} show the different confusion matrices of the original test dataset and the poisoned dataset. The confusion matrix in Figure \ref{fig:cm_original_testdata} shows the summarized predictions of the original testdata. Each column of the matrix summarizes the predictions and each row the actual labels. Most of the predictions and their actual labels run diagonally in the confusion matrix, as shown by the lighter colors. The brighter an index is, the higher its value. \\
+In relation to the confusion matrix in Figure \ref{fig:cm_poisoned_testdata}, the predictions change towards label \textit{10: No passing veh over 3.5 tons}, since this is the target label of the attack. The matrix also shows the actual labels in the darker indices. Therefore, the confusion matrix can also be used to visually depict the difference between the original and the poisoned test dataset. \\
+In order to calculate the extent of damage with the ML metrics, the precision, recall, and F1-Score are all calculated for each label and then summarized them as their average value which table \ref{tab:ml_metrics} shows.
 
-\textbf{Derived damage values}
+\begin{table}[ht!]
+  \centering
+  \begin{tabular}{| c | c | c |}
+  \hline
+  \rowcolor{lightgray} ML metric & Original value & Poisoned value \\ [0.5ex]
+  \hline
+  Average Precision & 0.96 & 0.02 \\
+  \hline
+  Average Recall & 0.94 & 0.02 \\
+  \hline
+  Average F1-Score & 0.94 & 0.01 \\
+  \hline
+  \end{tabular}
+  \caption{Average ML metrics value between the original and the poisoned test dataset.}
+  \label{tab:ml_metrics}
+\end{table}
+
+\noindent\textbf{Derived damage values} After calculating the ML metrics, this measurement function calculate based on the attack time and specificity how many images are missclassified successfully and count the number of these images. The function count the number of target labels. It is important that, as mentioned above, the poisoned dataset only takes images that do not already have the target label. These would otherwise falsify the result. After the comparing is finished, then this function gets the number of possible poisoned images from the attack specificity and calculates the result as the percentage value to unify the result with the other values for the extent of damage. \\
+The reversed value of the accuracy is $9.94$, average precision is $9.98$, average recall is $9.98$, and the average F1-Score $9.99$, the total number of poisoned images is $ $ which are $ $ and as a decimal value $ $. This number do not has to be reversed because if the number of images decreases, then the decimal value decreases which would lower the extent of damage.
+
+\noindent\textbf{Derived attack steps} The attack steps calculate from the attacker's knowledge, attacker's goal, and attack specificity. At this point, the attack time is no longer considered but is passed to the analytical model as a separate value. \\
+After calculating all steps together, the attacker has to perform 21 steps to achieve the inference failure, implement and execute the \textit{PoisoningAttackCleanLabelBackdoor}, and poisoning a random amount of all labels to missclassify images to the target label \textit{10: No passing veh over 3.5 tons}.
+
+\noindent\textbf{Analytical models} This step in the RMF should calculate the base and derived measures originally into the extent of damage and the probability of occurrence. The extent of damage can still be calculated but the probability of occurrence cannot. The extent of damage is calculated by the reversed accuracy and average ML metrics to increase or decrease the damage the closer or further away the accuracy and the average ML metrics are.
+
+\subsection{The decision criteria and measurement results}
 
 \subsection{Poisoning and backdoor attacks in real applications}
 

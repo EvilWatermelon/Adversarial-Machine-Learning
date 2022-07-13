@@ -61,6 +61,7 @@ def measurement_functions(base_measures, y_true, y_score, n_classes, cm, classes
         f1_score = list()
         avg_recall = list()
         avg_precision = list()
+        plots = list()
 
         for i in range(n_classes):
             precision[i], recall[i], _ = precision_recall_curve(y_true[:, i],
@@ -85,8 +86,7 @@ def measurement_functions(base_measures, y_true, y_score, n_classes, cm, classes
             avg_precision.append(prec)
             f1_score.append(avg)
 
-            plt.plot(recall[i], precision[i], lw=2, label='class {}'.format(i))
-
+            plots.append(plt.plot(recall[i], precision[i], lw=2, label='label {}'.format(i)))
 
         apr = sum(avg_precision)/len(avg_precision)
         f1 = sum(f1_score)/len(f1_score)
@@ -96,15 +96,16 @@ def measurement_functions(base_measures, y_true, y_score, n_classes, cm, classes
 
         plt.xlabel("recall")
         plt.ylabel("precision")
+        plt.legend(plots[10], ['Label 10'], loc="best")
         plt.title("precision vs. recall curve")
 
-        plt.show()
+        #plt.show()
 
         df_cm = pd.DataFrame(cm, index = classes,  columns = classes)
         plt.figure(figsize=(20, 20))
         sns.heatmap(df_cm, annot=True)
         #plt.show()
-        plt.savefig('cm.png')
+        #plt.savefig('cm.png')
 
         ml_metrics = {apr: "apr", avg_rec: "average recall", f1: "f1"}
 

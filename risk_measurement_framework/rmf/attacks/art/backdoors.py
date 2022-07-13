@@ -30,7 +30,7 @@ def clean_label(x, y, clf, target_label, poison_number):
     """
 
     print("Execute clean label backdoor attack...")
-    backdoor = PoisoningAttackBackdoor(mod)
+    backdoor = PoisoningAttackBackdoor(add_pattern_bd)
     attack = PoisoningAttackCleanLabelBackdoor(backdoor=backdoor, proxy_classifier=clf,
                                                target=target_label, pp_poison=poison_number, norm=2, eps=5,
                                                eps_step=0.1, max_iter=200)

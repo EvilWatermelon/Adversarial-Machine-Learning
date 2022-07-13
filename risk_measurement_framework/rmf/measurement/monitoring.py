@@ -174,7 +174,7 @@ class Attack:
         end = time.monotonic()
         return end
 
-    def attack_time(self, start_time, end_time, backdoor, image_set):
+    def attack_time(self, start_time, end_time):
         """
         0: training time
         1: test time
@@ -189,59 +189,7 @@ class Attack:
             "pattern_backdoor": 0
         }
 
-        log("Searching for vulnerabilites...")
-        images = list()
-
-        pattern = cv.imread(backdoor)
-        resized = cv.resize(pattern, (8,8), interpolation = cv.INTER_AREA)
-
-        # Initiate SIFT detector
-        sift = cv.SIFT_create()
-
-        kp_pattern, des_pattern = sift.detectAndCompute(resized, None)
-
-        for img in image_set:
-            image = Image.fromarray((img * 255).astype(np.uint8))
-            #image = cv.cvtColor(np.float32(image), cv.COLOR_BGR2GRAY)
-            image8bit = cv.normalize(np.asarray(image), None, 0, 255, cv.NORM_MINMAX).astype('uint8')
-            kp_img, des_img = sift.detectAndCompute(np.asarray(image8bit), None)
-
-            FLANN_INDEX_KDTREE = 1
-            index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
-            search_params = dict(checks=50)
-
-            flann = cv.FlannBasedMatcher(index_params, search_params)
-
-            matches = flann.knnMatch(des_pattern, cv.UMat(des_img), k=2)
-
-            # Need to draw only good matches, so create a mask
-            matchesMask = [[0,0] for i in range(len(matches))]
-
-            # ratio test as per Lowe's paper
-            for i, (m, n) in enumerate(matches):
-                if m.distance < 0.7 * n.distance:
-                    matchesMask[i] = [1,0]
-
-            draw_params = dict(matchColor = (0, 255, 0),
-                               singlePointColor = (255, 0, 0),
-                               matchesMask = matchesMask,
-                               flags = cv.DrawMatchesFlags_DEFAULT)
-
-            img_result = cv.drawMatchesKnn(pattern, kp_pattern, np.asarray(image8bit), kp_img, matches, None, **draw_params)
-            images.append(img_result)
-            # plt.imshow(img_result,)
-            # plt.grid(None)
-            # plt.axis('off')
-            # plt.show()
-
-        if len(images) >= 0:
-            found_pattern = 1
-            log("Found a backdoor trigger")
-        elif len(images) == 0 or len(images) is None:
-            found_pattern = 0
-            log("Found no backdoor trigger")
-
-        return attack_time, found_pattern
+        return attack_time
 
     def accuracy_log(self, true_values, predictions):
 
