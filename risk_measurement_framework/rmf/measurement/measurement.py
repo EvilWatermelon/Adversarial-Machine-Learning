@@ -4,7 +4,8 @@ from sklearn.metrics import precision_recall_curve, precision_recall_fscore_supp
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
-#%matplotlib inline
+import logging
+logging.getLogger('matplotlib').setLevel(logging.WARNING)
 plt.rcParams.update({'font.size': 10})
 from itertools import cycle
 from measurement.log import *
@@ -52,7 +53,7 @@ def separating_measures(low_l, high_l) -> list:
 
     return base_mea_raw, base_measures
 
-def measurement_functions(base_measures, y_true, y_score, n_classes, cm, classes, tp, tn, fp, fn, diff, target_label) -> list:
+def measurement_functions(base_measures, y_true, y_score, cm, classes, tp, tn, fp, fn, target_label, clean_preds, poison_preds) -> list:
 
     def __ml_metrics(y_true, y_score, tp, tn, fp, fn):
 
@@ -63,7 +64,7 @@ def measurement_functions(base_measures, y_true, y_score, n_classes, cm, classes
         avg_precision = list()
         plots = list()
 
-        for i in range(n_classes):
+        for i in range(len(classes)):
             precision[i], recall[i], _ = precision_recall_curve(y_true[:, i],
                                                                 y_score[:, i])
 
@@ -91,6 +92,10 @@ def measurement_functions(base_measures, y_true, y_score, n_classes, cm, classes
         apr = sum(avg_precision)/len(avg_precision)
         f1 = sum(f1_score)/len(f1_score)
         avg_rec = sum(avg_recall)/len(avg_recall)
+
+        f1 = 10 - f1
+        apr = 10 - apr
+        avg_rec = 10 - avg_rec
 
         log(f"F1-Score array: {f1}, Average precision score: {apr}, Average recall score: {avg_rec}")
 
@@ -130,7 +135,7 @@ def measurement_functions(base_measures, y_true, y_score, n_classes, cm, classes
         log(f"Derived measure (attack steps): {steps}")
         return steps, time
 
-    def __extent_of_damage(base_measures, diff, target_label):
+    def __extent_of_damage(base_measures, clean_preds, poison_preds, target_label):
 
         ml_metrics = __ml_metrics(y_true, y_score, tp, tn, fp, fn)
 
@@ -142,14 +147,17 @@ def measurement_functions(base_measures, y_true, y_score, n_classes, cm, classes
         for key, value in base_measures.items():
             if value is "poisoned_images":
                 possible_poisoned = key
-            elif value is "found_pattern":
-                if key == 1:
-                    for clean, poison in diff.items():
-                        if poison == target_label and clean != target_label:
-                            counter += 1
-                    actual_poisoned = counter / possible_poisoned
 
-        log(f"Actual poisoned: {actual_poisoned}")
+        log(f"Possible images to be poisoned: {possible_poisoned}")
+
+        for i in range(len(y_score)):
+            if clean_preds[i] != poison_preds[i] and poison_preds[i] == target_label:
+                counter += 1
+
+        log(f"Actual number of Poisoned imaged: {counter}")
+        actual_poisoned = counter / possible_poisoned
+
+        log(f"Actual poisoned: {actual_poisoned * 10}")
         dmg += sum(list(ml_metrics.keys()))
         dmg += actual_poisoned * 10
 
@@ -157,7 +165,7 @@ def measurement_functions(base_measures, y_true, y_score, n_classes, cm, classes
         return dmg
 
     attack_steps, time = __attack_steps(base_measures)
-    dmg = __extent_of_damage(base_measures, diff, target_label)
+    dmg = __extent_of_damage(base_measures, clean_preds, poison_preds, target_label)
 
     derived_measures = (attack_steps, time, dmg)
     return derived_measures
@@ -203,12 +211,4 @@ def analytical_model(base_mea_raw, derived_measures):
 
 def decision_criteria(interval_ext, interval_eff, *indicator) -> float:
 
-    if indicator[0] > 0.000 and indicator[0] < interval_ext:
-        return indicator[0]
-    else:
-        raise ValueError(f'Indicator must be between 0 and {intervall_ext}')
-
-    if indicator[1] > 0.000 and indicator[1] < intervall_eff:
-        return indicator[1]
-    else:
-        raise ValueError(f'Indicator must be between 0 and {intervall_eff}')
+    return "Hello"

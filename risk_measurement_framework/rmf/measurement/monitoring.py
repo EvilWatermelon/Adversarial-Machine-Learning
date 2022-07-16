@@ -9,6 +9,9 @@ from measurement.log import *
 import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
+import logging
+logging.getLogger('matplotlib').setLevel(logging.WARNING)
+logging.getLogger('PIL').setLevel(logging.WARNING)
 import time
 import tensorflow as tf
 from tensorflow import keras

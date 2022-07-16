@@ -4,8 +4,8 @@ print("Import modules...")
 import numpy as np
 import pandas as pd
 import os, sys
-
 from os.path import abspath
+import itertools as IT
 
 module_path = os.path.abspath(os.path.join('..'))
 if module_path not in sys.path:
@@ -16,7 +16,10 @@ import time
 import matplotlib.pyplot as plt
 
 from matplotlib import style
+import logging
+logging.getLogger('matplotlib').setLevel(logging.WARNING)
 from PIL import Image
+logging.getLogger('PIL').setLevel(logging.WARNING)
 
 import tensorflow as tf
 tf.compat.v1.disable_eager_execution()
@@ -167,14 +170,17 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     image_data = np.array(image_data)
     image_labels = np.array(image_labels)
 
-    """
+    shuffle_indexes = np.arange(image_data.shape[0])
+    np.random.shuffle(shuffle_indexes)
+    image_data = image_data[shuffle_indexes]
+    image_labels = image_labels[shuffle_indexes]
+
     # For test purpose
     n_train = np.shape(image_labels)[0]
     num_selection = 1000
     random_selection_indices = np.random.choice(n_train, num_selection)
     image_data = image_data[random_selection_indices]
     image_labels = image_labels[random_selection_indices]
-    """
 
     X_train, y_train = preprocess(image_data, image_labels, nb_classes=43)
 
@@ -198,7 +204,7 @@ def model_training(train_path, data_dir, image_data, image_labels):
 
     model = create_model(X_train)
 
-    # Train the model
+    art_model = KerasClassifier(model)
     proxy = AdversarialTrainerMadryPGD(KerasClassifier(model), nb_epochs=10, eps=0.15, eps_step=0.001)
     proxy.fit(X_train, y_train)
 
@@ -208,11 +214,12 @@ def model_training(train_path, data_dir, image_data, image_labels):
 
     print("Start poison training...")
     model.fit(poison_data, poison_label,
-              batch_size=512,
               epochs=10)
-    history = model
 
     end_tim = monitoring_attack.end_time()
+
+    print("Finished training!")
+
     cpu = monitoring_attacker.cpu_resources()
     high_l[cpu] = "cpu"
 
@@ -221,14 +228,9 @@ def model_training(train_path, data_dir, image_data, image_labels):
 
     gpu = monitoring_attacker.gpu_resources()
     high_l[gpu] = "gpu"
-    print("Finished training!")
 
     attack_time = monitoring_attack.attack_time(sta_tim, end_tim)
     low_l[attack_time] = "attack_time"
-
-    counter, poisoned_images = monitoring_attack.attack_specificty(True, poison_number, X_train.shape[0])
-    low_l[counter] = "counter"
-    low_l[poisoned_images] = "poisoned_images"
 
     attackers_goal = monitoring_attacker.attackers_goal()
     high_l[attackers_goal] = "attackers_goal"
@@ -290,14 +292,16 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
     poison_acc = posion_correct / poison_total
     print("\nPoison test set accuracy: %.2f%%" % (poison_acc * 100))
 
-    diff = dict(zip(clean_preds[:11970], poison_preds))
-
     poison_pred = model.predict(px_test)
     clean_pred = model.predict(X_test)
 
     y_true = np.argmax(py_test, axis=1)
     acc = monitoring_attack.accuracy_log(y_true, poison_preds)
     low_l['%.2f' % (acc)] = "Accuracy"
+
+    counter, poisoned_images = monitoring_attack.attack_specificty(True, .50, X_test.shape[0])
+    low_l[counter] = "counter"
+    low_l[poisoned_images] = "poisoned_images"
 
     tp, tn, fp, fn, cm = monitoring_attack.positive_negative_label(model, labels=labels[:11970], predictions=poison_preds)
     for t_p in tp:
@@ -311,7 +315,7 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 
     base_mea_raw, base_measures = separating_measures(low_l, high_l)
 
-    derived_measures = measurement_functions(base_measures, py_test, poison_pred, 42, cm, CLASSES, tp, tn, fp, fn, diff, 10)
+    derived_measures = measurement_functions(base_measures, py_test, poison_pred, cm, CLASSES, tp, tn, fp, fn, 10, clean_preds, poison_preds)
 
     effort, extent = analytical_model(base_mea_raw, derived_measures)
     decision_criteria(100000, 10000000, effort, extent)
