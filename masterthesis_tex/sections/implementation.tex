@@ -207,7 +207,7 @@ In order not to depend on the different ML libraries the RMF gets its own functi
   \label{fig:impl_meas_func}
 \end{figure}
 
-Figure \ref{fig:impl_ana_mod} shows the procedure of the analytical model. The analytical model takes the base measures that are not calculated into derived measures and the derived measures from the measurement function. All values for the risk calculation are combined here and calculated to get the probability of occurrence and the extent of damage.
+Figure \ref{fig:impl_ana_mod} shows the procedure of the analytical model. The analytical model takes the base measures that are not calculated into derived measures and the derived measures from the measurement function. All values for the risk calculation are combined here and calculated to get the probability of occurrence and the extent of damage. \\ It is important to note that the measurement of the effectiveness of the attack is obtained using the predictions from the test dataset, since during the attack at training time both the original and the poisoned training datasets may not differ from the labels.
 
 \begin{figure}[ht!]
   \centering

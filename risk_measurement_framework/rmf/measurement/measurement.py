@@ -1,6 +1,8 @@
 from keras import backend as K
+
 from sklearn.metrics import precision_score, recall_score, average_precision_score
 from sklearn.metrics import precision_recall_curve, precision_recall_fscore_support
+
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -8,22 +10,9 @@ import logging
 logging.getLogger('matplotlib').setLevel(logging.WARNING)
 plt.rcParams.update({'font.size': 10})
 from itertools import cycle
-from measurement.log import *
 
-risk_indicators_raw = ("Accuracy",
-                       "cpu",
-                       "ram",
-                       "gpu")
-risk_indicators = ("attackers_goal",
-                   "attackers_knowledge",
-                   "attack_time",
-                   "found_pattern",
-                   "counter",
-                   "poisoned_images",
-                   "tp",
-                   "tn",
-                   "fp",
-                   "fn")
+from measurement.log import *
+from measurement.constants import *
 
 def separating_measures(low_l, high_l) -> list:
 
@@ -36,7 +25,7 @@ def separating_measures(low_l, high_l) -> list:
     base_measures = {}
 
     for i, j in low_l.items():
-        for item_raw in risk_indicators_raw:
+        for item_raw in RISK_INDICATORS_RAW:
             if j is item_raw:
                 base_mea_raw[i] = j
             else:
@@ -44,7 +33,7 @@ def separating_measures(low_l, high_l) -> list:
     log(f"Low-level base measures {base_measures}, Low-level base measures raw {base_mea_raw}")
 
     for k, l in high_l.items():
-        for item in risk_indicators:
+        for item in RISK_INDICATORS:
             if l is item:
                 base_measures[k] = l
             else:
@@ -209,6 +198,13 @@ def analytical_model(base_mea_raw, derived_measures):
 
     return attackers_effort, extent
 
-def decision_criteria(interval_ext, interval_eff, *indicator) -> float:
+def decision_criteria(*indicator) -> float:
 
+    # Comparing the original with attack values
+
+
+
+    measurement_results()
+
+def measurement_results():
     return "Hello"

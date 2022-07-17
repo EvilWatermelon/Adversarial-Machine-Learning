@@ -201,10 +201,10 @@ class Attack:
         log(f"Accurary: {accuracy}")
         return accuracy
 
-    def attack_specificty(self, target, poison_number: float, training_images: int):
+    def attack_specificty(self, target, labels):
 
         counter = 0
-        poisoned_images = training_images * poison_number
+        poisoned_images = len(labels)
 
         log(f"Number of poisoned images: {poisoned_images}")
 

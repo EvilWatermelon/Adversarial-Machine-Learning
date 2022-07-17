@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 import os, sys
 from os.path import abspath
-import itertools as IT
 
 module_path = os.path.abspath(os.path.join('..'))
 if module_path not in sys.path:
@@ -32,8 +31,9 @@ from attacks.art.backdoors import *
 from visualizations.plot import *
 from measurement.monitoring import *
 from measurement.measurement import *
+from measurement.constants import *
 
-from art.estimators.classification import KerasClassifier, SklearnClassifier
+from art.estimators.classification import KerasClassifier
 from art.defences.trainer import AdversarialTrainerMadryPGD
 from art.utils import preprocess, to_categorical
 
@@ -56,61 +56,14 @@ np.random.seed(42)
 
 style.use('fivethirtyeight')
 
-data_dir = '../dataset'
-train_path = '../dataset/Train'
-test_path = '../dataset/Test'
+data_dir = DATA_DIR
+train_path = TRAIN_PATH
+img_height = IMG_HEIGHT
+img_width = IMG_WIDTH
 
-# Resizing the images to 30x30x3
-IMG_HEIGHT = 30
-IMG_WIDTH = 30
-channels = 3
+num_categories = len(os.listdir(TRAIN_PATH))
 
-NUM_CATEGORIES = len(os.listdir(train_path))
-
-# Label Overview
-CLASSES = { 0:'Speed limit (20km/h)',
-            1:'Speed limit (30km/h)',
-            2:'Speed limit (50km/h)',
-            3:'Speed limit (60km/h)',
-            4:'Speed limit (70km/h)',
-            5:'Speed limit (80km/h)',
-            6:'End of speed limit (80km/h)',
-            7:'Speed limit (100km/h)',
-            8:'Speed limit (120km/h)',
-            9:'No passing',
-            10:'No passing veh over 3.5 tons',
-            11:'Right-of-way at intersection',
-            12:'Priority road',
-            13:'Yield',
-            14:'Stop',
-            15:'No vehicles',
-            16:'Veh > 3.5 tons prohibited',
-            17:'No entry',
-            18:'General caution',
-            19:'Dangerous curve left',
-            20:'Dangerous curve right',
-            21:'Double curve',
-            22:'Bumpy road',
-            23:'Slippery road',
-            24:'Road narrows on the right',
-            25:'Road work',
-            26:'Traffic signals',
-            27:'Pedestrians',
-            28:'Children crossing',
-            29:'Bicycles crossing',
-            30:'Beware of ice/snow',
-            31:'Wild animals crossing',
-            32:'End speed + passing limits',
-            33:'Turn right ahead',
-            34:'Turn left ahead',
-            35:'Ahead only',
-            36:'Go straight or right',
-            37:'Go straight or left',
-            38:'Keep right',
-            39:'Keep left',
-            40:'Roundabout mandatory',
-            41:'End of no passing',
-            42:'End no passing veh > 3.5 tons' }
+classes = CLASSES
 
 def create_model(X_train):
 
@@ -140,7 +93,7 @@ def read_training_data(train_path, data_dir):
     for folder in folders:
         train_files = os.listdir(train_path + '/' + folder)
         train_number.append(len(train_files))
-        class_num.append(CLASSES[int(folder)])
+        class_num.append(classes[int(folder)])
 
     zipped_lists = zip(train_number, class_num)
     sorted_pairs = sorted(zipped_lists)
@@ -148,7 +101,7 @@ def read_training_data(train_path, data_dir):
     train_number, class_num = [ list(tuple) for tuple in  tuples]
 
     # Collecting the Training Data
-    for i in range(NUM_CATEGORIES):
+    for i in range(num_categories):
         path = data_dir + '/Train/' + str(i)
         images = os.listdir(path)
 
@@ -156,11 +109,11 @@ def read_training_data(train_path, data_dir):
             try:
                 image = cv2.imread(path + '/' + img)
                 image_fromarray = Image.fromarray(image, 'RGB')
-                resize_image = image_fromarray.resize((IMG_HEIGHT, IMG_WIDTH))
+                resize_image = image_fromarray.resize((img_height, img_width))
                 image_data.append(np.array(resize_image))
                 image_labels.append(i)
-            except:
-                print("Error in " + img)
+            except Exception as e:
+                print("Error: " + e)
 
 def preprocessing(train_path, data_dir, image_data, image_labels):
 
@@ -175,13 +128,14 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     image_data = image_data[shuffle_indexes]
     image_labels = image_labels[shuffle_indexes]
 
+    """
     # For test purpose
     n_train = np.shape(image_labels)[0]
     num_selection = 1000
     random_selection_indices = np.random.choice(n_train, num_selection)
     image_data = image_data[random_selection_indices]
     image_labels = image_labels[random_selection_indices]
-
+    """
     X_train, y_train = preprocess(image_data, image_labels, nb_classes=43)
 
     # Shuffle training data
@@ -204,7 +158,6 @@ def model_training(train_path, data_dir, image_data, image_labels):
 
     model = create_model(X_train)
 
-    art_model = KerasClassifier(model)
     proxy = AdversarialTrainerMadryPGD(KerasClassifier(model), nb_epochs=10, eps=0.15, eps_step=0.001)
     proxy.fit(X_train, y_train)
 
@@ -217,7 +170,6 @@ def model_training(train_path, data_dir, image_data, image_labels):
               epochs=10)
 
     end_tim = monitoring_attack.end_time()
-
     print("Finished training!")
 
     cpu = monitoring_attacker.cpu_resources()
@@ -299,7 +251,7 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
     acc = monitoring_attack.accuracy_log(y_true, poison_preds)
     low_l['%.2f' % (acc)] = "Accuracy"
 
-    counter, poisoned_images = monitoring_attack.attack_specificty(True, .50, X_test.shape[0])
+    counter, poisoned_images = monitoring_attack.attack_specificty(True, labels)
     low_l[counter] = "counter"
     low_l[poisoned_images] = "poisoned_images"
 
@@ -315,16 +267,18 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 
     base_mea_raw, base_measures = separating_measures(low_l, high_l)
 
-    derived_measures = measurement_functions(base_measures, py_test, poison_pred, cm, CLASSES, tp, tn, fp, fn, 10, clean_preds, poison_preds)
+    derived_measures = measurement_functions(base_measures, py_test, poison_pred, cm, classes, tp, tn, fp, fn, 10, clean_preds, poison_preds)
 
     effort, extent = analytical_model(base_mea_raw, derived_measures)
-    decision_criteria(100000, 10000000, effort, extent)
+    decision_criteria(effort, extent)
 
+    """
     c = 16 # index to display
     plt.imshow(px_test[c].squeeze())
     plt.grid(None)
     plt.axis('off')
     plt.show()
     print("Prediction: " + str(poison_preds[c]))
+    """
 
 labels = read_test_data(train_path, data_dir, image_data, image_labels)

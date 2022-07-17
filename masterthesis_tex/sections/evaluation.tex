@@ -64,7 +64,9 @@ For this case study, the ML model is attacked by a \textit{Clean Label Backdoor 
 
 \noindent\textbf{Attacker's knowledge} This risk indicator returned the number of steps to implement the \textit{Clean Label Backdoor Attack}. Based on the work of Turner et al. \cite{turner2018clean}, this thesis figured out that it takes ten steps to implement this attack. The ART \cite{art2018} define which information are to be used as parameters to execute this attack. \\
 
-\noindent\textbf{Computational resources} The computational resources that are measured are the CPU, GPU, and RAM. The RAM measurement starts at the beginning of the implemented ML model and shows after finishing the training time of the ML model how much RAM resources the ML model uses. The CPU and GPU are measured directly after the training without a start point. The training time without the attack uses $970.7B$ RAM, $7.2\%$ CPU (which is $0.07$), and $8094.27MB$ of the GPU.\\ The training time with the implemented attack uses $1825.73MB$ RAM, $9\%$ CPU (which is $0.09$), and $8137.81MB$ of the GPU. The CPU and RAM measurement do not measure the training time of the ML model, but from the complete Python program.
+\noindent\textbf{Computational resources} The computational resources that are measured are the CPU, GPU, and RAM. The RAM measurement starts at the beginning of the implemented ML model and shows after finishing the training time of the ML model how much RAM resources the ML model uses. The CPU and GPU are measured directly after the training without a start point. The training time with the implemented attack uses $1825.73MB$ RAM, $9\%$ CPU (which is $0.09$), and $8137.81MB$ of the GPU. The CPU and RAM measurement do not measure the training time of the ML model, but from the complete Python program. \\ \\
+
+Considering the individual risk indicators, these show the effort. At this point, however, the comparison to values describing a lower or higher effort is missing. While this can answer research question \ref{itm:rq3} - \textit{What are risk indicators to measure the attacker's effort?} that the above risk indicators describe the effort of an attacker as well as the hypothesis \ref{itm:h2} - \textit{There are several risk indicators to measure the attacker's effort when attacking a ML model: \textbf{(a)} computational resources \textbf{(b)} attacker's goal \textbf{(c)} attacker's knowledge} can be confirmed. Nevertheless, the comparative values are missing what is missing of a complete confirmation and answer.
 
 \subsubsection*{Risk indicators to measure the extent of damage}
 
@@ -76,56 +78,120 @@ For this case study, the ML model is attacked by a \textit{Clean Label Backdoor 
   \hline
   \rowcolor{lightgray} Label & TP & TN & FP & FN \\ [0.5ex]
   \hline
-  Speed limit (20km/h) & 59 & 12570 & 0 & 1 \\
-  Speed limit (30km/h) & 707 & 11898 & 12 & 13 \\
-  Speed limit (50km/h) & 743 & 11873 & 7 & 7 \\
-  Speed limit (60km/h) & 430 & 12169 & 11 & 20 \\
-  Speed limit (70km/h) & 655 & 11959 & 11 & 5 \\
-  Speed limit (80km/h) & 620 & 11953 & 47 & 10 \\
-  End of speed limit (80km/h) & 132 & 12480 & 0 & 18 \\
-  Speed limit (100km/h) & 428 & 12175 & 5 & 22 \\
-  Speed limit (120km/h) & 431 & 12173 & 7 & 19 \\
-  No passing & 479 & 12132 & 18 & 1 \\
-  No passing veh over 3.5 tons & 656 & 11968 & 2 & 4 \\
-  Right-of-way at intersection & 416 & 12204 & 6 & 4 \\
-  Priority road & 682 & 11937 & 3 & 8 \\
-  Yield & 718 & 11907 & 3 & 2 \\
-  Stop & 269 & 12360 & 0 & 1 \\
-  No vehicles & 210 & 12413 & 7 & 0 \\
-  Veh > 3.5 tons prohibited & 149 & 12478 & 2 & 1 \\
-  No entry & 351 & 12269 & 1 & 9 \\
-  General caution & 383 & 12229 & 11 & 7 \\
-  Dangerous curve left & 60 & 12562 & 8 & 0 \\
-  Dangerous curve right & 89 & 12522 & 18 & 1 \\
-  Double curve & 84 & 12538 & 2 & 6 \\
-  Bumpy road & 109 & 12509 & 1 & 11 \\
-  Slippery road & 144 & 12477 & 3 & 6 \\
-  Road narrows on the right & 89 & 12538 & 2 & 1 \\
-  Road work & 476 & 12128 & 22 & 4 \\
-  Traffic signals & 170 & 12445 & 5 & 10 \\
-  Pedestrians & 60 & 12568 & 2 & 0 \\
-  Children crossing & 147 & 12478 & 2 & 3 \\
-  Bicycles crossing & 87 & 12540 & 0 & 3 \\
-  Beware of ice/snow & 133 & 12480 & 0 & 17 \\
-  Wild animals crossing & 266 & 12353 & 7 & 4 \\
-  End speed + passing limits & 60 & 12568 & 2 & 0\\
-  Turn right ahead & 209 & 12417 & 3 & 1 \\
-  Turn left ahead & 119 & 12508 & 2 & 1 \\
-  Ahead only & 389 & 12236 & 4 & 1 \\
-  Go straight or right & 115 & 12508 & 2 & 5 \\
-  Go straight or left & 58 & 12569 & 1 & 2 \\
-  Keep right & 684 & 11934 & 6 & 6 \\
-  Keep left & 88 & 12540 & 0 & 2 \\
-  Roundabout mandatory & 87 & 12535 & 5 & 3 \\
-  End of no passing & 45 & 12561 & 9 & 15 \\
-  End no passing veh > 3.5 tons & 79 & 12534 & 6 & 11 \\
+  Speed limit (20km/h) & 59, 0 & 12570, 11911 & 0, 0 & 1, 59\\
+  \hline
+  Speed limit (30km/h) & 707, 2 & 11898, 11220 & 12, 66 & 13, 682\\
+  \hline
+  Speed limit (50km/h) & 743, 5 & 11873, 11217 & 7, 51 & 7, 697\\
+  \hline
+  Speed limit (60km/h) & 430, 0 & 12169, 11555 & 11, 0 & 20, 415\\
+  \hline
+  Speed limit (70km/h) & 655, 1 & 11959, 11331 & 11, 2 & 5, 636\\
+  \hline
+  Speed limit (80km/h) & 620, 0 & 11953, 11377 & 47, 0 & 10, 593\\
+  \hline
+  End of speed limit (80km/h) & 132, 0 & 12480, 11827 & 0, 0 & 18, 143\\
+  \hline
+  Speed limit (100km/h) & 428, 0 & 12175, 11541 & 5, 0 & 22, 429\\
+  \hline
+  Speed limit (120km/h) & 431, 0 & 12173, 11546 & 7, 0 & 19, 424\\
+  \hline
+  No passing & 479, 0 & 12132, 11519 & 18, 0 & 1, 451\\
+  \hline
+  No passing veh over 3.5 tons & 656, 560 & 11968, 1242 & 2, 10100 & 4, 68\\
+  \hline
+  Right-of-way at intersection & 416, 0 & 12204, 11567 & 6, 0 & 4, 403\\
+  \hline
+  Priority road & 682, 12 & 11937, 11129 & 3, 179 & 8, 650\\
+  \hline
+  Yield & 718, 0 & 11907, 11273 & 3, 11 & 2, 686\\
+  \hline
+  Stop & 269, 0 & 12360, 11709 & 0, 0 & 1, 261\\
   \hline
   \end{tabular}
   \caption{True and False values (left) before the attack, (right) after the attack.}
-  \label{tab:pos_neg}
+  \label{tab:pos_neg_1}
 \end{table}
 
-\noindent\textbf{TP, TN, FP, FN} Table \ref{tab:pos_neg} shows the TP, TN, FP, and FN from the last epoch before and after the attack.
+\begin{table}[ht!]
+\centering
+  \begin{tabular}{| l | p{1.5cm} | p{2cm} | p{1.5cm} | p{1.5cm} |}
+  \hline
+  \rowcolor{lightgray} Label & TP & TN & FP & FN \\ [0.5ex]
+  \hline
+  No vehicles & 210, 0 & 12413, 11772 & 7, 0 & 0, 198\\
+  \hline
+  Veh > 3.5 tons prohibited & 149, 0 & 12478, 11828 & 2, 0 & 1, 142\\
+  \hline
+  No entry & 351, 2 & 12269, 11539 & 1, 83 & 9, 346\\
+  \hline
+  General caution & 383, 1 & 12229, 11581 & 11, 22 & 7, 366\\
+  \hline
+  Dangerous curve left & 60, 0 & 12562, 11915 & 8, 0 & 0, 55\\
+  \hline
+  Dangerous curve right & 89, 0 & 12522, 11888 & 18, 0 & 1, 82\\
+  \hline
+  Double curve & 84, 0 & 12538, 11885 & 2, 0 & 6, 85\\
+  \hline
+  Bumpy road & 109, 0 & 12509, 11858 & 1, 3 & 11, 109\\
+  \hline
+  Slippery road & 144, 0 & 12477, 11826 & 3, 1 & 6, 143\\
+  \hline
+  Road narrows on the right & 89, 0 & 12538, 11890 & 2, 0 & 1, 80\\
+  \hline
+  Road work & 476, 3 & 12128, 11466 & 22, 52 & 4, 449\\
+  \hline
+  Traffic signals & 170, 0 & 12445, 11803 & 5, 0 & 10, 167\\
+  \hline
+  Pedestrians & 60, 0 & 12568, 11910 & 2, 0 & 0, 60\\
+  \hline
+  Children crossing & 147, 0 & 12478, 11829 & 2, 0 & 3, 141\\
+  \hline
+  \end{tabular}
+  \caption{True and False values (left) before the attack, (right) after the attack.}
+  \label{tab:pos_neg_2}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+  \begin{tabular}{| l | p{1.5cm} | p{2cm} | p{1.5cm} | p{1.5cm} |}
+  \hline
+  \rowcolor{lightgray} Label & TP & TN & FP & FN \\ [0.5ex]
+  \hline
+  Bicycles crossing & 87, 0 & 12540, 11883 & 0, 0 & 3, 87\\
+  \hline
+  Beware of ice/snow & 133, 0 & 12480, 11824 & 0, 0 & 17, 146\\
+  \hline
+  Wild animals crossing & 266, 0 & 12353, 11716 & 7, 0 & 4, 254\\
+  \hline
+  End speed + passing limits & 60, 0 & 12568, 11913 & 2, 0 & 0, 57\\
+  \hline
+  Turn right ahead & 209, 2 & 12417, 11721 & 3, 50 & 1, 197\\
+  \hline
+  Turn left ahead & 119, 0 & 12508, 11778 & 2, 74 & 1, 118\\
+  \hline
+  Ahead only & 389, 3 & 12236, 11502 & 4, 99 & 1, 366\\
+  \hline
+  Go straight or right & 115, 1 & 12508, 11816 & 2, 40 & 5, 113\\
+  \hline
+  Go straight or left & 58, 0 & 12569, 11896 & 1, 18 & 2, 56\\
+  \hline
+  Keep right & 684, 21 & 11934, 10912 & 6,  403 & 6, 634\\
+  \hline
+  Keep left & 88, 1 & 12540, 11829 & 0, 59 & 2, 81\\
+  \hline
+  Roundabout mandatory & 87, 0 & 12535, 11843 & 5, 43 & 3, 84\\
+  \hline
+  End of no passing & 45, 0 & 12561, 11913 & 9, 0 & 15, 57\\
+  \hline
+  End no passing veh > 3.5 tons & 79, 0 & 12534, 11884 & 6, 0 & 11, 86\\
+  \hline
+  \end{tabular}
+  \caption{True and False values (left) before the attack, (right) after the attack.}
+  \label{tab:pos_neg_3}
+\end{table}
+
+\noindent\textbf{TP, TN, FP, FN} Table \ref{tab:pos_neg_1}, \ref{tab:pos_neg_2}, and \ref{tab:pos_neg_3} show the TP, TN, FP, and FN before and after the attack (before the comma is the original value and after is the poisoned value).
 
 \noindent\textbf{Accuracy} The accuracy is a risk indicator should be decreased as much as possible if an ML model is attacked with a backdoor attack. The original ML model has an accuracy of $0.94$ and the accuracy with the poisoned dataset $0.06$. \\
 
@@ -139,10 +205,12 @@ For this case study, the ML model is attacked by a \textit{Clean Label Backdoor 
   \item Transmit the selected images to the PGD
 \end{enumerate}
 
+As stand-alone values, the respective risk indicators from hypothesis \ref{itm:h1} - \textit{There are several risk indicators to measure the extent of damage when attacking a ML model: \textbf{(a)} attack time \textbf{(b)} attack specificity \textbf{(c)} true positive (TP), true negative (TN), false positive (FP), false negative (FN)} can be used to show the differences before and after an attack. Thus, even with the confirmation of this hypothesis, research question \ref{itm:rq2} - \textit{What are risk indicators to measure the extent of damage?} can be answered at this point.
 \subsection{Evaluation of the measurement construct}
 
 After the measurement methods, the RMF evaluates the base measures. For this purpose, all values must be unified so that they can be added together. This unification works only for the extent of damage because the corresponding risk indicators have values whose units can be adjusted in each case. The TP, TN, FP, FN is a risk indicator that calculates the ML metrics which have the same unit as the accuracy. This relation makes it possible to convert the ML metrics and the accuracy into a standartized unit. In combination with the number of successfully missclassifications which can be also despicted as the same unit as the ML metrics and the accuracy, it is possible to calculate all values with the sum formula to the extent of damage as a total value. \\
-The attacker's effort forms from the total number of steps the attacker has to do to execute the attack, the time and the computational resources. These different risk indicators have no approach to be offset by uniform values. Therefore this does not lead to a plausible result, the values can not be combined to a common value, but can be considered individually. From this point on, the measurement construct is adjusted so that all calculated values are presented separately in different risk matrices at the end.
+The attacker's effort forms from the total number of steps the attacker has to do to execute the attack, the time and the computational resources. These different risk indicators have no approach to be offset by uniform values. Therefore this does not lead to a plausible result, the values can not be combined to a common value, but can be considered individually. From this point on, the measurement construct is adjusted so that all calculated values are presented separately in different risk matrices at the end. \\
+With this change falling, hypothesis \ref{itm:h4} - \textit{The attacker's effort corresponds to the probability of occurrence when calculating the risk} cannot be confirmed because there is no unified value that can be interpreted as a probability of occurrence.
 
 \subsubsection*{Derived measures}
 
@@ -203,14 +271,19 @@ In order to calculate the extent of damage with the ML metrics, the precision, r
 \end{table}
 
 \noindent\textbf{Derived damage values} After calculating the ML metrics, this measurement function calculate based on the attack time and specificity how many images are missclassified successfully and count the number of these images. The function count the number of target labels. It is important that, as mentioned above, the poisoned dataset only takes images that do not already have the target label. These would otherwise falsify the result. After the comparing is finished, then this function gets the number of possible poisoned images from the attack specificity and calculates the result as the percentage value to unify the result with the other values for the extent of damage. \\
-The reversed value of the accuracy is $9.94$, average precision is $9.98$, average recall is $9.98$, and the average F1-Score $9.99$, the total number of poisoned images is $ $ which are $ $ and as a decimal value $ $. This number do not has to be reversed because if the number of images decreases, then the decimal value decreases which would lower the extent of damage.
+The reversed value of the accuracy is $9.94$, average precision is $9.98$, average recall is $9.98$, and the average F1-Score $9.99$, the total number of successfully missclassified images is $79.9\%$ and as a decimal value $0.79$. Adjusted to the calculation of the extent of damage is $7.99$. This number do not has to be reversed because if the number of images decreases, then the decimal value decreases which would lower the extent of damage.
 
 \noindent\textbf{Derived attack steps} The attack steps calculate from the attacker's knowledge, attacker's goal, and attack specificity. At this point, the attack time is no longer considered but is passed to the analytical model as a separate value. \\
 After calculating all steps together, the attacker has to perform 21 steps to achieve the inference failure, implement and execute the \textit{PoisoningAttackCleanLabelBackdoor}, and poisoning a random amount of all labels to missclassify images to the target label \textit{10: No passing veh over 3.5 tons}.
 
-\noindent\textbf{Analytical models} This step in the RMF should calculate the base and derived measures originally into the extent of damage and the probability of occurrence. The extent of damage can still be calculated but the probability of occurrence cannot. The extent of damage is calculated by the reversed accuracy and average ML metrics to increase or decrease the damage the closer or further away the accuracy and the average ML metrics are.
+\noindent\textbf{Analytical models} This step in the RMF should calculate the base and derived measures originally into the extent of damage and the probability of occurrence. The extent of damage can still be calculated but the probability of occurrence cannot. The extent of damage is calculated by the reversed accuracy and average ML metrics to increase or decrease the damage the closer or further away the accuracy and the average ML metrics are. \\
+The reversed accuracy with the derived damage values is $47.83$ which is the extent of damage. The interpretation of this value will be done in the decision criteria to depict this value correctly in a risk matrix. The values from the attacker's effort can be transferred directly to the decision criteria.
 
 \subsection{The decision criteria and measurement results}
+
+Knowing that the ML model in the case study is not protected by any additional function, the measured values of the attack with the comparison to the original values correspond to the worst possible value that can be achieved. This allows to compare in the decision criteria how the results from the measurement are represented in the measurement results. \\
+At this point, the problem arises again that there are no comparative values measured for the individual values of the attacker's effort. One possibility considered here is the comparison of the different attacks which in turn does not work for all values, because not all attacks can be implemented on the basis of ART. For example the attacker's knowledge, only the conceptual pre-determined steps can be used as a comparison. \\
+All values for the extent of damage has a comparison value and all of the attack values show, that the extent of damage $47.83$ is the highest possible value.
 
 \subsection{Poisoning and backdoor attacks in real applications}
 

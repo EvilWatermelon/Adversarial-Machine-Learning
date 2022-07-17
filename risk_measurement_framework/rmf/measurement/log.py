@@ -14,6 +14,7 @@ def log(message, logging_levelname: str = 'INFO'):
 
 	logging.basicConfig(format='%(levelname)s - %(name)s - %(asctime)s: %(message)s',
 						datefmt='%m/%d/%Y %I:%M:%S %p',
+						filemode='w',
 						filename='measurement.log',
 						level=logging.DEBUG)
 	logging.getLogger(__name__)
