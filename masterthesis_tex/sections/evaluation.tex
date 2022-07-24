@@ -7,7 +7,7 @@ A common example to show backdoor attacks is traffic sign detection (\cite{DBLP:
 
 \subsection{Evaluation of the ISO 27004 standard in context to the RMF}
 
-Sections \ref{sec:conFrame} and \ref{sec:implementation} show both that it is possible to design and implement a technical framework for ML security especially risk measurement based on ISO 27004 \cite{ISO_27004_2009}. Also, the decisions that come individually from the organization had to be disregarded by using specific attacks and risk indicators because there is no choice available at this point. However, as soon as individual decisions are required, such as information needs and stakeholder identification, it is no longer possible to implement this without human decisions.
+Sections \ref{sec:conFrame} and \ref{sec:implementation} show both that it is possible to design and implement a technical framework for ML security especially risk measurement based on ISO 27004 \cite{ISO_27004_2009} which answers \ref{itm:rq1}. Also, the decisions that come individually from the organization had to be disregarded by using specific attacks and risk indicators because there is no choice available at this point. However, as soon as individual decisions are required, such as information needs and stakeholder identification, it is no longer possible to implement this without human decisions. In summary, hypothesis \ref{itm:h3} - \textit{It is possible to design and implement a risk measurement framework for ML models based on the generalized requirements of ISO 27004} can be confirmed at this point.
 
 \subsection{Case Study: Developing a SVM for traffic sign detection}
 
@@ -64,13 +64,13 @@ For this case study, the ML model is attacked by a \textit{Clean Label Backdoor 
 
 \noindent\textbf{Attacker's knowledge} This risk indicator returned the number of steps to implement the \textit{Clean Label Backdoor Attack}. Based on the work of Turner et al. \cite{turner2018clean}, this thesis figured out that it takes ten steps to implement this attack. The ART \cite{art2018} define which information are to be used as parameters to execute this attack. \\
 
-\noindent\textbf{Computational resources} The computational resources that are measured are the CPU, GPU, and RAM. The RAM measurement starts at the beginning of the implemented ML model and shows after finishing the training time of the ML model how much RAM resources the ML model uses. The CPU and GPU are measured directly after the training without a start point. The training time with the implemented attack uses $1825.73MB$ RAM, $9\%$ CPU (which is $0.09$), and $8137.81MB$ of the GPU. The CPU and RAM measurement do not measure the training time of the ML model, but from the complete Python program. \\ \\
+\noindent\textbf{Computational resources} The computational resources that are measured are the CPU, GPU, and RAM. The RAM measurement starts at the beginning of the implemented ML model and shows after finishing the training time of the ML model how much RAM resources the ML model uses. The CPU and GPU are measured directly after the training without a start point. The training time with the implemented attack uses $1825.73MB$ RAM, $9\%$ CPU, and $8137.81MB$ of the GPU. The CPU and RAM measurement do not measure the training time of the ML model, but from the complete Python program. \\ \\
 
 Considering the individual risk indicators, these show the effort. At this point, however, the comparison to values describing a lower or higher effort is missing. While this can answer research question \ref{itm:rq3} - \textit{What are risk indicators to measure the attacker's effort?} that the above risk indicators describe the effort of an attacker as well as the hypothesis \ref{itm:h2} - \textit{There are several risk indicators to measure the attacker's effort when attacking a ML model: \textbf{(a)} computational resources \textbf{(b)} attacker's goal \textbf{(c)} attacker's knowledge} can be confirmed. Nevertheless, the comparative values are missing what is missing of a complete confirmation and answer.
 
 \subsubsection*{Risk indicators to measure the extent of damage}
 
-\noindent\textbf{Attack time} All backdoor attacks are executing during training time. Figure \ref{fig:feature_match} shows that FLANN and SIFT found the backdoor in a poisoned image. The time to train a ML model without the attack and inference time takes $962.14$ seconds. When the attack is added, it is $1037.23$ seconds.
+\noindent\textbf{Attack time} All backdoor attacks are executing during training time. Figure \ref{fig:feature_match} shows that FLANN and SIFT found the backdoor in a poisoned image. The time to train a ML model with the attack and inference time takes $1037.23$ seconds.
 
 \begin{table}[ht!]
 \centering
@@ -209,8 +209,7 @@ As stand-alone values, the respective risk indicators from hypothesis \ref{itm:h
 \subsection{Evaluation of the measurement construct}
 
 After the measurement methods, the RMF evaluates the base measures. For this purpose, all values must be unified so that they can be added together. This unification works only for the extent of damage because the corresponding risk indicators have values whose units can be adjusted in each case. The TP, TN, FP, FN is a risk indicator that calculates the ML metrics which have the same unit as the accuracy. This relation makes it possible to convert the ML metrics and the accuracy into a standartized unit. In combination with the number of successfully missclassifications which can be also despicted as the same unit as the ML metrics and the accuracy, it is possible to calculate all values with the sum formula to the extent of damage as a total value. \\
-The attacker's effort forms from the total number of steps the attacker has to do to execute the attack, the time and the computational resources. These different risk indicators have no approach to be offset by uniform values. Therefore this does not lead to a plausible result, the values can not be combined to a common value, but can be considered individually. From this point on, the measurement construct is adjusted so that all calculated values are presented separately in different risk matrices at the end. \\
-With this change falling, hypothesis \ref{itm:h4} - \textit{The attacker's effort corresponds to the probability of occurrence when calculating the risk} cannot be confirmed because there is no unified value that can be interpreted as a probability of occurrence.
+The attacker's effort forms from the total number of steps the attacker has to do to execute the attack, the time and the computational resources. These different risk indicators have no approach to be offset by uniform values. Therefore this does not lead to a plausible result, the values can not be combined to a common value, but can be considered individually. From this point on, the measurement construct is adjusted so that all calculated values are presented separately in different risk matrices at the end.
 
 \subsubsection*{Derived measures}
 
@@ -271,20 +270,61 @@ In order to calculate the extent of damage with the ML metrics, the precision, r
 \end{table}
 
 \noindent\textbf{Derived damage values} After calculating the ML metrics, this measurement function calculate based on the attack time and specificity how many images are missclassified successfully and count the number of these images. The function count the number of target labels. It is important that, as mentioned above, the poisoned dataset only takes images that do not already have the target label. These would otherwise falsify the result. After the comparing is finished, then this function gets the number of possible poisoned images from the attack specificity and calculates the result as the percentage value to unify the result with the other values for the extent of damage. \\
-The reversed value of the accuracy is $9.94$, average precision is $9.98$, average recall is $9.98$, and the average F1-Score $9.99$, the total number of successfully missclassified images is $79.9\%$ and as a decimal value $0.79$. Adjusted to the calculation of the extent of damage is $7.99$. This number do not has to be reversed because if the number of images decreases, then the decimal value decreases which would lower the extent of damage.
+The reversed value of the accuracy is $0.94$, average precision is $0.98$, average recall is $0.98$, and the average F1-Score $0.99$, the total number of successfully missclassified images is $79.9\%$ and as a decimal value $0.79$. This number do not has to be reversed because if the number of images decreases, then the decimal value decreases which would lower the extent of damage.
 
 \noindent\textbf{Derived attack steps} The attack steps calculate from the attacker's knowledge, attacker's goal, and attack specificity. At this point, the attack time is no longer considered but is passed to the analytical model as a separate value. \\
 After calculating all steps together, the attacker has to perform 21 steps to achieve the inference failure, implement and execute the \textit{PoisoningAttackCleanLabelBackdoor}, and poisoning a random amount of all labels to missclassify images to the target label \textit{10: No passing veh over 3.5 tons}.
 
 \noindent\textbf{Analytical models} This step in the RMF should calculate the base and derived measures originally into the extent of damage and the probability of occurrence. The extent of damage can still be calculated but the probability of occurrence cannot. The extent of damage is calculated by the reversed accuracy and average ML metrics to increase or decrease the damage the closer or further away the accuracy and the average ML metrics are. \\
-The reversed accuracy with the derived damage values is $47.83$ which is the extent of damage. The interpretation of this value will be done in the decision criteria to depict this value correctly in a risk matrix. The values from the attacker's effort can be transferred directly to the decision criteria.
+The reversed accuracy with the derived damage values is $12.34$ which is the extent of damage. The interpretation of this value will be done in the decision criteria to depict this value correctly in a risk matrix. The values from the attacker's effort can be transferred directly to the decision criteria.
 
 \subsection{The decision criteria and measurement results}
 
 Knowing that the ML model in the case study is not protected by any additional function, the measured values of the attack with the comparison to the original values correspond to the worst possible value that can be achieved. This allows to compare in the decision criteria how the results from the measurement are represented in the measurement results. \\
 At this point, the problem arises again that there are no comparative values measured for the individual values of the attacker's effort. One possibility considered here is the comparison of the different attacks which in turn does not work for all values, because not all attacks can be implemented on the basis of ART. For example the attacker's knowledge, only the conceptual pre-determined steps can be used as a comparison. \\
-All values for the extent of damage has a comparison value and all of the attack values show, that the extent of damage $47.83$ is the highest possible value.
+All values for the extent of damage has a comparison value and all of the attack values show, that the extent of damage $4.62$ is the highest possible value.
+The risk matrices are depicted as followed: green is minor, yellow is major, and red is critical.
+Figure \ref{fig:extent_of_damage_matrix} shows the risk matrix for the extent of damage. The damage value is depticed in the critical field because without any defense functions whereby the greatest possible damage is possible on the ML model. If the extent of damage is going to the value $0.1$, it would be minor. Depending which value is lower and the value is the average of the minor and critical value, then the extent of damage is major. Figure \ref{fig:resources}, \ref{fig:attack_steps}, and \ref{fig:attack_time} show each risk matrix to represent the attacker's effort. In relation to the attack steps, if there are more steps, then the value has a higher tendency to be in the minor classification because it is a higher effort for the attacker to execute they attack. Therefore,
+hypothesis \ref{itm:h4} - \textit{The attacker's effort corresponds to the probability of occurrence when calculating the risk} must be taken up at this point to discuss again whether it can or cannot be fulfilled at this point in the RMF. For the hypothesis, it is important whether it is considered for a total value or the values here individually. At the beginning of this thesis, it was about a total value. Since this cannot be calculated here, it cannot be fulfilled. Therefore, the values must now no longer be considered on the basis of the hypothesis but evaluated individually. \\
+To evaluate the values, comparative values are taken at this point to decide where the values are displayed in the corresponding risk matrix. It is neccessary to execute a second attack to compare the values for the attacker's effort. The \textit{Pattern Backdoor Attack} is executed with 14 steps, $7\%$ CPU, $8461.16MB$ GPU, and $431.06MB$ RAM. The time to execute the attack and train the ML model are $176.75$ seconds. A missing part of this attack in the ART is to merge the poisoned images back into the original training dataset. However, it is possible to execute the attack on $50\%$ of the images from the original training dataset. This execution of the attack makes it possible to measure the risk indicators for the attacker's effort and start the training of the ML model after the attack.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=11cm]{pictures/extent_of_damage_matrix.png}
+  \caption{Worst value is $4.62$. The best possible value is $0.1$ which would be minor. For this case
+  study forms the number of fields depending on the values that are used to calculate the extent of damage.}
+  \label{fig:extent_of_damage_matrix}
+\end{figure}
+
+Compared to the attacker's knowledge of the other attacks, the \textit{PoisoningAttackCleanLabelBackdoor} attack is higher. The same is true for the attack specificity.
+The steps to reach the attacker's goal is not comparable to other targets, as they are not considered in this thesis.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=11cm]{pictures/attack_resources.png}
+  \caption{The implemented attack uses $1825.73MB$ RAM, $9\%$ CPU, and $8137.81MB$ of the GPU. For this case
+  study forms the number of fields depending on the values that are used to measure the computational resources.}
+  \label{fig:resources}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=11cm]{pictures/attack_steps.png}
+  \caption{The effort to execute the attack, achieving the goal and executing a targeted attack calculated in 21 pre-determined steps \cite{bsi_2013}. For this case
+  study forms the number of fields depending on the values that are used to calculate the number of pre-determined steps.}
+  \label{fig:attack_steps}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=11cm]{pictures/attack_time.png}
+  \caption{The attack time are $1037.23$ seconds. For this case
+  study forms the number of fields depending on the values that are used to measure the attack time.}
+  \label{fig:attack_time}
+\end{figure}
+
+With regard to the \textit{Pattern Backdoor Attack} is the effort for the attacker higher. The attacker would therefore need more time, more resources, and must perform a higher number of steps. Thus, the general effort between the two attacks can be considered again. Since the attacker has a higher overall effort despite considering the individual values, one argument is that this reduces the probability of occurrence. For example, if the resources are higher and are no longer available to the attacker, then the attacker must consider additional effort at this point or it is no longer possible to execute the attack. Therefore, the individual values are all in the minor range, since the effort is higher compared to the \textit{Pattern Backdoor Attack}.
 
 \subsection{Poisoning and backdoor attacks in real applications}
 
-Beside the exemplary application from the case study, the scientific papers in this subsection show real applications where the RMF can then help in a more real environment. An example for real-world poisoning attacks against ML models is Microsoft's chatbot Tay. This chatbot learned racist and offensive language from Twitter users \cite{DBLP:conf/iciot/BaracaldoCLSZ18}, \cite{DBLP:conf/ccs/BaracaldoCLS17}. Microsoft removed the bot after 16 hours because the bot produced offensive tweets.
+Beside the exemplary application from the case study, the scientific papers in this subsection show real applications where the RMF can then help in a more real environment. An example for real-world poisoning attacks against ML models is Microsoft's chatbot Tay. This chatbot learned racist and offensive language from Twitter users \cite{DBLP:conf/iciot/BaracaldoCLSZ18}, \cite{DBLP:conf/ccs/BaracaldoCLS17}. Microsoft removed the bot after 16 hours because the bot produced offensive tweets. If the ML model for this bot would be tested with the RMF it should be possible to attack the ML model with the corresponding attack and measure the extent of damage and attacker's effort to get the information if the ML model has to be improved or not.

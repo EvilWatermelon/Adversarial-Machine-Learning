@@ -4,26 +4,26 @@
 
 Machine Learning (ML) is a constantly growing field and is essential for many innovative applications such as highly-automated and autonomous driving. Resulting from this,
 there is an increased need to maintain security. This thesis concentrates on risk measurement in context of common standards such as ISO 27004 which will be
-discussed in Section \ref{sec:relWork}. This present thesis evaluates how to measure risks with the extent of damage and attacker's effort which should represent the probability of occurrence. \\ \\
+discussed in Section \ref{sec:relWork}. It will be evaluated how to measure risks with the extent of damage and attacker's effort, which should represent the probability of occurrence. \\ \\
 
-This thesis also explains and discusses the design of a conceptual framework and its implementation which is called Risk-Measurement-Framework (RMF). The RMF is designed by a
+This thesis also explains and discusses the design of a conceptual framework and its implementation, which from now on will be referred to as Risk-Measurement-Framework (RMF). The RMF is designed by a
 conceptual framework based on risk indicators as a fundamental part upon approaches by Jakub Breier et al. \cite{DBLP:journals/corr/abs-2012-04884} and Paul Schwerdtner et al.
 \cite{DBLP:journals/corr/abs-2011-04328}. The core of the implementation of the RMF is the Adversarial-Robustness-Toolbox (ART) that is included as a Python library but also an open-source
-framework which will be explained in Section \ref{sec:relWork}. Further, the risk indicators are evaluated during a measurement construct based on ISO 27004 to calculate the $Risk$ and depict it in a risk matrix which structure bases from a standard of the European Telecommunications Standards Institute. The RMF only measures the values from backdoor attacks and evaluates them. This thesis do not propose any possible defense methods or suggestions for improvement of a attacked ML model. \\ \\
+framework, which will be explained in Section \ref{sec:relWork}. Further, the risk indicators are evaluated during a measurement construct based on ISO 27004 to calculate the $Risk$ and depict it in a risk matrix which structure bases from a standard of the European Telecommunications Standards Institute \cite{applications_2022}. The RMF only measures the values from backdoor attacks and evaluates them. This thesis does not propose any possible defense methods or suggestions for improvement of a attacked ML model. \\ \\
 
-Sections \ref{sec:intro} and \ref{sec:relWork} are intended to clarify the goals and expectations of this thesis, explain terms, show necessary prior knowledge so that it is well defined where this thesis should go. Section \ref{sec:conFrame} is one of the main parts of the thesis. The section discusses and describes the conceptual framework and gives the basis for the implementation of the technical framework explained in Section \ref{sec:implementation}. Section \ref{sec:evaluation} explains the case study that uses the framework and evaluates its results. Furthermore, Section
-\ref{sec:evaluation} shows possible real-world scenarios that could use the RMF. In Section \ref{sec:conclusion}, a conclusion points out possible optimizations for the RMF, summarizes the results, and discusses them.
+Sections \ref{sec:intro} and \ref{sec:relWork} are intended to clarify the goals and expectations of this thesis, explain terms, and show necessary prior knowledge, so that it is well defined where this thesis should go. Section \ref{sec:conFrame} is one of the main parts of the thesis, discussing and describing the conceptual framework and gives the basis for the implementation of the technical framework explained in Section \ref{sec:implementation}. Section \ref{sec:evaluation} explains the case study that uses the framework and evaluates its results. Furthermore, Section
+\ref{sec:evaluation} shows a possible real-world scenario that could use the RMF. In Section \ref{sec:conclusion}, the conclusion points out possible optimizations for the RMF, summarizes the results, and discusses them.
 
-\subsection{Motivation}
+\subsection{Motivation for this thesis}
 
-The classic IT security is a large field and essential for every software application. In ML, security is also essential and needs more tools to find vulnerabilites and measure risks for
+The classic IT security is a large field and essential for every software application. In ML, security is also essential and needs more tools to find vulnerabilities and measure risks for
 the subsequent defense implementation. This thesis evaluates a conceptual and technical framework in the context of IT security standards. The aim is to improve security in ML, which could
 help researchers and companies to optimize their work. Due to the research for this present thesis, there were a lot of scientific papers that evaluate IT security management in the
-context of ISO 27005 but less with ISO 27004. Therefore, there is a need to put more focus on ISO 27004. So ML in relation to ISO 27004 is another motivating factor to extend the research
+context of ISO 27005, but less with ISO 27004. Therefore, there is a need to put more focus on ISO 27004. ML in relation to ISO 27004 is another motivating factor to extend the research
 in the context of security for ML and ISO 27004. From the previously mentioned points, it should emerge that this thesis should show the possibility of using common standards for risk
 measurement in ML.
 
-\subsection{Research questions and hypotheses for this thesis}
+\subsection{Research questions and hypotheses}
 
 \newlist{questions}{enumerate}{2}
 \setlist[questions,1]{label=\textsf{\textbf{RQ\arabic*:}},ref=RQ\arabic*}
@@ -35,8 +35,8 @@ To understand the goal of this thesis the following hypotheses and research ques
 
 \begin{questions}
   \item How can the procedure and requirements from ISO 27004 be used for risk measurement of ML models? \label{itm:rq1}
-  \item What are risk indicators to measure the extent of damage? \label{itm:rq2}
-  \item What are risk indicators to measure the attacker's effort? \label{itm:rq3}
+  \item What risk indicators are there to measure the extent of damage? \label{itm:rq2}
+  \item What risk indicators are there to measure the attacker's effort? \label{itm:rq3}
   \item Which measurement methods are suitable for measuring the extent of the damage and the attacker's effort? \label{itm:rq4}
   \item How are the results of a risk presented? \label{itm:rq5}
 \end{questions}
@@ -56,5 +56,5 @@ In this thesis, the hypotheses represent assertions that have to be tested.
   \item The attacker's effort corresponds to the probability of occurrence when calculating the risk. \label{itm:h4}
 \end{hypotheses}
 
-The first research question \ref{itm:rq1} is about the extent to which the ISO 27004 standard can be used for ML security. So the question should relate to what can be implemented and what cannot from the requirements. Thus, this research question is related to hypothesis \ref{itm:h3}. Research question \ref{itm:rq2} and \ref{itm:rq3} both refer to what should be measured. This refers to the hypotheses \ref{itm:h1} and \ref{itm:h2}. The research question \ref{itm:rq4} should deal with the process after the research questions \ref{itm:rq2} and \ref{itm:rq3} on how the values of the measurement could be evaluated. The last research question \ref{itm:rq5} leads to the direction on how the results of the risk measurement are presented that they are meaningful. For this purpose should
-hypothesis \ref{itm:h4} discuss the relation between the attacker's effort with the probability of occurrence that is one value to calculate the $Risk$. 
+The first research question \ref{itm:rq1} is about the extent to which the ISO 27004 standard can be used for ML security. The question should relate to what can be implemented and what cannot from the requirements. Thus, this research question is related to hypothesis \ref{itm:h3}. Research question \ref{itm:rq2} and \ref{itm:rq3} both refer to what should be measured. This refers to the hypotheses \ref{itm:h1} and \ref{itm:h2}. The research question \ref{itm:rq4} should deal with the process after the research questions \ref{itm:rq2} and \ref{itm:rq3} on how the values of the measurement could be
+evaluated. The last research question \ref{itm:rq5} aims to clarify how the risk measurement results are presented in a meaningful way. Hypothesis \ref{itm:h4} discusses for this purpose the relation between the attacker's effort with the probability of occurrence that is one value to calculate the $Risk$ since the relationship is not sufficiently clarified.

@@ -58,7 +58,7 @@ RISK_INDICATORS_RAW = ("Accuracy",
                        "ram",
                        "gpu")
 
-RIS_INDICATORS = ("attackers_goal",
+RISK_INDICATORS = ("attackers_goal",
                   "attackers_knowledge",
                   "attack_time",
                   "found_pattern",

@@ -46,21 +46,8 @@ def art_poison_backdoor_attack(x, y, num_of_images):
     https://arxiv.org/abs/1708.06733
     """
 
-    n_train = np.shape(x)[0]
-    num_selection = num_of_images
-
-    random_selection = np.random.choice(n_train, num_selection)
-
-    temp_x = x[random_selection]
-
-    del_x = np.delete(x, [random_selection], axis=0)
-
-    y = y[random_selection]
-
     backdoor_class = PoisoningAttackBackdoor(poison_func)
-    poisoned_x, poisoned_y = backdoor_class.poison(temp_x, y)
-
-    poisoned_data = np.concatenate((del_x, poisoned_x), axis=0)
+    poisoned_data, poisoned_y = backdoor_class.poison(x[:num_of_images], y[:num_of_images])
 
     print("Finished poisoning!")
 

@@ -165,8 +165,10 @@ def model_training(train_path, data_dir, image_data, image_labels):
     poison_number = .50
     poison_data, poison_label, backdoor = clean_label(X_train, y_train, proxy.get_classifier(), targets, poison_number)
 
+    #poison_data, poison_label = art_poison_backdoor_attack(X_train, y_train, 19604)
+
     print("Start poison training...")
-    model.fit(poison_data, poison_label,
+    model.fit(X_train, y_train,
               epochs=10)
 
     end_tim = monitoring_attack.end_time()

@@ -82,9 +82,9 @@ def measurement_functions(base_measures, y_true, y_score, cm, classes, tp, tn, f
         f1 = sum(f1_score)/len(f1_score)
         avg_rec = sum(avg_recall)/len(avg_recall)
 
-        f1 = 10 - f1
-        apr = 10 - apr
-        avg_rec = 10 - avg_rec
+        f1 = 1 - f1
+        apr = 1 - apr
+        avg_rec = 1 - avg_rec
 
         log(f"F1-Score array: {f1}, Average precision score: {apr}, Average recall score: {avg_rec}")
 
@@ -185,7 +185,7 @@ def analytical_model(base_mea_raw, derived_measures):
 
         for key, value in base_mea_raw.items():
             if value is "Accuracy":
-                rev_acc = 10 - float(key)
+                rev_acc = 1 - float(key)
                 log(f"Reversed accuracy: {rev_acc}")
 
         extent_of_damage = rev_acc + derived_measures[2]
@@ -200,7 +200,7 @@ def analytical_model(base_mea_raw, derived_measures):
 
 def decision_criteria(*indicator) -> float:
 
-    # Comparing the original with attack values
+    # Comparing the original with the attack values
 
 
 

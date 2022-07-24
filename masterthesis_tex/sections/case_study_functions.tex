@@ -20,10 +20,10 @@ This argument gets the training data. \\ \\
 Name of a backdoor attack as a string. \\
 
 \begin{lstlisting}
-  dataset_visualization(class_num, train_number)
+  createModel(X_train)
 \end{lstlisting}
 
-\noindent With this function, the number of images are visualized and sorted from the lowest to the highest number of images per label.
+\noindent This function creates the Keras ML model.
 
 \begin{lstlisting}
   read_training_data(train_path, data_dir)
@@ -35,34 +35,16 @@ Name of a backdoor attack as a string. \\
   preprocessing(train_path, data_dir, image_data, image_labels)
 \end{lstlisting}
 
-\noindent After calling the \textit{read\_training\_data()} function, this function assign the \textbf{image\_date} and \textbf{image\_labels} arguments to shuffle the training data. Then the training data splits into training and validation data. The shape of the images must be reshaped for the SVM.
+\noindent After calling the \textit{read\_training\_data()} function, this function assign the \textbf{image\_date} and \textbf{image\_labels} arguments to shuffle the training data. It also can takes a number of images that is lower than the original to execute the ML model faster for test purposes.
 
 \begin{lstlisting}
   model_training(train_path, data_dir, image_data, image_labels)
 \end{lstlisting}
 
-\noindent After calling the \textit{preprocessing()} function, this function calls the \textit{KerasClassifier()} class which is an ART class to use Keras. This class must be used because the attacks only takes these classes for the proxy model training.
+\noindent After calling the \textit{preprocessing()} function, this function calls the \textit{AdversarialTrainerMadryPGD()} class which is an ART class to use the \textit{CleanLabelBackdoor} attack. This class must be used because the attacks only takes these classes for the proxy model training.
 
 \begin{lstlisting}
   read_test_data(train_path, data_dir, image_data, image_labels)
 \end{lstlisting}
 
-\noindent After calling the \textit{model\_training()} function, this function reads in the test data, resizes the images to $30x30$ pixels and then reshape the images. The last step is the prediction with the test data.
-
-\begin{lstlisting}
-  create_model(X_train)
-\end{lstlisting}
-
-\noindent This function builds the ML model architecture for the classifier class of the ART.
-
-\begin{lstlisting}
-  model_finetuning()
-\end{lstlisting}
-
-\noindent This function is espacially for the \textit{Hidden Trigger Backdoor Attack} because this attack must be executed while ML model finetuning.
-
-\begin{lstlisting}
-  create_attack(attack)
-\end{lstlisting}
-
-\noindent To call an attack this function must be called with an attack name.
+\noindent After calling the \textit{model\_training()} function, this function reads in the test data, resizes the images to $30x30$ pixels and then reshape the images. The last step is the prediction with the test data. This function also calls all RMF functions to evaluate the risk indicators.

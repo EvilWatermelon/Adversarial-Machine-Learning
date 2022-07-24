@@ -80,7 +80,7 @@ class Attacker:
 
         log("Step 1: Choose a pattern")
         counter += 1
-        log("Step 2: Select a source image")
+        log("Step 2: Select a number of images to poison")
         counter += 1
         log("Step 3: Select a target image")
         counter += 1

@@ -29,73 +29,34 @@ This argument takes the number of untargeted images that should get a trigger pa
 \end{lstlisting}
 
 \noindent\textbf{x}
-This argument... \\ \\
+This argument takes the array of training images. \\ \\
 \textbf{y}
-This argument... \\ \\
+This argument takes the array of labels that are assigned to the training images. \\ \\
 
 \begin{lstlisting}
   art_hidden_trigger_backdoor(x, y, target, source)
 \end{lstlisting}
 
 \noindent\textbf{x}
-This argument... \\ \\
+This argument takes the array of training images. \\ \\
 \textbf{y}
-This argument... \\ \\
+This argument takes the array of labels that are assigned to the training images. \\ \\
 \textbf{target}
-This argument... \\ \\
+This argument takes the target label. \\ \\
 \textbf{source}
-This argument... \\ \\
+This argument takes the source labels that should be poisoned.
 
 The following functions visualize the ML model training process: \\
 
 \begin{lstlisting}
-  create_learning_curve(est, x_train, y_train, train_sz)
+  dataset_visualization(class_num, train_number)
 \end{lstlisting}
 
-\noindent\textbf{est}
-This argument... \\ \\
-\textbf{x\_train}
-This argument... \\ \\
-\textbf{y\_train}
-This argument... \\ \\
-\textbf{train\_sz}
-This argument... \\ \\
+\noindent\textbf{class\_num}
+This argument takes the number of labels. \\ \\
 
-\begin{lstlisting}
-  make_meshgrid(x, y, h=0.02)
-\end{lstlisting}
-
-\noindent\textbf{x}
-Data to base x-axis meshgrid on \\ \\
-\textbf{y}
-Data to base y-axis meshgrid on \\ \\
-\textbf{h}
-(Optional) stepsize for meshgrid \\ \\
-
-\begin{lstlisting}
-  plot_contours(ax, clf, xx, yy, **params)
-\end{lstlisting}
-
-\noindent\textbf{ax}
-Matplotlib axes object \\ \\
-\textbf{clf}
-Classifier \\ \\
-\textbf{xx}
-Meshgrid ndarray \\ \\
-\textbf{yy}
-Meshgrid ndarray \\ \\
-\textbf{**params}
-(Optional) dictionary of params to pass to contourf \\ \\
-
-The following functions show the data results of the risk measurement: \\
-
-\begin{lstlisting}
-  probability_calculation()
-\end{lstlisting}
-
-\begin{lstlisting}
-  list_probability()
-\end{lstlisting}
+\textbf{train\_number}
+This argument takes the training dataset to visualize it.
 
 The following functions represent the risk indicators in the RMF: \\
 These three functions form the computational resources risk indicator: \\
@@ -134,15 +95,15 @@ This argument takes the executed attack function to poison the training data \\
 \end{lstlisting}
 
 \begin{lstlisting}
-  positive_negative_label(thresholds=None, name=None, dtype=None)
+  positive_negative_label(model, labels, predictions)
 \end{lstlisting}
 
-\noindent\textbf{thresholds=None}
-\\ \\
-\textbf{name=None}
-\\ \\
-\textbf{dtype=None}
-\\ \\
+\noindent\textbf{model}
+This argument takes the used classifier. \\ \\
+\textbf{labels}
+This argument takes the correct labels. \\ \\
+\textbf{predictions}
+This argument takes the predicted labels. \\ \\
 
 \begin{lstlisting}
   attack_time(attack)
@@ -193,3 +154,11 @@ This argument takes a list of all derived measures from the measurement function
 
 \noindent\textbf{*indicator}
 This \textbf{*args} is an argument that takes all indicators from the analytical model
+
+The following function shows the data results of the risk measurement: \\
+
+\begin{lstlisting}
+  risk_matrix()
+\end{lstlisting}
+
+This function draws the risk matrix based on the return values from the \textit{decision\_criteria()} function.
