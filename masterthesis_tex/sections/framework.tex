@@ -3,7 +3,7 @@
 \section{Risk-Measurement-Framework concept}
 \label{sec:conFrame}
 
-In contrast to Schwerdtner et al. \cite{DBLP:journals/corr/abs-2011-04328}, the framework of this thesis concentrates on training, especially risk measurement before and during training of the ML model. This section discusses and explains the design of the RMF. The RMF is a technical framework based on a concept to measure risks of backdoor attacks \cite{DBLP:conf/eusipco/ArshadAQLY21} by measuring the attacker's effort and extent of damage of an attack. \\ Referencing on this thesis approach from Biggio et al. \cite{DBLP:conf/icml/BiggioNL12} a security analysis for ML is that the attacker knows the ML model and can use the data from the data distribution platform. It is assumed for the RMF that the attacker knows the training data. This is an unrealistic assumption, but in real-world scenarios the attacker could use a surrogate training set instead, from the same data distribution platform which the developers use \cite{DBLP:journals/ml/BarrenoNJT10}. The following subsection goes to the research question \ref{itm:rq1} - \textit{How can the procedure and requirements from ISO 27004 be used for risk measurement of ML models?}
+In contrast to Schwerdtner et al. \cite{DBLP:journals/corr/abs-2011-04328}, the framework of this thesis concentrates on training, especially risk measurement before and during training of the ML model. This section discusses and explains the design of the RMF. The RMF is a technical framework based on a concept to measure risks of backdoor attacks \cite{DBLP:conf/eusipco/ArshadAQLY21} by measuring the attacker's effort and extent of damage of an attack. \\ Referencing on this thesis approach from Biggio et al. \cite{DBLP:conf/icml/BiggioNL12} a security analysis for ML is that the attacker knows the ML model and can use the data from the data distribution platform. It is assumed for the RMF that the attacker knows the training data. This is an unrealistic assumption, but in real-world scenarios the attacker could use a surrogate training set instead, from the same data distribution platform which the developers use \cite{DBLP:journals/ml/BarrenoNJT10}. The following subsection goes to the research question \ref{itm:rq1}: \textit{How can the procedure and requirements from ISO 27004 be used for risk measurement of ML models?}
 
 \subsection{ISO 27004 in relation with the RMF}
 \label{sec:standard}
@@ -30,7 +30,7 @@ The terms of the standard thus enable a better classification and relationship o
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=10cm]{pictures/measurement_methods.png}
-  \caption{The measurement method (right) send the collected data to the measurement method left (left). Both measurement method are executed at the second step of the measurement from ISO 27004 -  adapted from \cite{ISO_27004_2009}.}
+  \caption{The measurement method (right) send the collected data to the measurement method left (left). Both measurement method are executed at the second step of the measurement from ISO 27004  adapted from \cite{ISO_27004_2009}.}
   \label{fig:measurement_methods}
 \end{figure}
 
@@ -152,9 +152,7 @@ must be implemented to make it harder classify correctly. The last step is addin
 
 \textbf{Hidden Trigger Backdoor Attack} The last backdoor attack from Saha et al. \cite{DBLP:journals/corr/abs-1910-00033} is the \textit{Hidden Trigger Backdoor Attack} which goal is to let poisoned data look natural with correct labels. This backdoor attack uses a threat model defined from Gu et al. \cite{DBLP:journals/corr/abs-1708-06733}. In this threat model, the attacker provides poisoned training data to a victim that uses it with a pre-trained ML model. The attacker uses a small image as a backdoor which changes the target label to a specific wrong label. This can be used for both attack specificity, targeted and untargeted. With this threat model it is possible to identify the poisoned data because as already explained in \textit{Clean Label Backdoor Attack}, the missclassified images change their label. Identifying the poisoned data in a training set can show how many images are poisoned to measure the extent of possible damage. Saha et al. propose a threat model inspired
 from Shafahi et al. \cite{DBLP:journals/corr/abs-1804-00792} and Sabour et al. \cite{DBLP:journals/corr/SabourCFF15} where the poisoned data are labeled correctly and the backdoor also remains not visible. This is done through optimization for poisoned images which pixel space is close to images from a target category while its feature space is close to source images that are patched with the backdoor. The next part is generalizing the attack for unseen source images which means that the trigger cannot be found during poisoning. Also the trigger should be placed at any random location. In order to implement this, during the optimization the poisoned images pushed close to a cluster of source images that are patched. Based on the
-work of Moosavi-Dezfooli et al. \cite{DBLP:conf/cvpr/Moosavi-Dezfooli17} about universal adversarial examples, Saha et al. minimized the value of loss at all source images and trigger locations. This is done by choosing a random trigger location and source images for each iteration of optimization. Over every iteration a method optimizes randomly patched source images and assigns them to poisoned images closest to the feature space.
-
-The steps to execute this attack are the following:
+work of Moosavi-Dezfooli et al. \cite{DBLP:conf/cvpr/Moosavi-Dezfooli17} about universal adversarial examples, Saha et al. minimized the value of loss at all source images and trigger locations. This is done by choosing a random trigger location and source images for each iteration of optimization. Over every iteration a method optimizes randomly patched source images and assigns them to poisoned images closest to the feature space. The steps to execute this attack are the following:
 
 \begin{enumerate}
   \item Choose a backdoor pattern
@@ -198,7 +196,7 @@ All of these risk indicators are assigned with values before and after an attack
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=9cm]{pictures/measure_damage.png}
-  \caption{Risk indicators of the attack object in relation to the low-level attributes measurement method.}
+  \caption{Risk indicators of the attack object in relation to the low-level measurement method.}
   \label{fig:measure_damage}
 \end{figure}
 
@@ -211,16 +209,25 @@ The second knowledge level are white-box attacks where an attacker has nearly pe
 \textit{Hidden Trigger Backdoor Attack} \cite{DBLP:journals/corr/abs-1910-00033} is a white-box attack where the attacker uses a backdoor trigger on a pre-trained ML model with finetuning for classification. The backdoor trigger must be implemented while finetuning the ML model to change the label. When the ML model finetunes its training data, the attacker changes the source label to a target label. \textit{Clean Label Backdoor Attack} \cite{turner2018clean} is a white-box attack which missclassifies during training time and not during inference. With this goal, the images should be harder to be correctly classified and the ML model should recognize the backdoor trigger as a feature. This procedure should prevent modifications during training time but it is used exactly for that purpose. This attack is implemented based on projected gradient descent (PGD) \cite{DBLP:journals/corr/MadryMSTV17}. PGD is an approach to train NN with an improved resistance against adversarial attacks.
 \textit{Pattern Backdoor Attack} \cite{DBLP:journals/corr/abs-1708-06733} is a black-box attack which adds a pixel pattern or single pixel into an image and missclassifies these poisoned images to a target or untargeted label. After adding the pattern, these poisoned images have to be mixed back into the original training dataset. All of these black- and white-box attacks are useful for the RMF to represent an attack scenario for the risk measurement. \\
 After one of these attacks are executed, it should be possible for the RMF to measure the knowledge by pre-determined steps to execute the attack \cite{bsi_2013}. Pre-determined steps originate from common criteria which this thesis get from the explained attacks. Every attack has its own steps during the development and execution. The attacker's knowledge is the risk indicator that count these steps. \\
-The attacker's goal is the last risk indicator to measure the attacker's effort to find out what the attacker is trying to achieve \cite{DBLP:journals/corr/abs-2012-04884}. To find this goal in the measurement method, this risk indicator has to get the attack type (i.e. backdoor attack) to return the goal and count the steps it takes for the development. If one of the previously mentioned attacks is identified, the goal is to measure pre-determined steps too. The pre-determined steps in the attacker's knowledge and goal are also summarized with the low-level attributes which Figure \ref{fig:attribute_mapping} shows. When all risk indicators are assigned with its values then the measurement methods can pass all results to the base measures.
+The attacker's goal is the last risk indicator to measure the attacker's effort to find out what the attacker is trying to achieve \cite{DBLP:journals/corr/abs-2012-04884}. To find this goal in the measurement method, this risk indicator has to get the attack type (i.e. backdoor attack) to return the goal and count the steps it takes for the development. If one of the previously mentioned attacks is identified, the goal is to measure pre-determined steps too. The pre-determined steps in the attacker's knowledge and goal are also summarized with the low-level attributes which Figure \ref{fig:attribute_mapping} shows. When all risk indicators are assigned with its values then the measurement methods can pass all results to the base measures. The following steps to get an inference failure are \cite{DBLP:journals/corr/abs-2003-03675}:
+
+\begin{enumerate}
+  \item Taking one or more backdoor pattern
+  \item Taking target labels corresponding to the patterns
+  \item Place it at a specific or random location
+  \item Place the backdoor trigger to a subset of the original data
+  \item Mix it with the original data
+  \item Mapping the backdoor triggers to the corresponding target labels
+\end{enumerate}
 
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=9cm]{pictures/measure_effort.png}
-  \caption{Risk indicators of the attacker object in relation to the high-level attributes measurement method.}
+  \caption{Risk indicators of the attacker object in relation to the high-level measurement method.}
   \label{fig:measure_effort}
 \end{figure}
 
-The high-level attribute measurement method should return all values to measure the attacker's effort. These values are only able to represent the attacker's effort if they are combined with specific values from the low-level attribute measurement method. This mapping method explains the following subsection.
+The high-level measurement method should return all values to measure the attacker's effort. These values are only able to represent the attacker's effort if they are combined with specific values from the low-level measurement method. This mapping method explains the following subsection.
 
 \subsection{The formal threat model for the measurement methods}
 \label{sec:use_threat_model}
@@ -232,7 +239,7 @@ Before explaining the procedure, there are two requirements for the dataset that
 
 \begin{enumerate}
   \item The first requirement is a dataset which contains information about the attack actions against a ML model. The information must be based on the skills, resources, intention, and motivation of the attacker.
-  \item The second requirement for the dataset is that everything is marked in such a way that the analysis shows which actions the attacker performed. However, this requirement is more about having multiple attackers or the analysis across multiple attackers.
+  \item The second requirement for the dataset is everything which is marked in such a way that the analysis shows which actions the attacker performed. However, this requirement is more about having multiple attackers or the analysis across multiple attackers.
 \end{enumerate}
 
 The second requirement can not be fulfilled because this thesis does not differentiate between one or multiple attackers. There is always just one attacker considered in this thesis.
@@ -279,16 +286,7 @@ After explaining the low- and high-level attributes as separated measurement met
 point, the attacks are displayed on the basis of their values. At the beginning, the data of the attacks are measured separately in the measurement method of the low-level attributes and then those of
 the high-level attributes. The data here always refer to the risk indicators before and after an attack to monitor the original and the manipulated training dataset. \\
 The combination starts with the attack time and specificity where the attack is executed during training or inference time. If the attack is, for example, executed during inference time, then the concentration is located on all steps after the training of the ML model. If the attack specificity is untargeted, then the attacker can poison the training dataset without finding out label names and only has to add a backdoor trigger. When the attacker decides to implement a backdoor attack, then they have to go through pre-determined steps which are defined depending on the used attack. The same applies to the goal which is based on pre-determined steps too. With these information it is possible to combine the steps and then getting the derived measure. The same procedure combines the measurement function for the extent of damage from the attack time and specificity. The accuracy and computational resources are not considered further here, because they are transferred directly to the analytical model. \\
-The accuracy is not considered for the mapping because the value is only relevant to measure the extent of damage. The attack time and specificity is relevant for the extent of damage and to find the attacker's effort. These risk indicators get values that can be transferred to the risk indicators such as attacker's
-knowledge and goal. The computational resources are a risk indicator that is only for finding the attacker's effort. Figure \ref{fig:attribute_mapping} summarizes this mapping and in comparison to
-the threat model of Doynikova et al., the values are collected and evaluated completely without human judgment.
-
-\begin{figure}[ht!]
-  \centering
-  \includegraphics[width=10cm]{pictures/attribute_mapping.png}
-  \caption{Mapping between the low- and high-level attributes.}
-  \label{fig:attribute_mapping}
-\end{figure}
+The accuracy is not considered for the mapping because the value is only relevant to measure the extent of damage. The attack time and specificity is relevant for the extent of damage and to find the attacker's effort. These risk indicators get values that can be transferred to the risk indicators such as attacker's knowledge and goal. The computational resources are a risk indicator that is only for finding the attacker's effort.
 
 \subsection{Concept of the analytical models and indicators}
 
@@ -300,6 +298,8 @@ The indicators are the final results from the measurement and provide the transi
   \caption{Calculation of the derived and base measures in the analytical models to get the indicators.}
   \label{fig:indicators}
 \end{figure}
+
+\newpage
 
 \subsubsection*{The transition between measurement and measurement results}
 
@@ -388,6 +388,8 @@ In order to depict the measurement results in the risk matrix, the following ste
 
 The goal of this flow graph is to weight the $Risk$ based on the original ML model. For example, if the accuracy is $90\%$, then this value represents the best approximation for the $Risk$ value in the risk matrix. The same weighting applies for the other risk indicators which are able to differentiate between the original and attacked ML model.
 
+\newpage
+
 \subsection{The implementation plan}
 \label{sec:final_design}
 
@@ -442,7 +444,7 @@ In Figure \ref{fig:complete_architecture}, the identified risk indicators are pa
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=8cm]{pictures/complete_architecture.png}
-  \caption{Complete concept architecture adapted from \cite{ISO_27004_2009}.}
+  \caption{Complete concept adapted from \cite{ISO_27004_2009}.}
   \label{fig:complete_architecture}
 \end{figure}
 

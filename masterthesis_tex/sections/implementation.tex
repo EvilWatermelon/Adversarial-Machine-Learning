@@ -32,17 +32,7 @@ The RMF is structured as follows: \\
 \subsection{Backdoor attacks from the ART}
 \label{sec:impl_backdoor_attacks}
 
-The following three attacks are all based on the ART \cite{art2018} and represent white-box and black-box attacks and both targeted and untargeted attacks. These attacks are the main factor to assign the values to the base measures. The attacks already differentiate between the original and poisoned dataset for evaluation. To implement the attacks and measure the attacker's goal to get an inference failure, the following steps has an attacker to do \cite{DBLP:journals/corr/abs-2003-03675}: \\
-
-\begin{enumerate}
-  \item Taking one or more backdoor pattern
-  \item Taking target labels corresponding to the patterns
-  \item Place it at a specific or random location
-  \item Place the backdoor trigger to a subset of the original data
-  \item Mix it with the original data
-  \item Mapping the backdoor triggers to the corresponding target labels
-\end{enumerate}
-
+The following three attacks are all based on the ART \cite{art2018} and represent white-box and black-box attacks and both targeted and untargeted attacks. These attacks are the main factor to assign the values to the base measures. The attacks already differentiate between the original and poisoned dataset for evaluation.
 All backdoor attacks use the \textit{Pattern Backdoor Attack} \cite{DBLP:journals/corr/abs-1708-06733} class which expects a pattern argument. The pattern is a picture which is for the poisoned images in the training dataset. The pattern must be implemented before training and choose a random selection of images. This is implemented in the RMF as follows:
 
 \begin{lstlisting}
@@ -61,9 +51,15 @@ testing the ML model.\\
 
 The first attack uses the \textit{Pattern Backdoor Attack} class without any other backdoor classes from the ART. This attack which bases on Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} is a black-box attack which is untargeted. In the RMF the attack is implemented with a pattern backdoor only which Figure \ref{fig:original_example} and Figure \ref{fig:poisoned_example} show as the
 difference between the original and the poisoned image. The goal of this attack is to change the original label to a random other label. This attack can be executed without any
-information because it is not important which training dataset the ML model use and what ML model is used for the training itself.
+information because it is not important which training dataset the ML model use and what ML model is used for the training itself. \\
 
-\begin{figure}[!tbp]
+After poisoning the images these image need be copied back into the original training dataset. Before this can be done, the poisoned data must replace the original training dataset which contains
+no backdoors. After taking the RMF the random original images, the RMF saves them into a temporary variable and then delete the images from the original training dataset. The next step is the
+poisoning while the poisoned data and the original training dataset need the same shape and dimension which make it possible to copy the poisoned images. As mentioned before the poisoning
+function takes four specific shapes which make it easy to have the same shape in the original training dataset and poisoned data. The implementation of the attack additionally shows the
+effort an attacker have to implement this attack. Thus the steps can be used for the attacker's knowledge.
+
+\begin{figure}[!ht]
   \centering
   \begin{minipage}[b]{0.4\textwidth}
     \includegraphics[width=8cm]{pictures/original_example.png}
@@ -77,12 +73,6 @@ information because it is not important which training dataset the ML model use 
     \label{fig:poisoned_example}
   \end{minipage}
 \end{figure}
-
-After poisoning the images these image need be copied back into the original training dataset. Before this can be done, the poisoned data must replace the original training dataset which contains
-no backdoors. After taking the RMF the random original images, the RMF saves them into a temporary variable and then delete the images from the original training dataset. The next step is the
-poisoning while the poisoned data and the original training dataset need the same shape and dimension which make it possible to copy the poisoned images. As mentioned before the poisoning
-function takes four specific shapes which make it easy to have the same shape in the original training dataset and poisoned data. The implementation of the attack additionally shows the
-effort an attacker have to implement this attack. Thus the steps can be used for the attacker's knowledge.
 
 The problem with this attack is that the ART can load the backdoor into the selected images, but the poisoned images are not mixed into the original training dataset. \\
 The \textit{Clean Label Backdoor Attack} \cite{turner2018clean} poison images and missclassify during the training time. To use this attack the \textit{Pattern Backdoor Attack} must be
@@ -154,8 +144,8 @@ In order not to depend on the different ML libraries, the RMF gets its own funct
 \subsubsection*{Mapping between the base measures}
 
 The attack time and specificity are the only risk indicators which have to be mapped to the attacker's knowledge and goal. Based on the low-level attributes, the high-level attributes are additionally adjusted after the measurement. After the execution of the attacks, the values of the attack itself - specifically the attack time - is used to measure the time an attacker need to execute its attack \cite{DBLP:journals/corr/abs-2012-04884}. This measurement is based on the difference between training of the ML model without and with the attack. The attack time for measuring the extent of damage is used to see which vulnerabilities a ML model has during the training or inference time \cite{DBLP:journals/csur/RosenbergSER21}. Since the values that are measured can be used to measure the effort of an attacker, this risk indicator must be mapped. \\
-For the attack specificity, the RMF measures how much images are poisoned and what the attacker has to do to poison targeted images \cite{DBLP:conf/iccv/ZhuNXWW21} or how he poisons random images \cite{DBLP:journals/corr/abs-1708-06733}. The attack specificity measures the steps to poison images to a target goal based on the target label that the ART takes as an argument for the attack. These steps are mapped with the attacker's knowledge and goal to calculate all steps that the attacker has to perform. \\
-The following subsection describes how the results from the measurement methods are evaluated in the measurement construct. \\ \\
+For the attack specificity, the RMF measures how much images are poisoned and what the attacker has to do to poison targeted images \cite{DBLP:conf/iccv/ZhuNXWW21} or how he poisons random images \cite{DBLP:journals/corr/abs-1708-06733}. The attack specificity measures the steps to poison images to a target goal based on the target label that the ART takes as an argument for the attack. These steps are mapped with the attacker's knowledge and goal to calculate all steps that the attacker has to perform.
+The following subsection describes how the results from the measurement methods are evaluated in the measurement construct.
 
 \subsubsection*{The analytical models}
 
