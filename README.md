@@ -16,11 +16,13 @@ The case study is a NN trained for image classification to simulate traffic sign
 
 # Abstract
 
-...
-
-# How to use the framework
-
-This framework can be used by build in functions into a ML model.
+This thesis deals with the field of machine learning, especially security. For this
+purpose, the concept of a technical framework will be described, implemented
+and evaluated in a case study. Based on ISO 27004, risk indicators are used
+to measure and evaluate the extent of damage and the effort required by an
+attacker. It is not possible, as assumed, to determine a risk value that represents
+the extent of the damage and the effort. Therefore, four different risk matrices
+will represent different values and must be interpreted individually.
 
 # Dataset
 
