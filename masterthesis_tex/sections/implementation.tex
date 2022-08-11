@@ -51,9 +51,7 @@ testing the ML model.\\
 
 The first attack uses the \textit{Pattern Backdoor Attack} class without any other backdoor classes from the ART. This attack which bases on Gu et al. \cite{DBLP:journals/corr/abs-1708-06733} is a black-box attack which is untargeted. In the RMF the attack is implemented with a pattern backdoor only which Figure \ref{fig:original_example} and Figure \ref{fig:poisoned_example} show as the
 difference between the original and the poisoned image. The goal of this attack is to change the original label to a random other label. This attack can be executed without any
-information because it is not important which training dataset the ML model use and what ML model is used for the training itself. \\
-
-After poisoning the images these image need be copied back into the original training dataset. Before this can be done, the poisoned data must replace the original training dataset which contains
+information because it is not important which training dataset the ML model use and what ML model is used for the training itself. After poisoning the images these image need be copied back into the original training dataset. Before this can be done, the poisoned data must replace the original training dataset which contains
 no backdoors. After taking the RMF the random original images, the RMF saves them into a temporary variable and then delete the images from the original training dataset. The next step is the
 poisoning while the poisoned data and the original training dataset need the same shape and dimension which make it possible to copy the poisoned images. As mentioned before the poisoning
 function takes four specific shapes which make it easy to have the same shape in the original training dataset and poisoned data. The implementation of the attack additionally shows the
