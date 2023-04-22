@@ -6,6 +6,8 @@ from sklearn.metrics import precision_recall_curve, precision_recall_fscore_supp
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
+plt.rcParams['toolbar'] = 'None' 
+
 import logging
 logging.getLogger('matplotlib').setLevel(logging.WARNING)
 plt.rcParams.update({'font.size': 10})
@@ -52,6 +54,8 @@ def measurement_functions(base_measures, y_true, y_score, cm, classes, tp, tn, f
         avg_recall = list()
         avg_precision = list()
         plots = list()
+        
+        fig, ax = plt.subplots(figsize=(20,20))
 
         for i in range(len(classes)):
             precision[i], recall[i], _ = precision_recall_curve(y_true[:, i],
@@ -76,7 +80,10 @@ def measurement_functions(base_measures, y_true, y_score, cm, classes, tp, tn, f
             avg_precision.append(prec)
             f1_score.append(avg)
 
-            plots.append(plt.plot(recall[i], precision[i], lw=2, label='label {}'.format(i)))
+            #plots.append(ax.plot(recall[i], precision[i], lw=1, label='label {}'.format(i)))
+        
+        #draw_pc_curve(plots, fig, ax)
+        draw_cm(cm, classes, fig, ax)
 
         apr = sum(avg_precision)/len(avg_precision)
         f1 = sum(f1_score)/len(f1_score)
@@ -87,19 +94,6 @@ def measurement_functions(base_measures, y_true, y_score, cm, classes, tp, tn, f
         avg_rec = 1 - avg_rec
 
         log(f"F1-Score array: {f1}, Average precision score: {apr}, Average recall score: {avg_rec}")
-
-        plt.xlabel("recall")
-        plt.ylabel("precision")
-        plt.legend(plots[10], ['Label 10'], loc="best")
-        plt.title("precision vs. recall curve")
-
-        #plt.show()
-
-        df_cm = pd.DataFrame(cm, index = classes,  columns = classes)
-        plt.figure(figsize=(20, 20))
-        sns.heatmap(df_cm, annot=True)
-        #plt.show()
-        #plt.savefig('cm.png')
 
         ml_metrics = {apr: "apr", avg_rec: "average recall", f1: "f1"}
 
@@ -198,13 +192,38 @@ def analytical_model(base_mea_raw, derived_measures):
 
     return attackers_effort, extent
 
-def decision_criteria(*indicator) -> float:
+def draw(xlabel, ylabel, fig, ax):
 
-    # Comparing the original with the attack values
+    ax.grid(True)
+    ax.set_facecolor('w')
+    ax.spines['bottom'].set_color('black')
+    ax.spines['left'].set_color('black')
+    ax.spines['bottom'].set_linewidth(1)
+    ax.spines['left'].set_linewidth(1)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    
+    ax.set_xlabel(xlabel, fontsize=10)
+    ax.set_ylabel(ylabel, fontsize=10)
+    
+    fig.patch.set_facecolor('w')
+    fig.tight_layout()
+    
+    return fig, ax
 
+def draw_pc_curve(plots: list, fig, ax):
+        figure, axis = draw("recall", "precision", fig, ax)
 
+        axis.legend(plots[10], ['Label 10'], loc="upper left")
+        
+        plt.show()
+        figure.savefig('prec_rec.svg', bbox_inches='tight', facecolor='w')
+        
+def draw_cm(cm, classes, fig, ax):
+        figure, axis = draw("predicted label", "true label", fig, ax)
 
-    measurement_results()
+        df_cm = pd.DataFrame(cm, index = classes,  columns = classes)
+        sns.heatmap(df_cm, annot=True, ax=axis)
 
-def measurement_results():
-    return "Hello"
+        plt.show()
+        figure.savefig('cm.svg', bbox_inches='tight', facecolor='w')

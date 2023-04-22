@@ -2,7 +2,7 @@ import tracemalloc
 import psutil
 import os
 
-import nvidia_smi
+# import nvidia_smi
 from PIL import Image
 from measurement.log import *
 

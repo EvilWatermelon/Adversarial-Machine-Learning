@@ -58,10 +58,10 @@ def risk_matrix():
     #axes[7].text(1.2, 1.2, '8137.81MB GPU')
     #axes[7].plot(2, 2, color='black', marker='o')
 
-    plt.show()
+    #plt.show()
     #plt.savefig('risk_matrix.png')
 
-risk_matrix()
+#risk_matrix()
 
 # Visualizing The Dataset
 def dataset_visualization(class_num, train_number):

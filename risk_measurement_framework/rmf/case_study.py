@@ -77,7 +77,7 @@ def create_model(X_train):
     model.add(Dropout(0.5))
     model.add(Dense(43, activation='softmax'))
 
-    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'], experimental_run_tf_function=False)
 
     return model
 
@@ -127,7 +127,7 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     np.random.shuffle(shuffle_indexes)
     image_data = image_data[shuffle_indexes]
     image_labels = image_labels[shuffle_indexes]
-
+    
     """
     # For test purpose
     n_train = np.shape(image_labels)[0]
@@ -136,6 +136,7 @@ def preprocessing(train_path, data_dir, image_data, image_labels):
     image_data = image_data[random_selection_indices]
     image_labels = image_labels[random_selection_indices]
     """
+    
     X_train, y_train = preprocess(image_data, image_labels, nb_classes=43)
 
     # Shuffle training data
@@ -154,43 +155,42 @@ def model_training(train_path, data_dir, image_data, image_labels):
     monitoring_attacker.start_ram_monitoring()
     print("Start training...")
 
-    sta_tim = monitoring_attack.start_time()
+    #sta_tim = monitoring_attack.start_time()
 
+    #model = KerasClassifier(create_model(X_train))
     model = create_model(X_train)
 
-    proxy = AdversarialTrainerMadryPGD(KerasClassifier(model), nb_epochs=10, eps=0.15, eps_step=0.001)
+    proxy = AdversarialTrainerMadryPGD(KerasClassifier(create_model(X_train)), nb_epochs=10, eps=0.15, eps_step=0.001)
     proxy.fit(X_train, y_train)
 
     targets = to_categorical([10], 43)[0]
     poison_number = .50
     poison_data, poison_label, backdoor = clean_label(X_train, y_train, proxy.get_classifier(), targets, poison_number)
 
-    #poison_data, poison_label = art_poison_backdoor_attack(X_train, y_train, 19604)
-
     print("Start poison training...")
     model.fit(X_train, y_train,
               epochs=10)
 
-    end_tim = monitoring_attack.end_time()
+    #end_tim = monitoring_attack.end_time()
     print("Finished training!")
 
-    cpu = monitoring_attacker.cpu_resources()
-    high_l[cpu] = "cpu"
+    #cpu = monitoring_attacker.cpu_resources()
+    #high_l[cpu] = "cpu"
 
-    current, peak = monitoring_attacker.ram_resources()
-    high_l[current] = "ram"
+    #current, peak = monitoring_attacker.ram_resources()
+    #high_l[current] = "ram"
 
-    gpu = monitoring_attacker.gpu_resources()
-    high_l[gpu] = "gpu"
+    #gpu = monitoring_attacker.gpu_resources()
+    #high_l[gpu] = "gpu"
 
-    attack_time = monitoring_attack.attack_time(sta_tim, end_tim)
-    low_l[attack_time] = "attack_time"
+    #attack_time = monitoring_attack.attack_time(sta_tim, end_tim)
+    #low_l[attack_time] = "attack_time"
 
-    attackers_goal = monitoring_attacker.attackers_goal()
-    high_l[attackers_goal] = "attackers_goal"
+    #attackers_goal = monitoring_attacker.attackers_goal()
+    #high_l[attackers_goal] = "attackers_goal"
 
-    attackers_knowledge = monitoring_attacker.attackers_knowledge("clean_label")
-    high_l[attackers_knowledge] = "attackers_knowledge"
+    #attackers_knowledge = monitoring_attacker.attackers_knowledge("clean_label")
+    #high_l[attackers_knowledge] = "attackers_knowledge"
 
     return model, backdoor, targets
 
@@ -200,7 +200,7 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 
     print("Import test data...")
     # Loading test data and running predictions
-    test = pd.read_csv(data_dir + '/Test.csv')
+    test = pd.read_csv(data_dir + '\\Test.csv')
 
     labels = test["ClassId"].values
     imgs = test["Path"].values
@@ -209,7 +209,7 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
 
     for img in imgs:
         try:
-            image = cv2.imread(data_dir + '/' +img)
+            image = cv2.imread(data_dir + '/' + img)
             image_fromarray = Image.fromarray(image, 'RGB')
             resize_image = image_fromarray.resize((IMG_HEIGHT, IMG_WIDTH))
             data.append(np.array(resize_image))
@@ -241,10 +241,10 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
     px_test, py_test = backdoor.poison(X_test[not_target], y_test[not_target])
     poison_preds = np.argmax(model.predict(px_test), axis=1)
     posion_correct = np.sum(poison_preds == np.argmax(y_test[not_target], axis=1))
-    poison_total = y_test.shape[0]
+    poison_total = poison_preds.shape[0]
 
     poison_acc = posion_correct / poison_total
-    print("\nPoison test set accuracy: %.2f%%" % (poison_acc * 100))
+    print(f"\nClean test set accuracy: {poison_acc * 100:.2f}%")
 
     poison_pred = model.predict(px_test)
     clean_pred = model.predict(X_test)
@@ -257,7 +257,7 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
     low_l[counter] = "counter"
     low_l[poisoned_images] = "poisoned_images"
 
-    tp, tn, fp, fn, cm = monitoring_attack.positive_negative_label(model, labels=labels[:11970], predictions=poison_preds)
+    tp, tn, fp, fn, cm = monitoring_attack.positive_negative_label(model, labels=labels[:12630], predictions=clean_preds)
     for t_p in tp:
         low_l[t_p] = "tp"
     for t_n in tn:
@@ -272,7 +272,7 @@ def read_test_data(train_path, data_dir, image_data, image_labels):
     derived_measures = measurement_functions(base_measures, py_test, poison_pred, cm, classes, tp, tn, fp, fn, 10, clean_preds, poison_preds)
 
     effort, extent = analytical_model(base_mea_raw, derived_measures)
-    decision_criteria(effort, extent)
+    #decision_criteria(effort, extent)
 
     """
     c = 16 # index to display

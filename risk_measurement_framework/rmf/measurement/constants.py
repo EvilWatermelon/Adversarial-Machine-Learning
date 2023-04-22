@@ -1,7 +1,9 @@
 import os
 
-DATA_DIR = '../dataset'
-TRAIN_PATH = '../dataset/Train'
+#DATA_DIR = '../dataset'
+DATA_DIR = r"C:\Users\Jan\Risk-Measurement-Framework\risk_measurement_framework\rmf\dataset"
+#TRAIN_PATH = '../dataset/Train'
+TRAIN_PATH = r"C:\Users\Jan\Risk-Measurement-Framework\risk_measurement_framework\rmf\dataset\Train"
 
 IMG_HEIGHT = 30
 IMG_WIDTH = 30
