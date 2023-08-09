@@ -2,6 +2,8 @@
 
 ![python: 3.7](https://img.shields.io/badge/python-3.7-blue)
 
+This project will not be developed anymore since October 2022. You can still utilize it for any other projects and to comprehend the paper. For further questions do not hesitate to contact me.
+
 # Risk-Measurement-Framework
 For my Masterthesis I develop a framework that measure risks which is called RMF. This framework should measure risks based on ISO 27004. The main goal of this thesis is to measure the extent of damage and the attacker's effort based on risk indicators such as the accuracy, TP, TN, FP, FN, attack time, attacker specificity, attacker's knowledge, attacker's goal, and the computational resources.
 
